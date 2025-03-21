@@ -1,7 +1,10 @@
-import { effectsTable } from "@/db/schema/effects";
-import { playerStatsTable, playerStatTypeEnum } from "@/db/schema/player-stats";
-import { playersTable } from "@/db/schema/players";
-import { staffsTable } from "@/db/schema/staffs";
+import { effectsTable } from "@/db/schema/effects.schema";
+import {
+  playerStatsTable,
+  playerStatTypeEnum,
+} from "@/db/schema/player-stats.schema";
+import { playersTable } from "@/db/schema/players.schema";
+import { staffsTable } from "@/db/schema/staffs.schema";
 import { timestamptz } from "@/db/util";
 import { foreignKey, integer, pgTable } from "drizzle-orm/pg-core";
 

@@ -1,4 +1,4 @@
-import { playersTable } from "@/db/schema/players";
+import { playersTable } from "@/db/schema/players.schema";
 import { integer, pgEnum, pgTable, primaryKey } from "drizzle-orm/pg-core";
 
 export const playerStatTypeEnum = pgEnum("player_stat_type", [
