@@ -8,6 +8,7 @@ import type {
 } from "@/server/applications/interfaces/usecases/player";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
+import { AuthService } from "@/server/applications/services/auth.service";
 import {
   CreatePlayerUseCase,
   GetAllPlayersUseCase,
@@ -16,8 +17,15 @@ import {
 } from "@/server/applications/usecases/player";
 import { Player, PlayerCreate } from "@/server/domain/models";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
+import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
+import { SessionService } from "@/server/infrastructure/services/session.service";
 
 const playerRepo = new PlayerRepository();
+const staffRepo = new StaffRepository();
+
+const sessionService = new SessionService();
+
+const authService = new AuthService(playerRepo, staffRepo, sessionService);
 
 const getAllPlayersUseCase = new GetAllPlayersUseCase(playerRepo);
 const getPlayerUseCase = new GetPlayerUseCase(playerRepo);
@@ -53,6 +61,8 @@ export async function createPlayer({
 }: UseCaseParams<ICreatePlayerUseCase>): Promise<
   UseCaseReturn<ICreatePlayerUseCase>
 > {
+  await authService.authStaff();
+
   return createPlayerUseCase.invoke({
     data: PlayerCreate.parse(data),
   });

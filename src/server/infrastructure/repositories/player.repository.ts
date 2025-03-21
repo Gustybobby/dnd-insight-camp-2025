@@ -1,6 +1,11 @@
 import type { IPlayerRepository } from "@/server/domain/interfaces/repositories";
 import type { PlayerItemWithInfo } from "@/server/domain/aggregates";
-import type { Player, PlayerCreate, PlayerStat } from "@/server/domain/models";
+import type {
+  Player,
+  PlayerCreate,
+  PlayerStat,
+  User,
+} from "@/server/domain/models";
 
 import { db } from "@/db";
 import {
@@ -9,7 +14,7 @@ import {
   playersTable,
   playerStatsTable,
 } from "@/db/schema";
-import { takeOneOrThrow } from "@/db/util";
+import { takeOne, takeOneOrThrow } from "@/db/util";
 import { eq, getTableColumns } from "drizzle-orm";
 
 export class PlayerRepository implements IPlayerRepository {
@@ -27,6 +32,18 @@ export class PlayerRepository implements IPlayerRepository {
       .from(playersTable)
       .where(eq(playersTable.id, playerId))
       .then(takeOneOrThrow);
+  }
+
+  async getByUserId({
+    userId,
+  }: {
+    userId: User["id"];
+  }): Promise<Player | null> {
+    return db
+      .select()
+      .from(playersTable)
+      .where(eq(playersTable.userId, userId))
+      .then(takeOne);
   }
 
   async getAllStats({
