@@ -13,6 +13,10 @@ import { takeOneOrThrow } from "@/db/util";
 import { eq, getTableColumns } from "drizzle-orm";
 
 export class PlayerRepository implements IPlayerRepository {
+  async getAll(): Promise<Player[]> {
+    return db.select().from(playersTable);
+  }
+
   async getByIdOrThrow({
     playerId,
   }: {
