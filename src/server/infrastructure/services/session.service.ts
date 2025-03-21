@@ -1,4 +1,8 @@
-import type { DefaultSession, Session } from "next-auth";
+import type {
+  AuthSession,
+  ISessionService,
+} from "@/server/applications/interfaces/services/infrastructure";
+import type { DefaultSession } from "next-auth";
 
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
@@ -38,8 +42,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
 });
 
-export class SessionService {
-  getSession(): Promise<Session | null> {
+export class SessionService implements ISessionService {
+  getSession(): Promise<AuthSession | null> {
     return auth();
   }
 }

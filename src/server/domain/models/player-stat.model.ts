@@ -8,3 +8,5 @@ export type PlayerStat = z.infer<typeof PlayerStat>;
 
 export const StatTypeEnum = PlayerStat.shape.type;
 export type StatTypeEnum = z.infer<typeof StatTypeEnum>;
+
+export const statTypeList: StatTypeEnum[] = Object.values(StatTypeEnum.Values);
