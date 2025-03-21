@@ -38,6 +38,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         .then(takeOneOrThrow);
       return { ...session, user };
     },
+    signIn: async ({ user }) => {
+      if (!user.email || !user.name) {
+        throw new Error("email or name not found");
+      }
+      await db
+        .insert(usersTable)
+        .values({ email: user.email, name: user.name })
+        .then(() => {
+          console.log("sign up", user);
+        })
+        .catch(() => {
+          console.log("sign in", user);
+        });
+      return true;
+    },
   },
   trustHost: true,
 });
