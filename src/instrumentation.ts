@@ -1,4 +1,9 @@
-const REQUIRED_ENV = ["DATABASE_URL"];
+const REQUIRED_ENV = [
+  "DATABASE_URL",
+  "AUTH_SECRET",
+  "GOOGLE_CLIENT_ID",
+  "GOOGLE_CLIENT_SECRET",
+];
 
 export function register() {
   console.info("checking required env variables");

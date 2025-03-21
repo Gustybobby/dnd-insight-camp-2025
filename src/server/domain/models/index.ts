@@ -4,3 +4,4 @@ export * from "./player-stat-log.model";
 export * from "./player-stat.model";
 export * from "./player.model";
 export * from "./staff.model";
+export * from "./user.model";

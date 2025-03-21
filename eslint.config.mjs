@@ -25,6 +25,8 @@ const eslintConfig = [
           groups: [
             //type imports
             ["\\u0000$"],
+            //db
+            ["^@\\/db", "^drizzle"],
             //anything else
             ["^"],
           ],
