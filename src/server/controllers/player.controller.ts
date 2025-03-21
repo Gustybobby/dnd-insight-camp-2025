@@ -8,10 +8,12 @@ import type {
 } from "@/server/applications/interfaces/usecases/player";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
-import { CreatePlayerUseCase } from "@/server/applications/usecases/player/create.usecase";
-import { GetPlayerUseCase } from "@/server/applications/usecases/player/get.usecase";
-import { GetAllPlayersUseCase } from "@/server/applications/usecases/player/get-all.usecase";
-import { GetPlayerStatsUseCase } from "@/server/applications/usecases/player/get-stats.usecase";
+import {
+  CreatePlayerUseCase,
+  GetAllPlayersUseCase,
+  GetPlayerStatsUseCase,
+  GetPlayerUseCase,
+} from "@/server/applications/usecases/player";
 import { Player, PlayerCreate } from "@/server/domain/models";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 
