@@ -1,6 +1,6 @@
-import { IGetPlayerCharacterUseCase } from "@/server/applications/interfaces/usecases/player";
-import { IPlayerRepository } from "@/server/domain/interfaces/repositories";
-import { Player, Character } from "@/server/domain/models";
+import type { IGetPlayerCharacterUseCase } from "@/server/applications/interfaces/usecases/player";
+import type { IPlayerRepository } from "@/server/domain/interfaces/repositories";
+import type { Character,Player } from "@/server/domain/models";
 
 export class GetPlayerCharacterUseCase implements IGetPlayerCharacterUseCase {
   constructor(private readonly playerRepo: IPlayerRepository) {}

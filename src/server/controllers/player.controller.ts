@@ -16,11 +16,11 @@ import {
   GetPlayerStatsUseCase,
   GetPlayerUseCase,
 } from "@/server/applications/usecases/player";
+import { GetPlayerCharacterUseCase } from "@/server/applications/usecases/player/get-character.usecase";
 import { Player, PlayerCreate } from "@/server/domain/models";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
-import { GetPlayerCharacterUseCase } from "@/server/applications/usecases/player/get-character.usecase";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
