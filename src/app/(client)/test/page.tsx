@@ -5,7 +5,7 @@ import { getAllPlayers } from "@/server/controllers/player.controller";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
-export default function Home() {
+export default function Test() {
   const { data: players, isRefetching: isPlayersRefetching } = useQuery({
     queryKey: ["getAllPlayers"],
     queryFn: async () => await getAllPlayers(),
