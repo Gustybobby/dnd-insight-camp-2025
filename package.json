@@ -12,6 +12,7 @@
     "prettier:format": "prettier --write ."
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.69.0",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.40.1",
     "drizzle-zod": "^0.7.0",
