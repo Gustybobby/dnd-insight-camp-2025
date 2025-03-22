@@ -32,6 +32,7 @@ export function CharacterCarousel({
         key={character.id}
         src={character.image}
         alt={character.name}
+        priority
         unoptimized
         width={500}
         height={500}
