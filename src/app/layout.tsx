@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Almendra } from "next/font/google";
 
-const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
+const almendra = Almendra({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
 
 export const metadata: Metadata = {
   title: "DnD Insight Camp 2025",
@@ -17,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.variable}>
+      <body className={almendra.className}>
         <div className="flex justify-center bg-black">
           <div className="h-full w-full max-w-xl">{children}</div>
         </div>

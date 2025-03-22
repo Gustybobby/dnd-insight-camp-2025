@@ -59,7 +59,7 @@ export default function Home() {
       />
       <StyledLink
         href="/staff"
-        className="motion-preset-bounce motion-delay-200 absolute bottom-[20%] p-2 text-xl"
+        className="motion-preset-bounce motion-delay-200 absolute bottom-[20%] px-4 py-2 text-lg"
         spanClassName="bg-lightorange border-lightorange"
       >
         Staff Login
