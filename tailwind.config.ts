@@ -9,7 +9,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        lightorange: "#e4b75e",
+        lightorange: "#ee9b00",
         seafoam: "#94d2bd",
       },
     },

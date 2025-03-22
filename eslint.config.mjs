@@ -24,9 +24,13 @@ const eslintConfig = [
         {
           groups: [
             //type imports
-            [".*interfaces.*\\u0000$", "\\u0000$"],
+            [".*interfaces.*\\u0000$", "^@\\/server.*\\u0000$", "\\u0000$"],
             //db
             ["^@\\/db", "^drizzle"],
+            //server
+            ["^@\\/server"],
+            //react, tanstack
+            ["^react", "^@tanstack"],
             //anything else
             ["^"],
           ],

@@ -65,7 +65,7 @@ export default function Home() {
         Staff Login
       </StyledLink>
       <StyledLink
-        href="/game"
+        href="/players"
         className="motion-preset-bounce motion-delay-300 absolute bottom-[10%] px-12 py-2 text-3xl"
       >
         Play
