@@ -1,3 +1,4 @@
+export * from "./characters.schema";
 export * from "./effects.schema";
 export * from "./items.schema";
 export * from "./player-equipments.schema";

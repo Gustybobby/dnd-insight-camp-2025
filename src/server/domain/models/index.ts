@@ -1,5 +1,7 @@
+export * from "./character.model";
 export * from "./effect.model";
 export * from "./item.model";
+export * from "./player-equipment.model";
 export * from "./player-item.model";
 export * from "./player-stat-log.model";
 export * from "./player-stat.model";

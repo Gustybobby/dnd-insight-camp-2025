@@ -1,5 +1,6 @@
 import type { PlayerItemWithInfo } from "@/server/domain/aggregates";
 import type {
+  Character,
   Player,
   PlayerCreate,
   PlayerStat,
@@ -12,6 +13,12 @@ export interface IPlayerRepository {
   getByIdOrThrow({ playerId }: { playerId: Player["id"] }): Promise<Player>;
 
   getByUserId({ userId }: { userId: User["id"] }): Promise<Player | null>;
+
+  getCharacterOrThrow({
+    playerId,
+  }: {
+    playerId: Player["id"];
+  }): Promise<Character>;
 
   getAllStats({ playerId }: { playerId: Player["id"] }): Promise<PlayerStat[]>;
 

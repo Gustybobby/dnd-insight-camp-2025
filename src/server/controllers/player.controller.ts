@@ -3,6 +3,7 @@
 import type {
   ICreatePlayerUseCase,
   IGetAllPlayersUseCase,
+  IGetPlayerCharacterUseCase,
   IGetPlayerStatsUseCase,
   IGetPlayerUseCase,
 } from "@/server/applications/interfaces/usecases/player";
@@ -19,6 +20,7 @@ import { Player, PlayerCreate } from "@/server/domain/models";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
+import { GetPlayerCharacterUseCase } from "@/server/applications/usecases/player/get-character.usecase";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
@@ -29,6 +31,7 @@ const authService = new AuthService(playerRepo, staffRepo, sessionService);
 
 const getAllPlayersUseCase = new GetAllPlayersUseCase(playerRepo);
 const getPlayerUseCase = new GetPlayerUseCase(playerRepo);
+const getPlayerCharacterUseCase = new GetPlayerCharacterUseCase(playerRepo);
 const getPlayerStatsUseCase = new GetPlayerStatsUseCase(playerRepo);
 const createPlayerUseCase = new CreatePlayerUseCase(playerRepo);
 
@@ -44,6 +47,14 @@ export async function getPlayer({
   UseCaseReturn<IGetPlayerUseCase>
 > {
   return getPlayerUseCase.invoke({ playerId: Player.shape.id.parse(playerId) });
+}
+
+export async function getPlayerCharacter({
+  playerId,
+}: UseCaseParams<IGetPlayerCharacterUseCase>): Promise<
+  UseCaseReturn<IGetPlayerCharacterUseCase>
+> {
+  return getPlayerCharacterUseCase.invoke({ playerId });
 }
 
 export async function getPlayerStats({

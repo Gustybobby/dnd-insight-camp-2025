@@ -1,6 +1,7 @@
 import type { IPlayerRepository } from "@/server/domain/interfaces/repositories";
 import type { PlayerItemWithInfo } from "@/server/domain/aggregates";
 import type {
+  Character,
   Player,
   PlayerCreate,
   PlayerStat,
@@ -9,6 +10,7 @@ import type {
 
 import { db } from "@/db";
 import {
+  charactersTable,
   itemsTable,
   playerItemsTable,
   playersTable,
@@ -44,6 +46,19 @@ export class PlayerRepository implements IPlayerRepository {
       .from(playersTable)
       .where(eq(playersTable.userId, userId))
       .then(takeOne);
+  }
+
+  async getCharacterOrThrow({
+    playerId,
+  }: {
+    playerId: Player["id"];
+  }): Promise<Character> {
+    return db
+      .select(getTableColumns(charactersTable))
+      .from(charactersTable)
+      .innerJoin(playersTable, eq(playersTable.characterId, charactersTable.id))
+      .where(eq(playersTable.id, playerId))
+      .then(takeOneOrThrow);
   }
 
   async getAllStats({
