@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={almendra.className}>
-        <div className="flex justify-center bg-black">
+        <div className="flex justify-center bg-black text-black">
           <div className="h-full w-full max-w-xl">{children}</div>
         </div>
       </body>
