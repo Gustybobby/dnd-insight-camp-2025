@@ -24,14 +24,22 @@ const eslintConfig = [
             //type imports
             [
               ".*interfaces.*\\u0000$",
-              "^@\\/server.*\\u0000$",
+              "^@\\/server\\/domain.*\\u0000$",
+              "^@\\/server\\/infrastructure.*\\u0000$",
+              "^@\\/server\\/applications.*\\u0000$",
+              "^@\\/server\\/controllers.*\\u0000$",
               "^react.*\\u0000$",
               "\\u0000$",
             ],
             //db
             ["^@\\/db", "^drizzle"],
             //server
-            ["^@\\/server"],
+            [
+              "^@\\/server\\/domain",
+              "^@\\/server\\/infrastructure",
+              "^@\\/server\\/applications",
+              "^@\\/server\\/controllers",
+            ],
             //react, tanstack, next navigation hooks
             ["^react", "^@tanstack", "^next/navigation"],
             //anything else

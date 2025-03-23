@@ -3,8 +3,8 @@
 import type { IGetAllCharactersUseCase } from "@/server/applications/interfaces/usecases/character";
 import type { UseCaseReturn } from "@/server/controllers/utils";
 
-import { GetAllCharactersUseCase } from "@/server/applications/usecases/character";
 import { CharacterRepository } from "@/server/infrastructure/repositories/character.repository";
+import { GetAllCharactersUseCase } from "@/server/applications/usecases/character";
 
 const characterRepo = new CharacterRepository();
 

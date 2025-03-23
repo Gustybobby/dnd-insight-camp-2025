@@ -9,6 +9,10 @@ import type {
 } from "@/server/applications/interfaces/usecases/player";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
+import { Player, PlayerCreate } from "@/server/domain/models";
+import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
+import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
+import { SessionService } from "@/server/infrastructure/services/session.service";
 import { AuthService } from "@/server/applications/services/auth.service";
 import {
   CreatePlayerUseCase,
@@ -17,10 +21,6 @@ import {
   GetPlayerUseCase,
 } from "@/server/applications/usecases/player";
 import { GetPlayerCharacterUseCase } from "@/server/applications/usecases/player/get-character.usecase";
-import { Player, PlayerCreate } from "@/server/domain/models";
-import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
-import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
-import { SessionService } from "@/server/infrastructure/services/session.service";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
