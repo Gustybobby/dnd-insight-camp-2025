@@ -2,6 +2,7 @@
 
 import { StyledLink } from "@/components/ui/link";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
 
 export default function Home() {
   return (
@@ -60,9 +61,10 @@ export default function Home() {
         className="max-w-3xs motion-preset-oscillate absolute left-1/2 top-[47%] w-1/6 translate-x-[25%] motion-opacity-in-0 motion-duration-1500"
       />
       <StyledLink
-        href="/staff"
+        href="#"
         className="motion-preset-bounce absolute bottom-[20%] px-4 py-2 text-lg motion-delay-200"
         spanClassName="bg-lightorange border-lightorange"
+        onClick={() => signIn("google", { redirectTo: "/staff" })}
       >
         Staff Login
       </StyledLink>
