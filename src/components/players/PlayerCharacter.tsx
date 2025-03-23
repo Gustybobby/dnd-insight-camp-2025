@@ -39,7 +39,7 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
   }
 
   return (
-    <div className="mx-auto mt-[16%] w-11/12 space-y-2 overflow-auto py-2">
+    <div className="mx-auto mt-[20%] w-11/12 space-y-2 overflow-auto py-2">
       <CharacterBox className="relative z-10 p-2">
         <TitleBanner>Group {playerId}</TitleBanner>
         <div className="grid grid-cols-3 place-items-center p-2 px-8">
