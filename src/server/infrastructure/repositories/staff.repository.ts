@@ -1,5 +1,5 @@
 import type { IStaffRepository } from "@/server/domain/interfaces/repositories";
-import type { Staff,User } from "@/server/domain/models";
+import type { Staff, User } from "@/server/domain/models";
 
 import { db } from "@/db";
 import { staffsTable } from "@/db/schema";

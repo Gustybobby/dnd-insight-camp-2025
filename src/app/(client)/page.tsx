@@ -1,3 +1,5 @@
+"use client";
+
 import { StyledLink } from "@/components/ui/link";
 import Image from "next/image";
 
@@ -28,7 +30,7 @@ export default function Home() {
         unoptimized
         width={500}
         height={500}
-        className="motion-preset-shake motion-duration-700 absolute -left-2 top-[7%] w-1/3 max-w-[12rem]"
+        className="motion-preset-shake absolute -left-2 top-[7%] w-1/3 max-w-[12rem] motion-duration-700"
       />
       <Image
         src="/asset/characters/mungkorn.png"
@@ -46,7 +48,7 @@ export default function Home() {
         unoptimized
         width={500}
         height={500}
-        className="motion-preset-pop motion-duration-200 absolute left-1/2 top-[45%] w-1/2 max-w-[16rem] -translate-x-[65%]"
+        className="motion-preset-pop absolute left-1/2 top-[45%] w-1/2 max-w-[16rem] -translate-x-[65%] motion-duration-200"
       />
       <Image
         src="/asset/props/dice.png"
@@ -55,18 +57,19 @@ export default function Home() {
         unoptimized
         width={500}
         height={500}
-        className="max-w-3xs motion-preset-oscillate motion-duration-1500 motion-opacity-in-0 absolute left-1/2 top-[47%] w-1/6 translate-x-[25%]"
+        className="max-w-3xs motion-preset-oscillate absolute left-1/2 top-[47%] w-1/6 translate-x-[25%] motion-opacity-in-0 motion-duration-1500"
       />
       <StyledLink
         href="/staff"
-        className="motion-preset-bounce motion-delay-200 absolute bottom-[20%] px-4 py-2 text-lg"
+        className="motion-preset-bounce absolute bottom-[20%] px-4 py-2 text-lg motion-delay-200"
         spanClassName="bg-lightorange border-lightorange"
       >
         Staff Login
       </StyledLink>
       <StyledLink
         href="/players"
-        className="motion-preset-bounce motion-delay-300 absolute bottom-[10%] px-12 py-2 text-3xl"
+        className="motion-preset-bounce absolute bottom-[10%] px-12 py-2 text-3xl motion-delay-300"
+        onClick={() => window.dispatchEvent(new Event("play music"))}
       >
         Play
       </StyledLink>

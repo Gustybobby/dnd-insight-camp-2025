@@ -27,14 +27,14 @@ export function PlayerTabs({
             </button>
             <div
               className={cn(
-                "bg-cream border-cream absolute h-2 w-full border",
+                "absolute h-2 w-full border border-cream bg-cream",
                 tab.label === active ? "opacity-100" : "opacity-0",
               )}
             />
           </div>
         ))}
       </div>
-      <CharacterBox className="border-oldcream h-full min-h-[32vh]">
+      <CharacterBox className="h-full min-h-[32vh] border-oldcream">
         {tabs.find((tab) => tab.label === active)?.node}
       </CharacterBox>
     </div>
