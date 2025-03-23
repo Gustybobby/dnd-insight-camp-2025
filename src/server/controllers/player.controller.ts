@@ -43,18 +43,16 @@ export async function getAllPlayers(): Promise<
 
 export async function getPlayer({
   playerId,
-}: UseCaseParams<IGetPlayerUseCase>): Promise<
-  UseCaseReturn<IGetPlayerUseCase>
-> {
-  return getPlayerUseCase.invoke({ playerId: Player.shape.id.parse(playerId) });
+}: UseCaseParams<IGetPlayerUseCase>): Promise<UseCaseReturn<IGetPlayerUseCase> | null> {
+  return getPlayerUseCase
+    .invoke({ playerId: Player.shape.id.parse(playerId) })
+    .catch(() => null);
 }
 
 export async function getPlayerCharacter({
   playerId,
-}: UseCaseParams<IGetPlayerCharacterUseCase>): Promise<
-  UseCaseReturn<IGetPlayerCharacterUseCase>
-> {
-  return getPlayerCharacterUseCase.invoke({ playerId });
+}: UseCaseParams<IGetPlayerCharacterUseCase>): Promise<UseCaseReturn<IGetPlayerCharacterUseCase> | null> {
+  return getPlayerCharacterUseCase.invoke({ playerId }).catch(() => null);
 }
 
 export async function getPlayerStats({

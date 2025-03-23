@@ -1,5 +1,8 @@
 import type { IPlayerRepository } from "@/server/domain/interfaces/repositories";
-import type { PlayerItemWithInfo } from "@/server/domain/aggregates";
+import type {
+  PlayerItemWithInfo,
+  PlayerWithCharater,
+} from "@/server/domain/aggregates";
 import type {
   Character,
   Player,
@@ -20,8 +23,17 @@ import { takeOne, takeOneOrThrow } from "@/db/util";
 import { eq, getTableColumns } from "drizzle-orm";
 
 export class PlayerRepository implements IPlayerRepository {
-  async getAll(): Promise<Player[]> {
-    return db.select().from(playersTable);
+  async getAllWithCharacter(): Promise<PlayerWithCharater[]> {
+    return db
+      .select({
+        ...getTableColumns(playersTable),
+        character: getTableColumns(charactersTable),
+      })
+      .from(playersTable)
+      .innerJoin(
+        charactersTable,
+        eq(charactersTable.id, playersTable.characterId),
+      );
   }
 
   async getByIdOrThrow({

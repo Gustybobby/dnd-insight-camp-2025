@@ -6,6 +6,7 @@ export const playerStatTypeEnum = pgEnum("player_stat_type", [
   "Dex",
   "Chr",
   "Int",
+  "HP",
 ]);
 
 export const playerStatsTable = pgTable(

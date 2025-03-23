@@ -1,6 +1,6 @@
 "use client";
 
-import { getAllCharacters } from "@/server/controllers/character.controller";
+import { getAllPlayers } from "@/server/controllers/player.controller";
 
 import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -12,25 +12,25 @@ export default function PlayersPage() {
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const prevIdxRef = useRef(0);
 
-  const { data: characters } = useQuery({
-    queryKey: ["getAllCharacters"],
-    queryFn: async () => await getAllCharacters(),
+  const { data: players } = useQuery({
+    queryKey: ["getAllPlayers"],
+    queryFn: async () => await getAllPlayers(),
   });
 
   function slideInFromRight(): boolean {
-    if (!characters) {
+    if (!players) {
       return false;
     }
-    if (currentIdx === 0 && prevIdxRef.current === characters.length - 1) {
+    if (currentIdx === 0 && prevIdxRef.current === players.length - 1) {
       return false;
     }
-    if (currentIdx === characters.length - 1 && prevIdxRef.current === 0) {
+    if (currentIdx === players.length - 1 && prevIdxRef.current === 0) {
       return true;
     }
     return prevIdxRef.current > currentIdx;
   }
 
-  const character = characters?.[currentIdx];
+  const character = players?.[currentIdx].character;
 
   return (
     <>
@@ -41,15 +41,11 @@ export default function PlayersPage() {
           slideFromRight={slideInFromRight()}
           onClickLeft={() => {
             prevIdxRef.current = currentIdx;
-            setCurrentIdx((idx) =>
-              idx === 0 ? characters.length - 1 : idx - 1,
-            );
+            setCurrentIdx((idx) => (idx === 0 ? players.length - 1 : idx - 1));
           }}
           onClickRight={() => {
             prevIdxRef.current = currentIdx;
-            setCurrentIdx((idx) =>
-              idx === characters.length - 1 ? 0 : idx + 1,
-            );
+            setCurrentIdx((idx) => (idx === players.length - 1 ? 0 : idx + 1));
           }}
         />
       ) : null}
@@ -62,8 +58,8 @@ export default function PlayersPage() {
       ) : null}
       {character ? (
         <StyledLink
-          href={`/players/id`}
-          className="motion-preset-bounce motion-delay-300 absolute bottom-[10%] px-8 py-4 text-3xl"
+          href={`/players/${players?.[currentIdx].id}`}
+          className="motion-preset-bounce absolute bottom-[10%] px-8 py-4 text-3xl motion-delay-300"
           spanClassName="bg-lightorange border-lightorange"
         >
           Character Insight

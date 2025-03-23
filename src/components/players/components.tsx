@@ -13,7 +13,7 @@ export function CharacterBox({
 }) {
   return (
     <section
-      className={cn("bg-cream rounded-lg border-4 border-black", className)}
+      className={cn("rounded-lg border-4 border-black bg-cream", className)}
     >
       {children}
     </section>
@@ -22,7 +22,7 @@ export function CharacterBox({
 
 export function TitleBanner({ children }: { children: React.ReactNode }) {
   return (
-    <div className="motion-preset-pop motion-duration-200 relative flex h-20 items-center justify-center">
+    <div className="motion-preset-pop relative flex h-20 items-center justify-center motion-duration-200">
       <Image
         src={"/asset/props/title_banner.png"}
         alt="banner image"
@@ -37,7 +37,7 @@ export function TitleBanner({ children }: { children: React.ReactNode }) {
 
 export function CharacterModel({ character }: { character: Character }) {
   return (
-    <div className="motion-preset-bounce motion-delay-200 relative mb-4 max-w-32">
+    <div className="motion-preset-bounce relative mb-4 max-w-32 motion-delay-200">
       <h1 className="text-center font-bold">{character.name}</h1>
       <Image
         key={character.id}
@@ -63,11 +63,11 @@ export function HealthBar({ health, max }: { health: number; max: number }) {
         alt="heart"
         width={256}
         height={256}
-        className="motion-preset-shake motion-duration-500 w-12"
+        className="motion-preset-shake w-12 motion-duration-500"
       />
       <div className="relative h-8 w-full rounded-full border-2 border-black bg-zinc-300">
         <div
-          className="motion-scale-x-in-0 absolute h-[calc(2rem-4px)] origin-left rounded-full bg-red-500"
+          className="absolute h-[calc(2rem-4px)] origin-left rounded-full bg-red-500 transition-all motion-scale-x-in-0"
           style={{ width: `${Math.ceil((health / max) * 100)}%` }}
         />
         <p className="relative z-10 flex h-8 w-full items-center justify-center font-bold">
@@ -88,7 +88,7 @@ export function Slot({
   return (
     <div
       className={cn(
-        "shadow-lightorange motion-preset-pop motion-duration-200 flex size-12 items-center justify-center rounded-lg border-2 border-black bg-gray-400 shadow-md",
+        "motion-preset-pop flex size-12 items-center justify-center rounded-lg border-2 border-black bg-gray-400 shadow-md shadow-lightorange motion-duration-200",
         className,
       )}
     >
@@ -151,7 +151,7 @@ export function StatBar({
       <div className="flex items-center justify-center">
         <div
           className={cn(
-            "motion-preset-shake motion-duration-500 flex size-12 items-center justify-center rounded-full border-2 border-black bg-gray-400",
+            "motion-preset-shake flex size-12 items-center justify-center rounded-full border-2 border-black bg-gray-400 motion-duration-500",
             colorClassName,
           )}
         >
@@ -172,7 +172,7 @@ export function StatBar({
         <div className="relative h-4 w-full rounded-full border-2 border-black bg-zinc-300">
           <div
             className={cn(
-              "motion-scale-x-in-0 absolute h-[calc(1rem-4px)] origin-left rounded-full",
+              "absolute h-[calc(1rem-4px)] origin-left rounded-full transition-all motion-scale-x-in-0",
               colorClassName,
             )}
             style={{ width: `${Math.ceil((value / max) * 100)}%` }}
