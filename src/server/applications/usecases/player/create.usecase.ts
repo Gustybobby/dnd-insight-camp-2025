@@ -16,9 +16,11 @@ export class CreatePlayerUseCase implements ICreatePlayerUseCase {
     await Promise.all(
       ORDERED_STAT_TYPES.map((type, idx) =>
         this.playerRepo.createStat({
-          playerId: player.id,
-          type,
-          value: DEFAULT_STAT_VALUES[idx],
+          data: {
+            playerId: player.id,
+            type,
+            value: DEFAULT_STAT_VALUES[idx],
+          },
         }),
       ),
     );

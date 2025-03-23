@@ -107,16 +107,10 @@ export class PlayerRepository implements IPlayerRepository {
       .then(takeOneOrThrow);
   }
 
-  async createStat({
-    playerId,
-    type,
-  }: {
-    playerId: Player["id"];
-    type: PlayerStat["type"];
-  }): Promise<PlayerStat> {
+  async createStat({ data }: { data: PlayerStat }): Promise<PlayerStat> {
     return db
       .insert(playerStatsTable)
-      .values({ playerId, type })
+      .values(data)
       .returning()
       .then(takeOneOrThrow);
   }

@@ -33,5 +33,5 @@ export interface IPlayerRepository {
 
   create({ data }: { data: PlayerCreate }): Promise<Player>;
 
-  createStat({ playerId, type, value }: PlayerStat): Promise<PlayerStat>;
+  createStat({ data }: { data: PlayerStat }): Promise<PlayerStat>;
 }
