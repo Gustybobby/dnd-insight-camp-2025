@@ -1,10 +1,13 @@
 "use client";
 
+import type { Character, StatTypeEnum } from "@/server/domain/models";
+
 import {
   getPlayerCharacter,
   getPlayerStats,
 } from "@/server/controllers/player.controller";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -16,11 +19,12 @@ import {
 } from "@/components/players/components";
 import { PlayerTabs } from "@/components/players/PlayerTabs";
 import { clientOrderedStatTypes } from "@/components/players/style";
-import { PlayerStats } from "@/components/players/tabs/PlayerStats";
+import { PlayerStats, StatInfo } from "@/components/players/tabs/PlayerStats";
 import { useRouter } from "next/navigation";
 
 export function PlayerCharacter({ playerId }: { playerId: number }) {
   const router = useRouter();
+  const [window, setWindow] = useState<"character" | StatTypeEnum>("character");
 
   const { data: character } = useQuery({
     queryKey: ["getPlayerCharacter", playerId],
@@ -40,14 +44,12 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
 
   return (
     <div className="mx-auto mt-[20%] w-11/12 space-y-2 overflow-auto py-2">
-      <CharacterBox className="relative z-10 p-2">
-        <TitleBanner>Group {playerId}</TitleBanner>
-        <div className="grid grid-cols-3 place-items-center p-2 px-8">
-          <div className="col-span-2">
-            {character && <CharacterModel character={character} />}
-          </div>
-          <EquipmentsBar equipments={[]} />
-        </div>
+      <CharacterBox className="relative z-10 min-h-[32vh] p-2">
+        {window === "character" ? (
+          <CharacterInfo playerId={playerId} character={character ?? null} />
+        ) : (
+          <StatInfo type={window} onClickBack={() => setWindow("character")} />
+        )}
       </CharacterBox>
       <CharacterBox className="relative z-10">
         <HealthBar
@@ -69,6 +71,7 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
                       playerId: 0,
                     },
                 )}
+                onClickIcon={(type) => setWindow(type)}
               />
             ),
           },
@@ -78,5 +81,25 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
         defaultTab="Stats"
       />
     </div>
+  );
+}
+
+function CharacterInfo({
+  playerId,
+  character,
+}: {
+  playerId: number;
+  character: Character | null;
+}) {
+  return (
+    <>
+      <TitleBanner>Group {playerId}</TitleBanner>
+      <div className="grid grid-cols-3 place-items-center p-2 px-8">
+        <div className="col-span-2">
+          {character && <CharacterModel character={character} />}
+        </div>
+        <EquipmentsBar equipments={[]} />
+      </div>
+    </>
   );
 }

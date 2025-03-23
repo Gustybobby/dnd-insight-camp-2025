@@ -1,5 +1,9 @@
 import type { PlayerEquipmentWithInfo } from "@/server/domain/aggregates";
-import type { Character, EquipmentPartEnum } from "@/server/domain/models";
+import type {
+  Character,
+  EquipmentPartEnum,
+  StatTypeEnum,
+} from "@/server/domain/models";
 
 import { cn } from "@/components/utils";
 import Image from "next/image";
@@ -135,36 +139,56 @@ export function StatsGrid({ children }: { children: React.ReactNode }) {
   return <div className="grid w-full grid-cols-4 gap-4 p-4">{children}</div>;
 }
 
+export function StatIcon({
+  className,
+  src,
+  type,
+  onClick,
+}: {
+  className?: string;
+  src: string;
+  type: StatTypeEnum;
+  onClick?: (type: StatTypeEnum) => void;
+}) {
+  return (
+    <div
+      className={cn(
+        "motion-preset-shake flex size-12 items-center justify-center rounded-full border-2 border-black bg-gray-400 motion-duration-500",
+        className,
+      )}
+      onClick={() => onClick?.(type)}
+    >
+      <Image src={src} alt={type} className="size-8" width={128} height={128} />
+    </div>
+  );
+}
+
 export function StatBar({
   label,
+  type,
   iconSrc,
   value,
   max,
   colorClassName,
+  onClickIcon,
 }: {
   label: string;
+  type: StatTypeEnum;
   iconSrc: string;
   value: number;
   max: number;
   colorClassName: string;
+  onClickIcon?: (type: StatTypeEnum) => void;
 }) {
   return (
     <>
       <div className="flex items-center justify-center">
-        <div
-          className={cn(
-            "motion-preset-shake flex size-12 items-center justify-center rounded-full border-2 border-black bg-gray-400 motion-duration-500",
-            colorClassName,
-          )}
-        >
-          <Image
-            src={iconSrc}
-            alt={label}
-            className="size-8"
-            width={128}
-            height={128}
-          />
-        </div>
+        <StatIcon
+          className={cn(colorClassName, "hover:cursor-pointer")}
+          src={iconSrc}
+          type={type}
+          onClick={onClickIcon}
+        />
       </div>
       <div className="col-span-3 flex flex-col justify-center">
         <div className="flex w-full justify-between text-lg">
