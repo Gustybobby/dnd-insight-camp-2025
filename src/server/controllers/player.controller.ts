@@ -35,10 +35,8 @@ const getPlayerCharacterUseCase = new GetPlayerCharacterUseCase(playerRepo);
 const getPlayerStatsUseCase = new GetPlayerStatsUseCase(playerRepo);
 const createPlayerUseCase = new CreatePlayerUseCase(playerRepo);
 
-export async function getAllPlayers(): Promise<
-  UseCaseReturn<IGetAllPlayersUseCase>
-> {
-  return getAllPlayersUseCase.invoke();
+export async function getAllPlayers(): Promise<UseCaseReturn<IGetAllPlayersUseCase> | null> {
+  return getAllPlayersUseCase.invoke().catch(() => null);
 }
 
 export async function getPlayer({
@@ -57,22 +55,20 @@ export async function getPlayerCharacter({
 
 export async function getPlayerStats({
   playerId,
-}: UseCaseParams<IGetPlayerStatsUseCase>): Promise<
-  UseCaseReturn<IGetPlayerStatsUseCase>
-> {
-  return getPlayerStatsUseCase.invoke({
-    playerId: Player.shape.id.parse(playerId),
-  });
+}: UseCaseParams<IGetPlayerStatsUseCase>): Promise<UseCaseReturn<IGetPlayerStatsUseCase> | null> {
+  return getPlayerStatsUseCase
+    .invoke({
+      playerId: Player.shape.id.parse(playerId),
+    })
+    .catch(() => null);
 }
 
 export async function createPlayer({
   data,
-}: UseCaseParams<ICreatePlayerUseCase>): Promise<
-  UseCaseReturn<ICreatePlayerUseCase>
-> {
+}: UseCaseParams<ICreatePlayerUseCase>): Promise<UseCaseReturn<ICreatePlayerUseCase> | null> {
   await authService.authStaff();
 
-  return createPlayerUseCase.invoke({
-    data: PlayerCreate.parse(data),
-  });
+  return createPlayerUseCase
+    .invoke({ data: PlayerCreate.parse(data) })
+    .catch(() => null);
 }

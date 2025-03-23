@@ -1,8 +1,9 @@
+import type { SubmitHandler } from "react-hook-form";
+
 import { getAllCharacters } from "@/server/controllers/character.controller";
 import { createPlayer } from "@/server/controllers/player.controller";
 
 import { useState } from "react";
-import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
