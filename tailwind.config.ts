@@ -14,6 +14,11 @@ export default {
         cream: "#d0c1a0",
         oldcream: "#80826e",
         oldpurple: "#7d5c9d",
+        darkred: "#692212",
+        dark: "#111111",
+      },
+      backgroundImage: {
+        "radial-gradient": "radial-gradient(circle, var(--tw-gradient-stops))",
       },
     },
   },
