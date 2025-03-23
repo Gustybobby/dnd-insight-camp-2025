@@ -6,8 +6,8 @@ import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { CharacterCarousel } from "@/components/players/CharacterCarousel";
-import { StyledLink } from "@/components/ui/link";
 import { TitleBanner } from "@/components/players/components";
+import { StyledLink } from "@/components/ui/link";
 
 export default function PlayersPage() {
   const [currentIdx, setCurrentIdx] = useState<number>(0);
