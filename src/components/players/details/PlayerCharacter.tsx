@@ -11,15 +11,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { usePlayerWindow } from "@/components/hooks/usePlayerWindow";
-import {
-  CharacterBox,
-  HealthBar,
-  TitleBanner,
-} from "@/components/players/components";
+import { CharacterBox, TitleBanner } from "@/components/players/components";
 import { CharacterModel } from "@/components/players/details/character";
 import { EquipmentsBar } from "@/components/players/details/equipment";
 import { PlayerTabs } from "@/components/players/details/PlayerTabs";
-import { PlayerStats, StatInfo } from "@/components/players/details/stat";
+import {
+  HealthBar,
+  PlayerStats,
+  StatInfo,
+} from "@/components/players/details/stat";
 import { clientOrderedStatTypes } from "@/components/players/style";
 
 export function PlayerCharacter({ playerId }: { playerId: number }) {

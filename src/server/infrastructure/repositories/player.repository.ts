@@ -8,6 +8,7 @@ import type {
   Player,
   PlayerCreate,
   PlayerStat,
+  PlayerStatLogCreate,
   User,
 } from "@/server/domain/models";
 
@@ -17,10 +18,11 @@ import {
   itemsTable,
   playerItemsTable,
   playersTable,
+  playerStatLogsTable,
   playerStatsTable,
 } from "@/db/schema";
 import { takeOne, takeOneOrThrow } from "@/db/util";
-import { eq, getTableColumns } from "drizzle-orm";
+import { and, eq, getTableColumns, sql } from "drizzle-orm";
 
 export class PlayerRepository implements IPlayerRepository {
   async getAllWithCharacter(): Promise<PlayerWithCharater[]> {
@@ -113,5 +115,29 @@ export class PlayerRepository implements IPlayerRepository {
       .values(data)
       .returning()
       .then(takeOneOrThrow);
+  }
+
+  async updateStat({
+    data,
+  }: {
+    data: PlayerStatLogCreate;
+  }): Promise<PlayerStat> {
+    return db.transaction(async (tx) => {
+      await tx.insert(playerStatLogsTable).values(data);
+      return tx
+        .update(playerStatsTable)
+        .set({
+          type: data.type,
+          value: sql`${playerStatsTable.value} + ${data.value}`,
+        })
+        .where(
+          and(
+            eq(playerStatsTable.type, data.type),
+            eq(playerStatsTable.playerId, data.playerId),
+          ),
+        )
+        .returning()
+        .then(takeOneOrThrow);
+    });
   }
 }

@@ -18,6 +18,8 @@ declare module "next-auth" {
       id: string;
       email: string;
       name: string;
+      staffId: number | null;
+      playerId: number | null;
     };
   }
 }

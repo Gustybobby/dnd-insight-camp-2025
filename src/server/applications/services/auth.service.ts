@@ -26,7 +26,7 @@ export class AuthService implements IAuthService {
     if (!player) {
       throw new AuthError("user is not a player", session);
     }
-    return session;
+    return { ...session, user: { ...session.user, playerId: player.id } };
   }
 
   async authStaff(): Promise<AuthSession> {
@@ -38,7 +38,7 @@ export class AuthService implements IAuthService {
     if (!staff) {
       throw new AuthError("user is not a staff", session);
     }
-    return session;
+    return { ...session, user: { ...session.user, staffId: staff.id } };
   }
 }
 

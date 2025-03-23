@@ -5,3 +5,6 @@ import { createSelectSchema } from "drizzle-zod";
 
 export const PlayerStatLog = createSelectSchema(playerStatLogsTable);
 export type PlayerStatLog = z.infer<typeof PlayerStatLog>;
+
+export const PlayerStatLogCreate = PlayerStatLog.omit({ createdAt: true });
+export type PlayerStatLogCreate = z.infer<typeof PlayerStatLogCreate>;

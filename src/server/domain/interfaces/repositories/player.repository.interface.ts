@@ -7,6 +7,7 @@ import type {
   Player,
   PlayerCreate,
   PlayerStat,
+  PlayerStatLogCreate,
   User,
 } from "@/server/domain/models";
 
@@ -34,4 +35,6 @@ export interface IPlayerRepository {
   create({ data }: { data: PlayerCreate }): Promise<Player>;
 
   createStat({ data }: { data: PlayerStat }): Promise<PlayerStat>;
+
+  updateStat({ data }: { data: PlayerStatLogCreate }): Promise<PlayerStat>;
 }
