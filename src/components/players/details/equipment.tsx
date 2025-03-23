@@ -20,7 +20,7 @@ export function Slot({
     >
       <Image
         src={placeholderSrc}
-        alt="sword placeholder"
+        alt="placeholder"
         width={128}
         height={128}
         className="size-8"

@@ -4,6 +4,7 @@ import type { Character } from "@/server/domain/models";
 
 import {
   getPlayerCharacter,
+  getPlayerItems,
   getPlayerStats,
 } from "@/server/controllers/player.controller";
 
@@ -14,6 +15,7 @@ import { usePlayerWindow } from "@/components/hooks/usePlayerWindow";
 import { CharacterBox, TitleBanner } from "@/components/players/components";
 import { CharacterModel } from "@/components/players/details/character";
 import { EquipmentsBar } from "@/components/players/details/equipment";
+import { Inventory } from "@/components/players/details/inventory";
 import { PlayerTabs } from "@/components/players/details/PlayerTabs";
 import {
   HealthBar,
@@ -34,6 +36,12 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
   const { data: playerStats } = useQuery({
     queryKey: ["getPlayerStats", playerId],
     queryFn: async () => await getPlayerStats({ playerId }),
+    refetchInterval: 5000,
+  });
+
+  const { data: playerItems } = useQuery({
+    queryKey: ["getPlayerItems", playerId],
+    queryFn: async () => await getPlayerItems({ playerId }),
     refetchInterval: 5000,
   });
 
@@ -81,7 +89,10 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
               />
             ),
           },
-          { label: "Inventory", node: <div></div> },
+          {
+            label: "Inventory",
+            node: <>{playerItems && <Inventory items={playerItems} />}</>,
+          },
           { label: "Skills", node: <div></div> },
         ]}
         defaultTab="Stats"
