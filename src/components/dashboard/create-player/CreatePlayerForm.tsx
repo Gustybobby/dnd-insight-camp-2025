@@ -1,9 +1,9 @@
-import React, { FormEvent, useState } from "react";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { getAllCharacters } from "@/server/controllers/character.controller";
 import { createPlayer } from "@/server/controllers/player.controller";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useForm, SubmitHandler } from "react-hook-form";
+import React, { useState } from "react";
+import { type SubmitHandler,useForm } from "react-hook-form";
 
 interface PlayerFormData {
   name: string;
@@ -17,8 +17,6 @@ interface PlayerFormData {
 // this one use server action so you can call directly on frontend
 
 export default function CreatePlayerForm() {
-  const queryClient = useQueryClient();
-
   const mutation = useMutation({
     mutationFn: (newPlayer: PlayerFormData) =>
       createPlayer({ data: { ...newPlayer, userId: null } }),
@@ -26,12 +24,7 @@ export default function CreatePlayerForm() {
       alert(`Player created successfully!`);
     },
   });
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<PlayerFormData>();
+  const { register, handleSubmit, setValue } = useForm<PlayerFormData>();
   const onSubmit: SubmitHandler<PlayerFormData> = (data, event) => {
     event?.preventDefault();
     console.log(data);
