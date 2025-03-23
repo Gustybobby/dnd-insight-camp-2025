@@ -38,7 +38,9 @@ export function TitleBanner({ children }: { children: React.ReactNode }) {
 export function CharacterModel({ character }: { character: Character }) {
   return (
     <div className="motion-preset-bounce relative mb-4 max-w-32 motion-delay-200">
-      <h1 className="text-center font-bold">{character.name}</h1>
+      <h1 className="text-center font-[family-name:var(--noto-sans-thai)] font-bold">
+        {character.name}
+      </h1>
       <Image
         key={character.id}
         src={character.image}

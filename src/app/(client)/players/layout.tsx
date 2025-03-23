@@ -23,7 +23,7 @@ export default function CharacterMenuLayout({
         fill
         priority
         unoptimized
-        className="scale-115 object-cover contrast-[110%]"
+        className="scale-115 object-cover"
       />
       <Image
         src="/asset/props/logo_wing.png"

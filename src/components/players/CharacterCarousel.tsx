@@ -25,7 +25,7 @@ export function CharacterCarousel({
           width={500}
           height={500}
           unoptimized
-          className="motion-preset-fade h-20 w-fit hover:scale-110"
+          className="motion-preset-fade h-20 w-fit opacity-60 hover:scale-110"
         />
       </button>
       <Image
@@ -37,7 +37,7 @@ export function CharacterCarousel({
         width={500}
         height={500}
         className={cn(
-          "motion-duration-300 aspect-square h-full max-w-fit",
+          "aspect-square h-full max-w-fit motion-duration-300",
           slideFromRight
             ? "motion-preset-slide-right-md"
             : "motion-preset-slide-left-md",
@@ -51,7 +51,7 @@ export function CharacterCarousel({
           width={500}
           height={500}
           unoptimized
-          className="motion-preset-fade h-20 w-fit rotate-180 hover:scale-110"
+          className="motion-preset-fade h-20 w-fit rotate-180 opacity-60 hover:scale-110"
         />
       </button>
     </div>
