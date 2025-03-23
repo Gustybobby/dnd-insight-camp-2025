@@ -10,6 +10,7 @@ const almendra = Almendra({
 
 const notoSansThai = Noto_Sans_Thai({
   variable: "--noto-sans-thai",
+  subsets: ["thai"],
   weight: ["400", "700"],
 });
 
