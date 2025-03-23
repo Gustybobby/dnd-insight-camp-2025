@@ -2,7 +2,9 @@
 
 import { getAllCharacters } from "@/server/controllers/character.controller";
 import { getAllPlayers } from "@/server/controllers/player.controller";
+
 import { useQuery } from "@tanstack/react-query";
+
 import Image from "next/image";
 
 export default function Home() {

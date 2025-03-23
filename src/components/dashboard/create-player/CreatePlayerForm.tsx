@@ -1,9 +1,12 @@
 import { getAllCharacters } from "@/server/controllers/character.controller";
 import { createPlayer } from "@/server/controllers/player.controller";
+
+import { useState } from "react";
+import type { SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
+
 import Image from "next/image";
-import React, { useState } from "react";
-import { type SubmitHandler,useForm } from "react-hook-form";
 
 interface PlayerFormData {
   name: string;
@@ -79,7 +82,7 @@ export default function CreatePlayerForm() {
           ))}
         </div>
       </div>
-      <button type="submit" className="border border-2">
+      <button type="submit" className="border-2">
         Create Player
       </button>
     </form>

@@ -1,9 +1,12 @@
 "use client";
 
-import CreatePlayerForm from "@/components/dashboard/create-player/CreatePlayerForm";
 import { getAllPlayers } from "@/server/controllers/player.controller";
-import { useQuery } from "@tanstack/react-query";
+
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import CreatePlayerForm from "@/components/dashboard/create-player/CreatePlayerForm";
+
 export default function PlayerDashboard() {
   const { data: players, isRefetching: isPlayersRefetching } = useQuery({
     queryKey: ["getAllPlayers"],

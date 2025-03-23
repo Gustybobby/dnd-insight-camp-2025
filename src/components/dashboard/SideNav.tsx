@@ -1,5 +1,7 @@
-import Link from "next/link";
 import React from "react";
+
+import Link from "next/link";
+
 const menu = [
   {
     href: "/dashboard/overview",
@@ -14,6 +16,7 @@ const menu = [
     label: "Characters",
   },
 ];
+
 export default function SideNav() {
   return (
     <div className="h-full w-64 bg-gray-800 text-white">
