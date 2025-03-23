@@ -1,4 +1,4 @@
-import { PlayerCharacter } from "@/components/players/PlayerCharacter";
+import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
 
 export default async function PlayerCharacterPage({
   params,

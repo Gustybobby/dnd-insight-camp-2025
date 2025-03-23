@@ -25,6 +25,10 @@ export default function QueryClientLayout({
   }, [play]);
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <div onClick={() => dispatchEvent(new Event("play music"))}>
+        {children}
+      </div>
+    </QueryClientProvider>
   );
 }

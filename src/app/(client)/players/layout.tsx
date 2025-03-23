@@ -1,8 +1,9 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 const backPatterns: { pathRegex: RegExp; redirectTo: string }[] = [
   { pathRegex: /^\/players\/.*$/, redirectTo: "/players" },

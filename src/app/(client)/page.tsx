@@ -69,7 +69,6 @@ export default function Home() {
       <StyledLink
         href="/players"
         className="motion-preset-bounce absolute bottom-[10%] px-12 py-2 text-3xl motion-delay-300"
-        onClick={() => window.dispatchEvent(new Event("play music"))}
       >
         Play
       </StyledLink>

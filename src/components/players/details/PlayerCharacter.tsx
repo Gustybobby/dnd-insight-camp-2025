@@ -1,30 +1,30 @@
 "use client";
 
-import type { Character, StatTypeEnum } from "@/server/domain/models";
+import type { Character } from "@/server/domain/models";
 
 import {
   getPlayerCharacter,
   getPlayerStats,
 } from "@/server/controllers/player.controller";
 
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
+import { usePlayerWindow } from "@/components/hooks/usePlayerWindow";
 import {
   CharacterBox,
-  CharacterModel,
-  EquipmentsBar,
   HealthBar,
   TitleBanner,
 } from "@/components/players/components";
-import { PlayerTabs } from "@/components/players/PlayerTabs";
+import { CharacterModel } from "@/components/players/details/character";
+import { EquipmentsBar } from "@/components/players/details/equipment";
+import { PlayerTabs } from "@/components/players/details/PlayerTabs";
+import { PlayerStats, StatInfo } from "@/components/players/details/stat";
 import { clientOrderedStatTypes } from "@/components/players/style";
-import { PlayerStats, StatInfo } from "@/components/players/tabs/PlayerStats";
-import { useRouter } from "next/navigation";
 
 export function PlayerCharacter({ playerId }: { playerId: number }) {
   const router = useRouter();
-  const [window, setWindow] = useState<"character" | StatTypeEnum>("character");
+  const { window, setWindow } = usePlayerWindow();
 
   const { data: character } = useQuery({
     queryKey: ["getPlayerCharacter", playerId],
@@ -44,12 +44,16 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
 
   return (
     <div className="mx-auto mt-[20%] w-11/12 space-y-2 overflow-auto py-2">
-      <CharacterBox className="relative z-10 min-h-[32vh] p-2">
-        {window === "character" ? (
+      <CharacterBox className="relative z-10 min-h-[38vh] p-2">
+        {window.type === "character" ? (
           <CharacterInfo playerId={playerId} character={character ?? null} />
-        ) : (
-          <StatInfo type={window} onClickBack={() => setWindow("character")} />
-        )}
+        ) : window.type === "statInfo" ? (
+          <StatInfo
+            key={window.statType}
+            type={window.statType}
+            onClickBack={() => setWindow({ type: "character" })}
+          />
+        ) : null}
       </CharacterBox>
       <CharacterBox className="relative z-10">
         <HealthBar
@@ -71,7 +75,9 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
                       playerId: 0,
                     },
                 )}
-                onClickIcon={(type) => setWindow(type)}
+                onClickIcon={(statType) =>
+                  setWindow({ type: "statInfo", statType })
+                }
               />
             ),
           },
