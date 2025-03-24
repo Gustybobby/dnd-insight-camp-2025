@@ -1,6 +1,7 @@
 "use client";
 
-import type { Player } from "@/server/domain/models";
+import type { Player, PlayerStat } from "@/server/domain/models";
+import type { Popper, PopupData } from "@/components/hooks/usePopupEffect";
 
 import {
   getPlayerEquipments,
@@ -15,13 +16,23 @@ import {
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+import { STAT_STYLE_MAP } from "@/components/players/style";
+
 export function useCharacter({
   playerId,
   refetchInterval,
+  popper,
 }: {
   playerId: Player["id"];
   refetchInterval: number;
+  popper: Popper;
 }) {
+  function getBoundingRect() {
+    return window.document
+      .getElementById("character_model")
+      ?.getBoundingClientRect();
+  }
+
   const { data: character } = useQuery({
     queryKey: ["getPlayerCharacter", playerId],
     queryFn: async () => await getPlayerCharacter({ playerId }),
@@ -29,7 +40,24 @@ export function useCharacter({
 
   const { data: playerStats, refetch: refetchStats } = useQuery({
     queryKey: ["getPlayerStats", playerId],
-    queryFn: async () => await getPlayerStats({ playerId }),
+    queryFn: async () => {
+      const newPlayerStats = await getPlayerStats({ playerId });
+      const rect = getBoundingRect();
+      if (rect && playerStats) {
+        newPlayerStats?.forEach((_, idx) => {
+          const data = statChangePopup({
+            idx,
+            currStats: newPlayerStats,
+            prevStats: playerStats,
+            rect,
+          });
+          if (data) {
+            setTimeout(() => popper(data), 400);
+          }
+        });
+      }
+      return newPlayerStats;
+    },
     refetchInterval,
   });
 
@@ -58,5 +86,31 @@ export function useCharacter({
     refetchEquipments,
     equipMutation,
     removeMutation,
+  };
+}
+
+function statChangePopup({
+  idx,
+  currStats,
+  prevStats,
+  rect,
+}: {
+  idx: number;
+  currStats: PlayerStat[];
+  prevStats: PlayerStat[];
+  rect: DOMRect;
+}): Omit<PopupData, "id"> | null {
+  const stat = currStats[idx];
+  const change = stat.value - prevStats[idx].value;
+  if (change === 0) {
+    return null;
+  }
+  return {
+    duration: 1000,
+    text: `${stat.type} ${change > 0 ? "+" : "-"}${stat.value - prevStats[idx].value}`,
+    x: rect.x + (idx % 2) * rect.width - 50 * (1 - (idx % 2)) + 5 * (idx % 2),
+    y:
+      rect.y + ((idx % currStats.length) / currStats.length) * rect.height - 20,
+    className: STAT_STYLE_MAP[stat.type].textColor,
   };
 }

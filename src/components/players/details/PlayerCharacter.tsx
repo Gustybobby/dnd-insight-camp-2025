@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { useCharacter } from "@/components/hooks/useCharacter";
 import { usePlayerWindow } from "@/components/hooks/usePlayerWindow";
+import { Popups, usePopupEffect } from "@/components/hooks/usePopupEffect";
 import { CharacterBox } from "@/components/players/components";
 import { CharacterInfo } from "@/components/players/details/character";
 import { Inventory, ItemInfo } from "@/components/players/details/inventory";
@@ -25,6 +26,7 @@ export function PlayerCharacter({
 }) {
   const router = useRouter();
   const { window, setWindow } = usePlayerWindow();
+  const { popups, popper } = usePopupEffect();
 
   const {
     character,
@@ -36,7 +38,7 @@ export function PlayerCharacter({
     refetchEquipments,
     equipMutation,
     removeMutation,
-  } = useCharacter({ playerId, refetchInterval: 5000 });
+  } = useCharacter({ playerId, refetchInterval: 5000, popper });
 
   if (character === null) {
     router.replace("/players");
@@ -142,6 +144,7 @@ export function PlayerCharacter({
         ]}
         defaultTab="Stats"
       />
+      <Popups popups={popups} />
     </div>
   );
 }

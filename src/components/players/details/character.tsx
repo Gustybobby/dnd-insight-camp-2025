@@ -12,6 +12,7 @@ export function CharacterModel({ character }: { character: Character }) {
         {character.name}
       </h1>
       <Image
+        id="character_model"
         key={character.id}
         src={character.image}
         alt={character.name}
