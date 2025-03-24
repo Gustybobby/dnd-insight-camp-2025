@@ -1,10 +1,10 @@
 import type { IItemRepository } from "@/server/domain/interfaces/repositories";
-import type { Item } from "@/server/domain/models";
+import type { Item, PlayerItem } from "@/server/domain/models";
 
 import { db } from "@/db";
-import { itemsTable } from "@/db/schema";
+import { itemsTable, playerItemsTable } from "@/db/schema";
 import { takeOneOrThrow } from "@/db/util";
-import { eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 export class ItemRepository implements IItemRepository {
   async getAll(): Promise<Item[]> {
@@ -16,6 +16,26 @@ export class ItemRepository implements IItemRepository {
       .select()
       .from(itemsTable)
       .where(eq(itemsTable.id, itemId))
+      .then(takeOneOrThrow);
+  }
+
+  async createPlayerItem({ data }: { data: PlayerItem }): Promise<PlayerItem> {
+    return db
+      .insert(playerItemsTable)
+      .values(data)
+      .returning()
+      .catch(() =>
+        db
+          .update(playerItemsTable)
+          .set({ amount: sql`${playerItemsTable.amount} + ${data.amount}` })
+          .where(
+            and(
+              eq(playerItemsTable.playerId, data.playerId),
+              eq(playerItemsTable.itemId, data.itemId),
+            ),
+          )
+          .returning(),
+      )
       .then(takeOneOrThrow);
   }
 }
