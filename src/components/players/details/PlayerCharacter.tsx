@@ -15,7 +15,7 @@ import { usePlayerWindow } from "@/components/hooks/usePlayerWindow";
 import { CharacterBox, TitleBanner } from "@/components/players/components";
 import { CharacterModel } from "@/components/players/details/character";
 import { EquipmentsBar } from "@/components/players/details/equipment";
-import { Inventory } from "@/components/players/details/inventory";
+import { Inventory, ItemInfo } from "@/components/players/details/inventory";
 import { PlayerTabs } from "@/components/players/details/PlayerTabs";
 import {
   HealthBar,
@@ -61,6 +61,12 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
             type={window.statType}
             onClickBack={() => setWindow({ type: "character" })}
           />
+        ) : window.type === "itemInfo" ? (
+          <ItemInfo
+            key={window.item.id}
+            item={window.item}
+            onClickBack={() => setWindow({ type: "character" })}
+          />
         ) : null}
       </CharacterBox>
       <CharacterBox className="relative z-10">
@@ -89,9 +95,19 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
               />
             ),
           },
+          { label: "Status", node: <div></div> },
           {
-            label: "Inventory",
-            node: <>{playerItems && <Inventory items={playerItems} />}</>,
+            label: "Items",
+            node: (
+              <>
+                {playerItems && (
+                  <Inventory
+                    items={playerItems}
+                    onClick={(item) => setWindow({ type: "itemInfo", item })}
+                  />
+                )}
+              </>
+            ),
           },
           { label: "Skills", node: <div></div> },
         ]}
