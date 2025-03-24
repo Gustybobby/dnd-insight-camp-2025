@@ -6,13 +6,13 @@ export const STAT_STYLE_MAP: Record<
 > = {
   Str: {
     label: "Strength",
-    color: "bg-oldpurple",
+    color: "bg-strcolor",
     description:
       "Integer consequat dolor nec tellus ullamcorper, ac iaculis elit mattis. Pellentesque et sem sit amet leo placerat imperdiet. Curabitur enim lacus, abradacradaba hello what are you this is dextroryrasdaslkdaljwqeicjqwiceqwceqcw",
   },
   Dex: {
     label: "Dexterity",
-    color: "bg-cyan-700",
+    color: "bg-dexcolor",
     description:
       "Integer consequat dolor nec tellus ullamcorper, ac iaculis elit mattis. Pellentesque et sem sit amet leo placerat imperdiet. Curabitur enim lacus, abradacradaba hello what are you this is dextroryrasdaslkdaljwqeicjqwiceqwceqcw",
   },
@@ -24,7 +24,7 @@ export const STAT_STYLE_MAP: Record<
   },
   Int: {
     label: "Intelligence",
-    color: "bg-orange-500",
+    color: "bg-intcolor",
     description:
       "Integer consequat dolor nec tellus ullamcorper, ac iaculis elit mattis. Pellentesque et sem sit amet leo placerat imperdiet. Curabitur enim lacus, abradacradaba hello what are you this is dextroryrasdaslkdaljwqeicjqwiceqwceqcw",
   },

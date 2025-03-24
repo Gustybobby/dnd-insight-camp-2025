@@ -44,6 +44,7 @@ export function EquipmentsBar({
   console.log(equipments);
   return (
     <div className="flex w-full flex-col items-center justify-center gap-2 px-4">
+      <h1 className="font-bold">Equipments</h1>
       {equipmentsOrder.map((part, idx) => (
         <Slot
           key={part}

@@ -1,5 +1,7 @@
 import type { Character } from "@/server/domain/models";
 
+import { TitleBanner } from "@/components/players/components";
+import { EquipmentsBar } from "@/components/players/details/equipment";
 import Image from "next/image";
 
 export function CharacterModel({ character }: { character: Character }) {
@@ -21,5 +23,25 @@ export function CharacterModel({ character }: { character: Character }) {
       />
       <div className="absolute -bottom-2 left-0 right-0 mx-auto h-14 w-32 rounded-[50%] bg-black opacity-20" />
     </div>
+  );
+}
+
+export function CharacterInfo({
+  playerId,
+  character,
+}: {
+  playerId: number;
+  character: Character | null;
+}) {
+  return (
+    <>
+      <TitleBanner>Group {playerId}</TitleBanner>
+      <div className="grid grid-cols-3 place-items-center p-2 px-8">
+        <div className="col-span-2">
+          {character && <CharacterModel character={character} />}
+        </div>
+        <EquipmentsBar equipments={[]} />
+      </div>
+    </>
   );
 }

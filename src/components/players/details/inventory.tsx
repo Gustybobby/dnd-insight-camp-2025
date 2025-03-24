@@ -1,5 +1,7 @@
 import type { PlayerItemWithInfo } from "@/server/domain/aggregates";
+import type { StatTypeEnum } from "@/server/domain/models";
 
+import { STAT_STYLE_MAP } from "@/components/players/style";
 import { cn } from "@/components/utils";
 import Image from "next/image";
 
@@ -113,8 +115,39 @@ export function ItemInfo({
         <h1 className="col-span-3 rounded-full bg-oldcream px-8 py-2 text-center text-xl font-bold">
           {item.name}
         </h1>
+        <div className="col-span-full flex items-center justify-between">
+          <InfoBadge className="bg-oldcream">{item.type}</InfoBadge>
+          <div className="flex items-center gap-2">
+            {item.stats
+              .map((statText) => statText.split(":"))
+              .map(([statType, value], idx) => (
+                <InfoBadge
+                  key={idx}
+                  className={STAT_STYLE_MAP[statType as StatTypeEnum].color}
+                >
+                  {statType} {value}
+                </InfoBadge>
+              ))}
+          </div>
+        </div>
         <p className="col-span-full text-left">{item.description}</p>
       </div>
     </div>
+  );
+}
+
+function InfoBadge({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <span
+      className={cn("rounded-full px-4 py-1 text-center font-bold", className)}
+    >
+      {children}
+    </span>
   );
 }

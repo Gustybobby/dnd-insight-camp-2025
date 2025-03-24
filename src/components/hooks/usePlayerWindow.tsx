@@ -1,11 +1,11 @@
-import type { Item, StatTypeEnum } from "@/server/domain/models";
+import type { StatTypeEnum } from "@/server/domain/models";
 
 import { useState } from "react";
 
 export type PlayerWindowOptions =
   | { type: "character" }
   | { type: "statInfo"; statType: StatTypeEnum }
-  | { type: "itemInfo"; item: Item };
+  | { type: "itemInfo"; itemId: number };
 
 export function usePlayerWindow() {
   const [window, setWindow] = useState<PlayerWindowOptions>({

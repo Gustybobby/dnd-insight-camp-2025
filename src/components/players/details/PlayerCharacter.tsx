@@ -1,7 +1,5 @@
 "use client";
 
-import type { Character } from "@/server/domain/models";
-
 import {
   getPlayerCharacter,
   getPlayerItems,
@@ -12,9 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { usePlayerWindow } from "@/components/hooks/usePlayerWindow";
-import { CharacterBox, TitleBanner } from "@/components/players/components";
-import { CharacterModel } from "@/components/players/details/character";
-import { EquipmentsBar } from "@/components/players/details/equipment";
+import { CharacterBox } from "@/components/players/components";
+import { CharacterInfo } from "@/components/players/details/character";
 import { Inventory, ItemInfo } from "@/components/players/details/inventory";
 import { PlayerTabs } from "@/components/players/details/PlayerTabs";
 import {
@@ -23,6 +20,7 @@ import {
   StatInfo,
 } from "@/components/players/details/stat";
 import { clientOrderedStatTypes } from "@/components/players/style";
+import { nonNullable } from "@/components/utils";
 
 export function PlayerCharacter({ playerId }: { playerId: number }) {
   const router = useRouter();
@@ -63,8 +61,10 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
           />
         ) : window.type === "itemInfo" ? (
           <ItemInfo
-            key={window.item.id}
-            item={window.item}
+            key={window.itemId}
+            item={nonNullable(
+              playerItems?.find(({ item }) => item.id === window.itemId)?.item,
+            )}
             onClickBack={() => setWindow({ type: "character" })}
           />
         ) : null}
@@ -103,7 +103,9 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
                 {playerItems && (
                   <Inventory
                     items={playerItems}
-                    onClick={(item) => setWindow({ type: "itemInfo", item })}
+                    onClick={(item) =>
+                      setWindow({ type: "itemInfo", itemId: item.id })
+                    }
                   />
                 )}
               </>
@@ -114,25 +116,5 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
         defaultTab="Stats"
       />
     </div>
-  );
-}
-
-function CharacterInfo({
-  playerId,
-  character,
-}: {
-  playerId: number;
-  character: Character | null;
-}) {
-  return (
-    <>
-      <TitleBanner>Group {playerId}</TitleBanner>
-      <div className="grid grid-cols-3 place-items-center p-2 px-8">
-        <div className="col-span-2">
-          {character && <CharacterModel character={character} />}
-        </div>
-        <EquipmentsBar equipments={[]} />
-      </div>
-    </>
   );
 }
