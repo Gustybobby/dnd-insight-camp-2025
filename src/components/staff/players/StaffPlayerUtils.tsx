@@ -1,6 +1,7 @@
+import React, { useState } from "react";
+
 import { CharacterBox } from "@/components/players/components";
 import { cn } from "@/components/utils";
-import React, { useState } from "react";
 
 export default function StaffPlayerUtils({
   tabs,

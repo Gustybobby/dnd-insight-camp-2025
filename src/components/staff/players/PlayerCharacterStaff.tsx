@@ -1,50 +1,66 @@
 "use client";
 
-import {
-  getPlayerCharacter,
-  getPlayerStats,
-} from "@/server/controllers/player.controller";
+import type { StatTypeEnum } from "@/server/domain/models";
+import type { ModEffectCreate } from "@/server/domain/models/effect.model";
 
-import { useQuery } from "@tanstack/react-query";
+import { createModEffect } from "@/server/controllers/effect.controller";
+import { getPlayerStats } from "@/server/controllers/player.controller";
 
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { PlayerCharacter } from "@/components/players/PlayerCharacter";
-import StaffPlayerUtils from "@/components/staff/players/StaffPlayerUtils";
-import { PlayerStats } from "@/components/players/tabs/PlayerStats";
-import { clientOrderedStatTypes } from "@/components/players/style";
-import StaffPlayerStats from "./StaffPlayerStats";
 
-interface StatChangeFormData {
-  name: string;
-  characterId: number;
-  str: number;
-  dex: number;
-  chr: number;
-  int: number;
-  hp: number;  
-}
+import StaffPlayerStats from "./StaffPlayerStats";
+import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
+import { clientOrderedStatTypes } from "@/components/players/style";
+import StaffPlayerUtils from "@/components/staff/players/StaffPlayerUtils";
 
 export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
   const router = useRouter();
 
-  const { data: character } = useQuery({
-    queryKey: ["getPlayerCharacter", playerId],
-    queryFn: async () => await getPlayerCharacter({ playerId }),
-  });
-
-  const { data: playerStats } = useQuery({
+  const { data: playerStats, refetch: refetchPlayerStats } = useQuery({
     queryKey: ["getPlayerStats", playerId],
     queryFn: async () => await getPlayerStats({ playerId }),
     refetchInterval: 5000,
   });
 
-  if (character === null) {
-    router.replace("/players");
+  if (playerStats === null) {
+    router.replace("/staff/players");
     return;
   }
 
+  const mutation = useMutation({
+    mutationFn: (modEffectCreate: ModEffectCreate) =>
+      createModEffect({ data: { ...modEffectCreate }, playerIds: [+playerId] }),
+    onSuccess: () => {
+      // alert(`Stat changed successfully!`);
+    },
+  });
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const statChange = Object.fromEntries(
+      formData.entries().filter(([, value]) => +value !== 0),
+    );
+    const mutationPromises = Object.entries(statChange).map(([key, value]) => {
+      return mutation.mutateAsync({
+        stat: key as StatTypeEnum,
+        value: +value,
+        itemId: null,
+      });
+    });
+
+    Promise.all(mutationPromises)
+      .then(() => {
+        refetchPlayerStats();
+      })
+      .catch((e) => {
+        alert(`Error changing stat: ${e}`);
+      });
+    e.currentTarget.reset();
+  };
   return (
-    <div className="bg-radial-gradient from-darkred to-dark grid w-full grid-cols-2 gap-4">
+    <div className="grid w-full grid-cols-2 gap-4 bg-radial-gradient from-darkred to-dark">
       <PlayerCharacter playerId={playerId}></PlayerCharacter>
       <StaffPlayerUtils
         tabs={[
@@ -60,6 +76,7 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
                       playerId: 0,
                     },
                 )}
+                onSubmit={onSubmit}
               />
             ),
           },
