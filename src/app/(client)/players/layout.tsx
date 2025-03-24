@@ -17,15 +17,7 @@ export default function CharacterMenuLayout({
 }>) {
   const pathname = usePathname();
   return (
-    <div className="relative size-full min-h-screen overflow-hidden">
-      <Image
-        src="/asset/cover/player_select_bg.jpg"
-        alt="cover"
-        fill
-        priority
-        unoptimized
-        className="scale-115 object-cover"
-      />
+    <div className="relative size-full min-h-screen overflow-hidden bg-radial-gradient from-darkred to-dark">
       <Image
         src="/asset/props/logo_wing.png"
         alt="wing"

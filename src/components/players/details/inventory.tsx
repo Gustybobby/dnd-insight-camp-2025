@@ -93,9 +93,11 @@ export function ItemSlot({
       item={playerItem?.item ?? null}
       onClick={onClick}
     >
-      <p className="absolute -bottom-1 right-1 font-bold">
-        {playerItem?.amount}
-      </p>
+      {playerItem?.amount && playerItem.amount > 1 ? (
+        <p className="absolute -bottom-1 right-1 font-bold">
+          x{playerItem?.amount}
+        </p>
+      ) : null}
     </ItemIcon>
   );
 }

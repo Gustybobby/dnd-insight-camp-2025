@@ -58,7 +58,7 @@ export default function Home() {
         unoptimized
         width={500}
         height={500}
-        className="max-w-3xs motion-preset-oscillate absolute left-1/2 top-[47%] w-1/6 translate-x-[25%] motion-opacity-in-0 motion-duration-1500"
+        className="motion-preset-oscillate absolute left-1/2 top-[47%] w-1/6 max-w-xs translate-x-[25%] motion-opacity-in-0 motion-duration-1500"
       />
       <StyledLink
         href="#"
@@ -70,10 +70,19 @@ export default function Home() {
       </StyledLink>
       <StyledLink
         href="/players"
-        className="motion-preset-bounce absolute bottom-[10%] px-12 py-2 text-3xl motion-delay-300"
+        className="motion-preset-bounce absolute bottom-[12%] px-12 py-2 text-3xl motion-delay-300"
       >
         Play
       </StyledLink>
+      <Image
+        src="/asset/characters/mekla.png"
+        alt="mekla"
+        priority
+        unoptimized
+        width={500}
+        height={500}
+        className="absolute bottom-[2%] left-1/2 w-1/6 max-w-[4rem] -translate-x-[45%] motion-opacity-in-0 motion-duration-1500"
+      />
     </div>
   );
 }
