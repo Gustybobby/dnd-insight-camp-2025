@@ -39,7 +39,10 @@ const getPlayerItemsUseCase = new GetPlayerItemsUseCase(playerRepo);
 const createPlayerUseCase = new CreatePlayerUseCase(playerRepo);
 
 export async function getAllPlayers(): Promise<UseCaseReturn<IGetAllPlayersUseCase> | null> {
-  return getAllPlayersUseCase.invoke().catch(() => null);
+  return getAllPlayersUseCase.invoke().catch((error) => {
+    console.error(error);
+    return null;
+  });
 }
 
 export async function getPlayer({
@@ -47,29 +50,39 @@ export async function getPlayer({
 }: UseCaseParams<IGetPlayerUseCase>): Promise<UseCaseReturn<IGetPlayerUseCase> | null> {
   return getPlayerUseCase
     .invoke({ playerId: Player.shape.id.parse(playerId) })
-    .catch(() => null);
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
 }
 
 export async function getPlayerCharacter({
   playerId,
 }: UseCaseParams<IGetPlayerCharacterUseCase>): Promise<UseCaseReturn<IGetPlayerCharacterUseCase> | null> {
-  return getPlayerCharacterUseCase.invoke({ playerId }).catch(() => null);
+  return getPlayerCharacterUseCase.invoke({ playerId }).catch((error) => {
+    console.error(error);
+    return null;
+  });
 }
 
 export async function getPlayerStats({
   playerId,
 }: UseCaseParams<IGetPlayerStatsUseCase>): Promise<UseCaseReturn<IGetPlayerStatsUseCase> | null> {
   return getPlayerStatsUseCase
-    .invoke({
-      playerId: Player.shape.id.parse(playerId),
-    })
-    .catch(() => null);
+    .invoke({ playerId: Player.shape.id.parse(playerId) })
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
 }
 
 export async function getPlayerItems({
   playerId,
 }: UseCaseParams<IGetPlayerItemsUseCase>): Promise<UseCaseReturn<IGetPlayerItemsUseCase> | null> {
-  return getPlayerItemsUseCase.invoke({ playerId }).catch(() => null);
+  return getPlayerItemsUseCase.invoke({ playerId }).catch((error) => {
+    console.error(error);
+    return null;
+  });
 }
 
 export async function createPlayer({
@@ -79,5 +92,8 @@ export async function createPlayer({
 
   return createPlayerUseCase
     .invoke({ data: PlayerCreate.parse(data) })
-    .catch(() => null);
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
 }

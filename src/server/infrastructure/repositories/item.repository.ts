@@ -7,6 +7,10 @@ import { takeOneOrThrow } from "@/db/util";
 import { eq } from "drizzle-orm";
 
 export class ItemRepository implements IItemRepository {
+  async getAll(): Promise<Item[]> {
+    return db.select().from(itemsTable);
+  }
+
   async getByIdOrThrow({ itemId }: { itemId: Item["id"] }): Promise<Item> {
     return db
       .select()

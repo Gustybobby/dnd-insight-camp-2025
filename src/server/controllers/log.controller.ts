@@ -27,5 +27,8 @@ export async function getPlayerStatLogs(
 ): Promise<UseCaseReturn<IGetPlayerStatLogsUseCase> | null> {
   await authService.authStaff();
 
-  return getPlayerStatLogsUseCase.invoke(params).catch(() => null);
+  return getPlayerStatLogsUseCase.invoke(params).catch((error) => {
+    console.error(error);
+    return null;
+  });
 }

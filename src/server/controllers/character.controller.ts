@@ -11,5 +11,8 @@ const characterRepo = new CharacterRepository();
 const getAllChractersUseCase = new GetAllCharactersUseCase(characterRepo);
 
 export async function getAllCharacters(): Promise<UseCaseReturn<IGetAllCharactersUseCase> | null> {
-  return getAllChractersUseCase.invoke().catch(() => null);
+  return getAllChractersUseCase.invoke().catch((error) => {
+    console.error(error);
+    return null;
+  });
 }

@@ -36,5 +36,8 @@ export async function createModEffect({
       playerIds: Player.shape.id.array().parse(playerIds),
       staffId: session.user.staffId,
     })
-    .catch(() => null);
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
 }
