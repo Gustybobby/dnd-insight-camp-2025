@@ -28,14 +28,14 @@ export default function StaffPlayerUtils({
             </button>
             <div
               className={cn(
-                "bg-cream border-cream absolute h-2 w-full border",
+                "absolute h-2 w-full border border-cream bg-cream",
                 tab.label === active ? "opacity-100" : "opacity-0",
               )}
             />
           </div>
         ))}
       </div>
-      <CharacterBox className="border-oldcream h-full max-h-[90%] min-h-[32vh] w-full">
+      <CharacterBox className="h-full max-h-[90%] min-h-[32vh] w-full border-oldcream">
         {tabs.find((tab) => tab.label === active)?.node}
       </CharacterBox>
     </div>

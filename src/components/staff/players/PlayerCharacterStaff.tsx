@@ -23,11 +23,6 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
     refetchInterval: 5000,
   });
 
-  if (playerStats === null) {
-    router.replace("/staff/players");
-    return;
-  }
-
   const mutation = useMutation({
     mutationFn: (modEffectCreate: ModEffectCreate) =>
       createModEffect({ data: { ...modEffectCreate }, playerIds: [+playerId] }),
@@ -35,6 +30,11 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
       // alert(`Stat changed successfully!`);
     },
   });
+
+  if (playerStats === null) {
+    router.replace("/staff/players");
+    return;
+  }
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,7 +52,7 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
 
     Promise.all(mutationPromises)
       .then(() => {
-        refetchPlayerStats();
+        void refetchPlayerStats();
       })
       .catch((e) => {
         alert(`Error changing stat: ${e}`);

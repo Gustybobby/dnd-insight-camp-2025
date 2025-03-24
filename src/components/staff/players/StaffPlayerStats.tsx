@@ -12,7 +12,7 @@ export default function StaffPlayerStats({
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }) {
   return (
-    <div className="flex flex-col gap-2 p-2 items-center">
+    <div className="flex flex-col items-center gap-2 p-2">
       <form onSubmit={onSubmit}>
         {playerStats.map((stat) => (
           <StatChanger
@@ -25,7 +25,10 @@ export default function StaffPlayerStats({
             type={stat.type}
           />
         ))}
-        <button className="rounded-md self-center bg-white p-2 text-black border border-2 border-gray-100 mt-4 " type="submit">
+        <button
+          className="mt-4 self-center rounded-md border border-2 border-gray-100 bg-white p-2 text-black"
+          type="submit"
+        >
           Submit
         </button>
       </form>
