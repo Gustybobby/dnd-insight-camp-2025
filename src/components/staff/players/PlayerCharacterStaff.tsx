@@ -1,37 +1,40 @@
 "use client";
 
-import type { StatTypeEnum } from "@/server/domain/models";
+import type { Item, StatTypeEnum } from "@/server/domain/models";
 import type { ModEffectCreate } from "@/server/domain/models/effect.model";
 
 import { ORDERED_STAT_TYPES } from "@/shared/stat";
 
 import { createModEffect } from "@/server/controllers/effect.controller";
-import { getPlayerStats } from "@/server/controllers/player.controller";
+import {
+  getPlayerItems,
+  getPlayerStats,
+} from "@/server/controllers/player.controller";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { StaffPlayerStats } from "./StaffPlayerStats";
 import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
 import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
 import Link from "next/link";
-import Image from "next/image";
-import { useState } from "react";
-
-const backPatterns: { pathRegex: RegExp; redirectTo: string }[] = [
-  { pathRegex: /^\/players\/.*$/, redirectTo: "/players" },
-  { pathRegex: /^\/players/, redirectTo: "/" },
-];
+import { StaffPlayerItems } from "./StaffPlayerItem";
 
 export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
   const router = useRouter();
-  const pathname = usePathname();
 
   const { data: playerStats, refetch: refetchPlayerStats } = useQuery({
     queryKey: ["getPlayerStats", playerId],
     queryFn: async () => await getPlayerStats({ playerId }),
     refetchInterval: 5000,
   });
+
+  // const { data: items} = useQuery({
+  //   queryKey: ["getPlayerItems", playerId],
+  //   queryFn: async () => await getAll({ playerId }),
+  //   refetchInterval: 5000,
+  // });
+  const items = [] as Item[];
 
   const mutation = useMutation({
     mutationFn: (modEffectCreate: ModEffectCreate) =>
@@ -43,7 +46,6 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
     router.replace("/staff/players");
     return;
   }
-  const [isChanging, setIsChanging] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,7 +60,6 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
         itemId: null,
       });
     });
-    setIsChanging(true);
     Promise.all(mutationPromises)
       .then(() => {
         void refetchPlayerStats();
@@ -67,8 +68,8 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
         alert(`Error changing stat: ${e}`);
       });
     e.currentTarget.reset();
-    setIsChanging(false);
   };
+
   return (
     <div className="flex flex-col">
       <div className="px-4">
@@ -94,11 +95,13 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
                       },
                   )}
                   onSubmit={onSubmit}
-                  isChanging={isChanging}
                 />
               ),
             },
-            { label: "Inventory", node: <div></div> },
+            {
+              label: "Item",
+              node: <StaffPlayerItems items={items} onSubmit={() => {}} />,
+            },
             { label: "Skills", node: <div></div> },
           ]}
           defaultTab="Stats"

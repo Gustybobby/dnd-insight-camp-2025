@@ -7,11 +7,9 @@ import { STAT_STYLE_MAP } from "@/components/players/style";
 export function StaffPlayerStats({
   playerStats,
   onSubmit,
-  isChanging,
 }: {
   playerStats: PlayerStat[];
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  isChanging: boolean;
 }) {
   return (
     <div className="p-2">
@@ -28,11 +26,11 @@ export function StaffPlayerStats({
           />
         ))}
         <button
-          className={`mt-4 self-center rounded-md border-2 border-gray-100 bg-white p-2 text-black ${isChanging ? "cursor-not-allowed bg-slate-300" : "cursor-pointer"}`}
+          className={`mt-4 self-center rounded-md border-2 border-gray-100 bg-white p-2 text-black ${false ? "cursor-not-allowed bg-slate-300" : "cursor-pointer"}`}
           type="submit"
           disabled
         >
-          {isChanging ? "Loading..." : "Submit"}
+          {false ? "Loading..." : "Submit"}
         </button>
       </form>
     </div>

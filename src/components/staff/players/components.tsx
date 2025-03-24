@@ -1,4 +1,5 @@
 import { cn } from "@/components/utils";
+import { PlayerItemWithInfo } from "@/server/domain/aggregates/player-item.aggregate";
 import Image from "next/image";
 
 export function StatChanger({
@@ -54,6 +55,30 @@ export function StatChanger({
           required
         />
       </div>
+    </div>
+  );
+}
+
+export function ItemCard({
+  item,
+  onClick,
+}: {
+  item: PlayerItemWithInfo["item"];
+  onClick: (item: PlayerItemWithInfo["item"]) => void;
+}) {
+  return (
+    <div
+      className="flex flex-col items-center justify-center gap-4 rounded-md border-2 border-black bg-white p-4 shadow"
+      onClick={() => onClick(item)}
+    >
+      <p>{item.name}</p>
+      <Image
+        src={item.image}
+        width={200}
+        height={200}
+        className="h-32"
+        alt={item.name}
+      />
     </div>
   );
 }
