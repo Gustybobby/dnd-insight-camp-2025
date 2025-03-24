@@ -1,5 +1,8 @@
+import type { PlayerEquipmentWithInfo } from "@/server/domain/aggregates";
 import type { Character } from "@/server/domain/models";
 
+import { TitleBanner } from "@/components/players/components";
+import { EquipmentsBar } from "@/components/players/details/equipment";
 import Image from "next/image";
 
 export function CharacterModel({ character }: { character: Character }) {
@@ -9,6 +12,7 @@ export function CharacterModel({ character }: { character: Character }) {
         {character.name}
       </h1>
       <Image
+        id="character_model"
         key={character.id}
         src={character.image}
         alt={character.name}
@@ -21,5 +25,34 @@ export function CharacterModel({ character }: { character: Character }) {
       />
       <div className="absolute -bottom-2 left-0 right-0 mx-auto h-14 w-32 rounded-[50%] bg-black opacity-20" />
     </div>
+  );
+}
+
+export function CharacterInfo({
+  playerId,
+  character,
+  playerEquipments,
+  onClickEquipment,
+}: {
+  playerId: number;
+  character: Character | null;
+  playerEquipments: PlayerEquipmentWithInfo[] | null;
+  onClickEquipment?: (itemId: PlayerEquipmentWithInfo["itemId"]) => void;
+}) {
+  return (
+    <>
+      <TitleBanner>Group {playerId}</TitleBanner>
+      <div className="grid grid-cols-3 place-items-center p-2 px-8">
+        <div className="col-span-2">
+          {character && <CharacterModel character={character} />}
+        </div>
+        {playerEquipments && (
+          <EquipmentsBar
+            equipments={playerEquipments}
+            onClickEquipment={onClickEquipment}
+          />
+        )}
+      </div>
+    </>
   );
 }

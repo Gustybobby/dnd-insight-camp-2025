@@ -1,3 +1,5 @@
+import { pageAuth } from "@/server/controllers/utils";
+
 import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
 
 export default async function PlayerCharacterPage({
@@ -7,5 +9,9 @@ export default async function PlayerCharacterPage({
 }) {
   const { playerId } = await params;
 
-  return <PlayerCharacter playerId={+playerId} />;
+  const session = await pageAuth.authPlayer().catch(() => null);
+
+  return (
+    <PlayerCharacter playerId={+playerId} isPlayer={!!session?.user.playerId} />
+  );
 }

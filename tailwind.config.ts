@@ -10,6 +10,9 @@ export default {
     extend: {
       colors: {
         lightorange: "#ee9b00",
+        intcolor: "#f97316",
+        strcolor: "#7d5c9d",
+        dexcolor: "#0e7490",
         seafoam: "#94d2bd",
         cream: "#d0c1a0",
         oldcream: "#80826e",

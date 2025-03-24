@@ -1,41 +1,44 @@
 "use client";
 
-import type { Character } from "@/server/domain/models";
+import { ORDERED_STAT_TYPES } from "@/shared/stat";
 
-import {
-  getPlayerCharacter,
-  getPlayerStats,
-} from "@/server/controllers/player.controller";
-
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
+import { useCharacter } from "@/components/hooks/useCharacter";
 import { usePlayerWindow } from "@/components/hooks/usePlayerWindow";
-import { CharacterBox, TitleBanner } from "@/components/players/components";
-import { CharacterModel } from "@/components/players/details/character";
-import { EquipmentsBar } from "@/components/players/details/equipment";
+import { Popups, usePopupEffect } from "@/components/hooks/usePopupEffect";
+import { CharacterBox } from "@/components/players/components";
+import { CharacterInfo } from "@/components/players/details/character";
+import { Inventory, ItemInfo } from "@/components/players/details/inventory";
 import { PlayerTabs } from "@/components/players/details/PlayerTabs";
 import {
   HealthBar,
   PlayerStats,
   StatInfo,
 } from "@/components/players/details/stat";
-import { clientOrderedStatTypes } from "@/components/players/style";
 
-export function PlayerCharacter({ playerId }: { playerId: number }) {
+export function PlayerCharacter({
+  playerId,
+  isPlayer,
+}: {
+  playerId: number;
+  isPlayer: boolean;
+}) {
   const router = useRouter();
   const { window, setWindow } = usePlayerWindow();
+  const { popups, popper } = usePopupEffect();
 
-  const { data: character } = useQuery({
-    queryKey: ["getPlayerCharacter", playerId],
-    queryFn: async () => await getPlayerCharacter({ playerId }),
-  });
-
-  const { data: playerStats } = useQuery({
-    queryKey: ["getPlayerStats", playerId],
-    queryFn: async () => await getPlayerStats({ playerId }),
-    refetchInterval: 5000,
-  });
+  const {
+    character,
+    playerStats,
+    playerItems,
+    playerEquipments,
+    refetchStats,
+    refetchItems,
+    refetchEquipments,
+    equipMutation,
+    removeMutation,
+  } = useCharacter({ playerId, refetchInterval: 5000, popper });
 
   if (character === null) {
     router.replace("/players");
@@ -46,12 +49,52 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
     <div className="mx-auto mt-[20%] w-11/12 space-y-2 overflow-auto py-2">
       <CharacterBox className="relative z-10 min-h-[38vh] p-2">
         {window.type === "character" ? (
-          <CharacterInfo playerId={playerId} character={character ?? null} />
+          <CharacterInfo
+            playerId={playerId}
+            character={character ?? null}
+            playerEquipments={playerEquipments ?? null}
+            onClickEquipment={(itemId) =>
+              setWindow({ type: "itemInfo", itemId })
+            }
+          />
         ) : window.type === "statInfo" ? (
           <StatInfo
             key={window.statType}
             type={window.statType}
             onClickBack={() => setWindow({ type: "character" })}
+          />
+        ) : window.type === "itemInfo" ? (
+          <ItemInfo
+            key={window.itemId}
+            item={
+              playerItems?.find(({ item }) => item.id === window.itemId)
+                ?.item ??
+              playerEquipments?.find(({ item }) => item.id === window.itemId)
+                ?.item ??
+              null
+            }
+            equipped={
+              playerEquipments?.some(({ item }) => item.id === window.itemId) ??
+              false
+            }
+            showPlayerOptions={isPlayer}
+            onClickBack={() => setWindow({ type: "character" })}
+            onEquip={(itemId) => {
+              void equipMutation.mutateAsync({ playerId, itemId }).then(() => {
+                void refetchStats();
+                void refetchItems();
+                void refetchEquipments();
+              });
+              setWindow({ type: "character" });
+            }}
+            onRemove={(itemId) => {
+              void removeMutation.mutateAsync({ playerId, itemId }).then(() => {
+                void refetchStats();
+                void refetchItems();
+                void refetchEquipments();
+              });
+              setWindow({ type: "character" });
+            }}
           />
         ) : null}
       </CharacterBox>
@@ -67,7 +110,7 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
             label: "Stats",
             node: (
               <PlayerStats
-                playerStats={clientOrderedStatTypes.map(
+                playerStats={ORDERED_STAT_TYPES.map(
                   (type) =>
                     playerStats?.find((stat) => stat.type === type) ?? {
                       type,
@@ -81,31 +124,27 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
               />
             ),
           },
-          { label: "Inventory", node: <div></div> },
+          { label: "Status", node: <div></div> },
+          {
+            label: "Items",
+            node: (
+              <>
+                {playerItems && (
+                  <Inventory
+                    items={playerItems}
+                    onClick={(item) =>
+                      setWindow({ type: "itemInfo", itemId: item.id })
+                    }
+                  />
+                )}
+              </>
+            ),
+          },
           { label: "Skills", node: <div></div> },
         ]}
         defaultTab="Stats"
       />
+      <Popups popups={popups} />
     </div>
-  );
-}
-
-function CharacterInfo({
-  playerId,
-  character,
-}: {
-  playerId: number;
-  character: Character | null;
-}) {
-  return (
-    <>
-      <TitleBanner>Group {playerId}</TitleBanner>
-      <div className="grid grid-cols-3 place-items-center p-2 px-8">
-        <div className="col-span-2">
-          {character && <CharacterModel character={character} />}
-        </div>
-        <EquipmentsBar equipments={[]} />
-      </div>
-    </>
   );
 }

@@ -6,11 +6,12 @@ import {
 import { playersTable } from "@/db/schema/players.schema";
 import { staffsTable } from "@/db/schema/staffs.schema";
 import { timestamptz } from "@/db/util";
-import { foreignKey, integer, pgTable } from "drizzle-orm/pg-core";
+import { foreignKey, integer, pgTable, serial } from "drizzle-orm/pg-core";
 
 export const playerStatLogsTable = pgTable(
   "player_stat_logs",
   {
+    id: serial("id").primaryKey(),
     playerId: integer("player_id")
       .notNull()
       .references(() => playersTable.id, { onDelete: "cascade" }),

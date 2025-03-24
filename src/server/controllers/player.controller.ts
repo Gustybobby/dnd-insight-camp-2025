@@ -4,23 +4,25 @@ import type {
   ICreatePlayerUseCase,
   IGetAllPlayersUseCase,
   IGetPlayerCharacterUseCase,
+  IGetPlayerItemsUseCase,
   IGetPlayerStatsUseCase,
   IGetPlayerUseCase,
 } from "@/server/applications/interfaces/usecases/player";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
-import { AuthService } from "@/server/applications/services/auth.service";
-import {
-  CreatePlayerUseCase,
-  GetAllPlayersUseCase,
-  GetPlayerStatsUseCase,
-  GetPlayerUseCase,
-} from "@/server/applications/usecases/player";
-import { GetPlayerCharacterUseCase } from "@/server/applications/usecases/player/get-character.usecase";
 import { Player, PlayerCreate } from "@/server/domain/models";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
+import { AuthService } from "@/server/applications/services/auth.service";
+import {
+  CreatePlayerUseCase,
+  GetAllPlayersUseCase,
+  GetPlayerCharacterUseCase,
+  GetPlayerItemsUseCase,
+  GetPlayerStatsUseCase,
+  GetPlayerUseCase,
+} from "@/server/applications/usecases/player";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
@@ -33,6 +35,7 @@ const getAllPlayersUseCase = new GetAllPlayersUseCase(playerRepo);
 const getPlayerUseCase = new GetPlayerUseCase(playerRepo);
 const getPlayerCharacterUseCase = new GetPlayerCharacterUseCase(playerRepo);
 const getPlayerStatsUseCase = new GetPlayerStatsUseCase(playerRepo);
+const getPlayerItemsUseCase = new GetPlayerItemsUseCase(playerRepo);
 const createPlayerUseCase = new CreatePlayerUseCase(playerRepo);
 
 export async function getAllPlayers(): Promise<UseCaseReturn<IGetAllPlayersUseCase> | null> {
@@ -61,6 +64,12 @@ export async function getPlayerStats({
       playerId: Player.shape.id.parse(playerId),
     })
     .catch(() => null);
+}
+
+export async function getPlayerItems({
+  playerId,
+}: UseCaseParams<IGetPlayerItemsUseCase>): Promise<UseCaseReturn<IGetPlayerItemsUseCase> | null> {
+  return getPlayerItemsUseCase.invoke({ playerId }).catch(() => null);
 }
 
 export async function createPlayer({

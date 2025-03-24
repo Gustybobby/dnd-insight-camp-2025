@@ -22,7 +22,7 @@ import {
   playerStatsTable,
 } from "@/db/schema";
 import { takeOne, takeOneOrThrow } from "@/db/util";
-import { and, eq, getTableColumns, sql } from "drizzle-orm";
+import { and, asc, eq, getTableColumns, sql } from "drizzle-orm";
 
 export class PlayerRepository implements IPlayerRepository {
   async getAllWithCharacter(): Promise<PlayerWithCharater[]> {
@@ -35,7 +35,8 @@ export class PlayerRepository implements IPlayerRepository {
       .innerJoin(
         charactersTable,
         eq(charactersTable.id, playersTable.characterId),
-      );
+      )
+      .orderBy(asc(playersTable.id));
   }
 
   async getByIdOrThrow({
@@ -98,7 +99,8 @@ export class PlayerRepository implements IPlayerRepository {
       })
       .from(playerItemsTable)
       .innerJoin(itemsTable, eq(itemsTable.id, playerItemsTable.itemId))
-      .where(eq(playerItemsTable.playerId, playerId));
+      .where(eq(playerItemsTable.playerId, playerId))
+      .orderBy(asc(itemsTable.id));
   }
 
   async create({ data }: { data: PlayerCreate }): Promise<Player> {
@@ -126,10 +128,7 @@ export class PlayerRepository implements IPlayerRepository {
       await tx.insert(playerStatLogsTable).values(data);
       return tx
         .update(playerStatsTable)
-        .set({
-          type: data.type,
-          value: sql`${playerStatsTable.value} + ${data.value}`,
-        })
+        .set({ value: sql`${playerStatsTable.value} + ${data.value}` })
         .where(
           and(
             eq(playerStatsTable.type, data.type),

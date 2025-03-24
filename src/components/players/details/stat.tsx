@@ -1,7 +1,7 @@
 import type { PlayerStat, StatTypeEnum } from "@/server/domain/models";
 
 import { STAT_STYLE_MAP } from "@/components/players/style";
-import { cn } from "@/components/utils";
+import { cn, constrain } from "@/components/utils";
 import Image from "next/image";
 
 export function HealthBar({ health, max }: { health: number; max: number }) {
@@ -18,7 +18,7 @@ export function HealthBar({ health, max }: { health: number; max: number }) {
         <div
           className="absolute h-[calc(2rem-4px)] origin-left rounded-full bg-red-500 transition-all motion-scale-x-in-0"
           style={{
-            width: `${Math.min(Math.ceil((health / max) * 100), 100)}%`,
+            width: `${constrain(Math.ceil((health / max) * 100), 0, 100)}%`,
           }}
         />
         <p className="relative z-10 flex h-8 w-full items-center justify-center font-bold">
@@ -149,7 +149,7 @@ export function StatBar({
               colorClassName,
             )}
             style={{
-              width: `${Math.min(Math.ceil((value / max) * 100), 100)}%`,
+              width: `${constrain(Math.ceil((value / max) * 100), 0, 100)}%`,
             }}
           />
         </div>

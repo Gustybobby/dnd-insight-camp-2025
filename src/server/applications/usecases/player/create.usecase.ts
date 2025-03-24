@@ -2,10 +2,7 @@ import type { ICreatePlayerUseCase } from "@/server/applications/interfaces/usec
 import type { IPlayerRepository } from "@/server/domain/interfaces/repositories";
 import type { Player, PlayerCreate } from "@/server/domain/models";
 
-import {
-  DEFAULT_STAT_VALUES,
-  ORDERED_STAT_TYPES,
-} from "@/server/domain/models";
+import { ALL_STAT_TYPES, DEFAULT_STAT_VALUES } from "@/shared/stat";
 
 export class CreatePlayerUseCase implements ICreatePlayerUseCase {
   constructor(private readonly playerRepo: IPlayerRepository) {}
@@ -14,7 +11,7 @@ export class CreatePlayerUseCase implements ICreatePlayerUseCase {
     const player = await this.playerRepo.create({ data });
 
     await Promise.all(
-      ORDERED_STAT_TYPES.map((type, idx) =>
+      ALL_STAT_TYPES.map((type, idx) =>
         this.playerRepo.createStat({
           data: {
             playerId: player.id,

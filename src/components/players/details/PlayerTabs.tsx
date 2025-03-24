@@ -18,7 +18,7 @@ export function PlayerTabs({
           <div key={tab.label} className="relative w-full">
             <button
               className={cn(
-                "w-full rounded-t-3xl text-lg font-semibold",
+                "w-full rounded-t-2xl text-lg font-semibold",
                 tab.label === active ? "bg-cream" : "bg-oldcream",
               )}
               onClick={() => setActive(tab.label)}
