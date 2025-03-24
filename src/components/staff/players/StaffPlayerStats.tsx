@@ -7,13 +7,15 @@ import { STAT_STYLE_MAP } from "@/components/players/style";
 export function StaffPlayerStats({
   playerStats,
   onSubmit,
+  isChanging,
 }: {
   playerStats: PlayerStat[];
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  isChanging: boolean;
 }) {
   return (
-    <div className="flex flex-col items-center gap-2 p-2">
-      <form onSubmit={onSubmit}>
+    <div className="p-2">
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
         {playerStats.map((stat) => (
           <StatChanger
             key={stat.type}
@@ -26,10 +28,11 @@ export function StaffPlayerStats({
           />
         ))}
         <button
-          className="mt-4 self-center rounded-md border-2 border-gray-100 bg-white p-2 text-black"
+          className={`mt-4 self-center rounded-md border-2 border-gray-100 bg-white p-2 text-black ${isChanging ? "cursor-not-allowed bg-slate-300" : "cursor-pointer"}`}
           type="submit"
+          disabled
         >
-          Submit
+          {isChanging ? "Loading..." : "Submit"}
         </button>
       </form>
     </div>

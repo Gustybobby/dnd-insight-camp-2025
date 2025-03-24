@@ -16,13 +16,16 @@ import {
   PlayerStats,
   StatInfo,
 } from "@/components/players/details/stat";
+import { cn } from "@/components/utils";
 
 export function PlayerCharacter({
   playerId,
   isPlayer,
+  className,
 }: {
   playerId: number;
   isPlayer: boolean;
+  className?: string;
 }) {
   const router = useRouter();
   const { window, setWindow } = usePlayerWindow();
@@ -46,7 +49,12 @@ export function PlayerCharacter({
   }
 
   return (
-    <div className="mx-auto mt-[20%] w-11/12 space-y-2 overflow-auto py-2">
+    <div
+      className={cn(
+        "mx-auto mt-[20%] w-11/12 space-y-2 overflow-auto py-2",
+        className,
+      )}
+    >
       <CharacterBox className="relative z-10 min-h-[38vh] p-2">
         {window.type === "character" ? (
           <CharacterInfo
