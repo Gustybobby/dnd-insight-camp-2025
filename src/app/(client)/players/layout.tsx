@@ -17,7 +17,7 @@ export default function CharacterMenuLayout({
 }>) {
   const pathname = usePathname();
   return (
-    <main className="relative size-full min-h-screen overflow-hidden bg-radial-gradient from-darkred to-dark">
+    <main className="relative flex size-full min-h-screen flex-col justify-between overflow-hidden bg-radial-gradient from-darkred to-dark">
       <Image
         src="/asset/cover/player_menu_bg.jpg"
         alt="cover"
