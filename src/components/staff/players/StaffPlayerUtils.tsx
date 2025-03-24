@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { CharacterBox } from "@/components/players/components";
 import { cn } from "@/components/utils";
 
-export default function StaffPlayerUtils({
+export function StaffPlayerUtils({
   tabs,
   defaultTab,
 }: {

@@ -3,16 +3,17 @@
 import type { StatTypeEnum } from "@/server/domain/models";
 import type { ModEffectCreate } from "@/server/domain/models/effect.model";
 
+import { ORDERED_STAT_TYPES } from "@/shared/stat";
+
 import { createModEffect } from "@/server/controllers/effect.controller";
 import { getPlayerStats } from "@/server/controllers/player.controller";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-import StaffPlayerStats from "./StaffPlayerStats";
+import { StaffPlayerStats } from "./StaffPlayerStats";
 import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
-import { clientOrderedStatTypes } from "@/components/players/style";
-import StaffPlayerUtils from "@/components/staff/players/StaffPlayerUtils";
+import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
 
 export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
   const router = useRouter();
@@ -61,14 +62,14 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
   };
   return (
     <div className="grid w-full grid-cols-2 gap-4 bg-radial-gradient from-darkred to-dark">
-      <PlayerCharacter playerId={playerId}></PlayerCharacter>
+      <PlayerCharacter playerId={playerId} isPlayer={true}></PlayerCharacter>
       <StaffPlayerUtils
         tabs={[
           {
             label: "Stats",
             node: (
               <StaffPlayerStats
-                playerStats={clientOrderedStatTypes.map(
+                playerStats={ORDERED_STAT_TYPES.map(
                   (type) =>
                     playerStats?.find((stat) => stat.type === type) ?? {
                       type,

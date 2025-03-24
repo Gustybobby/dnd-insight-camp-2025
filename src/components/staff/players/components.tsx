@@ -46,7 +46,7 @@ export function StatChanger({
         </div>
         <input
           className={cn(
-            "border-1 w-full rounded rounded-md border border-2 border-darkred text-center text-2xl",
+            "border-1 w-full rounded-md border-2 border-darkred text-center text-2xl",
             textColorClassName,
           )}
           name={type}

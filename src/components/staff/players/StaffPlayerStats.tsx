@@ -4,7 +4,7 @@ import { StatChanger } from "./components";
 import { STAT_TEXT_STYLE_MAP } from "./style";
 import { STAT_STYLE_MAP } from "@/components/players/style";
 
-export default function StaffPlayerStats({
+export function StaffPlayerStats({
   playerStats,
   onSubmit,
 }: {
@@ -26,7 +26,7 @@ export default function StaffPlayerStats({
           />
         ))}
         <button
-          className="mt-4 self-center rounded-md border border-2 border-gray-100 bg-white p-2 text-black"
+          className="mt-4 self-center rounded-md border-2 border-gray-100 bg-white p-2 text-black"
           type="submit"
         >
           Submit
