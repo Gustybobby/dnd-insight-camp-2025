@@ -34,6 +34,7 @@ export default {
         cream: "#d5c395",
         oldcream: "#80826e",
         oldpurple: "#7d5c9d",
+        gold: "#ffca22",
         darkred: "#692212",
         dark: "#111111",
       },

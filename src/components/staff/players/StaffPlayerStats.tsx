@@ -20,7 +20,7 @@ export function StaffPlayerStats({
             label={STAT_STYLE_MAP[stat.type].label}
             iconSrc={`/asset/props/${stat.type.toLowerCase()}.png`}
             value={stat.value}
-            colorClassName={STAT_STYLE_MAP[stat.type].color}
+            colorClassName={STAT_STYLE_MAP[stat.type].iconColor}
             textColorClassName={STAT_TEXT_STYLE_MAP[stat.type].color}
             type={stat.type}
           />

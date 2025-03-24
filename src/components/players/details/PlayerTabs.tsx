@@ -13,28 +13,28 @@ export function PlayerTabs({
   const [active, setActive] = useState<string>(defaultTab);
   return (
     <div className="relative">
-      <div className="flex w-full items-center gap-2 px-1.5">
+      <div className="flex w-full items-center px-1.5">
         {tabs.map((tab) => (
           <div key={tab.label} className="relative w-full">
             <button
               className={cn(
-                "w-full rounded-t-2xl text-lg font-semibold",
+                "w-full rounded-t-2xl text-base font-semibold",
                 tab.label === active ? "bg-cream" : "bg-oldcream",
               )}
               onClick={() => setActive(tab.label)}
             >
-              {tab.label}
+              <p className="mt-0.5">{tab.label}</p>
             </button>
             <div
               className={cn(
-                "absolute h-2 w-full border border-cream bg-cream",
+                "absolute h-1 w-full border border-cream bg-cream",
                 tab.label === active ? "opacity-100" : "opacity-0",
               )}
             />
           </div>
         ))}
       </div>
-      <CharacterBox className="h-full min-h-[32vh] border-oldcream">
+      <CharacterBox className="h-full min-h-[32vh] border-oldcream bg-[url(/asset/cover/paper_texture.jpg)] bg-center">
         {tabs.find((tab) => tab.label === active)?.node}
       </CharacterBox>
     </div>

@@ -139,7 +139,7 @@ export function ItemInfo({
               .map(([statType, value], idx) => (
                 <InfoBadge
                   key={idx}
-                  className={STAT_STYLE_MAP[statType as StatTypeEnum].color}
+                  className={STAT_STYLE_MAP[statType as StatTypeEnum].bgColor}
                 >
                   {statType} {value}
                 </InfoBadge>
