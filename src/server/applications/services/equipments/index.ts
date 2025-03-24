@@ -38,6 +38,13 @@ export class EquipmentService {
         itemService,
         effectService,
       ),
+      Gear: new BaseEquipmentService(
+        { part: "Gear" },
+        equipmentRepo,
+        itemRepo,
+        itemService,
+        effectService,
+      ),
     };
   }
 

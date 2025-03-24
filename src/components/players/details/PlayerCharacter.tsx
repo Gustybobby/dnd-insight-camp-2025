@@ -1,19 +1,10 @@
 "use client";
 
-import {
-  getPlayerEquipments,
-  playerEquipEquipment,
-  playerRemoveEquipment,
-} from "@/server/controllers/equipment.controller";
-import {
-  getPlayerCharacter,
-  getPlayerItems,
-  getPlayerStats,
-} from "@/server/controllers/player.controller";
+import { ORDERED_STAT_TYPES } from "@/shared/stat";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
+import { useCharacter } from "@/components/hooks/useCharacter";
 import { usePlayerWindow } from "@/components/hooks/usePlayerWindow";
 import { CharacterBox } from "@/components/players/components";
 import { CharacterInfo } from "@/components/players/details/character";
@@ -24,37 +15,28 @@ import {
   PlayerStats,
   StatInfo,
 } from "@/components/players/details/stat";
-import { clientOrderedStatTypes } from "@/components/players/style";
 
-export function PlayerCharacter({ playerId }: { playerId: number }) {
+export function PlayerCharacter({
+  playerId,
+  isPlayer,
+}: {
+  playerId: number;
+  isPlayer: boolean;
+}) {
   const router = useRouter();
   const { window, setWindow } = usePlayerWindow();
 
-  const { data: character } = useQuery({
-    queryKey: ["getPlayerCharacter", playerId],
-    queryFn: async () => await getPlayerCharacter({ playerId }),
-  });
-
-  const { data: playerStats, refetch: refetchStats } = useQuery({
-    queryKey: ["getPlayerStats", playerId],
-    queryFn: async () => await getPlayerStats({ playerId }),
-    refetchInterval: 5000,
-  });
-
-  const { data: playerItems, refetch: refetchItems } = useQuery({
-    queryKey: ["getPlayerItems", playerId],
-    queryFn: async () => await getPlayerItems({ playerId }),
-    refetchInterval: 5000,
-  });
-
-  const { data: playerEquipments, refetch: refetchEquipments } = useQuery({
-    queryKey: ["getPlayerEquipments", playerId],
-    queryFn: async () => await getPlayerEquipments({ playerId }),
-    refetchInterval: 5000,
-  });
-
-  const equipMutation = useMutation({ mutationFn: playerEquipEquipment });
-  const removeMutation = useMutation({ mutationFn: playerRemoveEquipment });
+  const {
+    character,
+    playerStats,
+    playerItems,
+    playerEquipments,
+    refetchStats,
+    refetchItems,
+    refetchEquipments,
+    equipMutation,
+    removeMutation,
+  } = useCharacter({ playerId, refetchInterval: 5000 });
 
   if (character === null) {
     router.replace("/players");
@@ -93,6 +75,7 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
               playerEquipments?.some(({ item }) => item.id === window.itemId) ??
               false
             }
+            showPlayerOptions={isPlayer}
             onClickBack={() => setWindow({ type: "character" })}
             onEquip={(itemId) => {
               void equipMutation.mutateAsync({ playerId, itemId }).then(() => {
@@ -125,7 +108,7 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
             label: "Stats",
             node: (
               <PlayerStats
-                playerStats={clientOrderedStatTypes.map(
+                playerStats={ORDERED_STAT_TYPES.map(
                   (type) =>
                     playerStats?.find((stat) => stat.type === type) ?? {
                       type,

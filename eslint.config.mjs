@@ -33,6 +33,8 @@ const eslintConfig = [
             ],
             //db
             ["^@\\/db", "^drizzle"],
+            //shared
+            ["@\\/shared"],
             //server
             [
               "^@\\/server\\/domain",

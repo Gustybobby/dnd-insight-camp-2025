@@ -1,5 +1,6 @@
 import type { PlayerEquipmentWithInfo } from "@/server/domain/aggregates";
-import type { EquipmentPartEnum } from "@/server/domain/models";
+
+import { ORDERED_EQUIPMENTS } from "@/shared/item";
 
 import { cn } from "@/components/utils";
 import Image from "next/image";
@@ -32,8 +33,6 @@ export function Slot({
   );
 }
 
-const equipmentsOrder: EquipmentPartEnum[] = ["Sword", "Armor", "Gear"];
-
 export function EquipmentsBar({
   equipments,
   onClickEquipment,
@@ -46,7 +45,7 @@ export function EquipmentsBar({
       <h1 className="motion-preset-pop font-bold motion-duration-200">
         Equipments
       </h1>
-      {equipmentsOrder.map((part) => {
+      {ORDERED_EQUIPMENTS.map((part) => {
         const item = equipments.find(
           (equipment) => equipment.part === part,
         )?.item;

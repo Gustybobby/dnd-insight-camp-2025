@@ -1,5 +1,7 @@
 import type { PlayerItemWithInfo } from "@/server/domain/aggregates";
-import type { ItemTypeEnum, StatTypeEnum } from "@/server/domain/models";
+import type { StatTypeEnum } from "@/server/domain/models";
+
+import { EQUIPPABLE_ITEM_TYPES } from "@/shared/item";
 
 import { STAT_STYLE_MAP } from "@/components/players/style";
 import { cn } from "@/components/utils";
@@ -98,17 +100,17 @@ export function ItemSlot({
   );
 }
 
-const EQUIPPABLE_TYPES: ItemTypeEnum[] = ["Armor", "Weapon"];
-
 export function ItemInfo({
   item,
   equipped,
+  showPlayerOptions,
   onClickBack,
   onEquip,
   onRemove,
 }: {
   item: PlayerItemWithInfo["item"] | null;
   equipped: boolean;
+  showPlayerOptions: boolean;
   onClickBack: () => void;
   onEquip: (itemId: PlayerItemWithInfo["itemId"]) => void;
   onRemove: (itemId: PlayerItemWithInfo["itemId"]) => void;
@@ -144,7 +146,7 @@ export function ItemInfo({
         </div>
         <p className="col-span-full text-left">{item.description}</p>
       </div>
-      {EQUIPPABLE_TYPES.includes(item.type) ? (
+      {showPlayerOptions && EQUIPPABLE_ITEM_TYPES.includes(item.type) ? (
         <>
           {equipped ? (
             <button

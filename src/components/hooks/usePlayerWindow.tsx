@@ -1,3 +1,5 @@
+"use client";
+
 import type { StatTypeEnum } from "@/server/domain/models";
 
 import { useState } from "react";

@@ -1,7 +1,12 @@
 import { sql } from "drizzle-orm";
 import { pgEnum, pgTable, serial, text } from "drizzle-orm/pg-core";
 
-export const itemTypeEnum = pgEnum("item_type", ["Armor", "Weapon", "Others"]);
+export const itemTypeEnum = pgEnum("item_type", [
+  "Armor",
+  "Weapon",
+  "Gear",
+  "Others",
+]);
 
 export const itemsTable = pgTable("items", {
   id: serial("id").primaryKey(),
