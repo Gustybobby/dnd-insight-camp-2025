@@ -1,12 +1,17 @@
 "use client";
 
 import {
+  getPlayerEquipments,
+  playerEquipEquipment,
+  playerRemoveEquipment,
+} from "@/server/controllers/equipment.controller";
+import {
   getPlayerCharacter,
   getPlayerItems,
   getPlayerStats,
 } from "@/server/controllers/player.controller";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { usePlayerWindow } from "@/components/hooks/usePlayerWindow";
@@ -20,7 +25,6 @@ import {
   StatInfo,
 } from "@/components/players/details/stat";
 import { clientOrderedStatTypes } from "@/components/players/style";
-import { nonNullable } from "@/components/utils";
 
 export function PlayerCharacter({ playerId }: { playerId: number }) {
   const router = useRouter();
@@ -31,17 +35,26 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
     queryFn: async () => await getPlayerCharacter({ playerId }),
   });
 
-  const { data: playerStats } = useQuery({
+  const { data: playerStats, refetch: refetchStats } = useQuery({
     queryKey: ["getPlayerStats", playerId],
     queryFn: async () => await getPlayerStats({ playerId }),
     refetchInterval: 5000,
   });
 
-  const { data: playerItems } = useQuery({
+  const { data: playerItems, refetch: refetchItems } = useQuery({
     queryKey: ["getPlayerItems", playerId],
     queryFn: async () => await getPlayerItems({ playerId }),
     refetchInterval: 5000,
   });
+
+  const { data: playerEquipments, refetch: refetchEquipments } = useQuery({
+    queryKey: ["getPlayerEquipments", playerId],
+    queryFn: async () => await getPlayerEquipments({ playerId }),
+    refetchInterval: 5000,
+  });
+
+  const equipMutation = useMutation({ mutationFn: playerEquipEquipment });
+  const removeMutation = useMutation({ mutationFn: playerRemoveEquipment });
 
   if (character === null) {
     router.replace("/players");
@@ -52,7 +65,14 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
     <div className="mx-auto mt-[20%] w-11/12 space-y-2 overflow-auto py-2">
       <CharacterBox className="relative z-10 min-h-[38vh] p-2">
         {window.type === "character" ? (
-          <CharacterInfo playerId={playerId} character={character ?? null} />
+          <CharacterInfo
+            playerId={playerId}
+            character={character ?? null}
+            playerEquipments={playerEquipments ?? null}
+            onClickEquipment={(itemId) =>
+              setWindow({ type: "itemInfo", itemId })
+            }
+          />
         ) : window.type === "statInfo" ? (
           <StatInfo
             key={window.statType}
@@ -62,10 +82,34 @@ export function PlayerCharacter({ playerId }: { playerId: number }) {
         ) : window.type === "itemInfo" ? (
           <ItemInfo
             key={window.itemId}
-            item={nonNullable(
-              playerItems?.find(({ item }) => item.id === window.itemId)?.item,
-            )}
+            item={
+              playerItems?.find(({ item }) => item.id === window.itemId)
+                ?.item ??
+              playerEquipments?.find(({ item }) => item.id === window.itemId)
+                ?.item ??
+              null
+            }
+            equipped={
+              playerEquipments?.some(({ item }) => item.id === window.itemId) ??
+              false
+            }
             onClickBack={() => setWindow({ type: "character" })}
+            onEquip={(itemId) => {
+              void equipMutation.mutateAsync({ playerId, itemId }).then(() => {
+                void refetchStats();
+                void refetchItems();
+                void refetchEquipments();
+              });
+              setWindow({ type: "character" });
+            }}
+            onRemove={(itemId) => {
+              void removeMutation.mutateAsync({ playerId, itemId }).then(() => {
+                void refetchStats();
+                void refetchItems();
+                void refetchEquipments();
+              });
+              setWindow({ type: "character" });
+            }}
           />
         ) : null}
       </CharacterBox>

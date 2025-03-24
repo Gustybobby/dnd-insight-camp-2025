@@ -7,9 +7,11 @@ import Image from "next/image";
 export function Slot({
   className,
   placeholderSrc,
+  onClick,
 }: {
   className?: string;
   placeholderSrc: string;
+  onClick?: () => void;
 }) {
   return (
     <div
@@ -17,6 +19,7 @@ export function Slot({
         "motion-preset-pop flex size-12 items-center justify-center rounded-lg border-2 border-black bg-gray-400 shadow-md shadow-lightorange motion-duration-200",
         className,
       )}
+      onClick={onClick}
     >
       <Image
         src={placeholderSrc}
@@ -30,28 +33,38 @@ export function Slot({
 }
 
 const equipmentsOrder: EquipmentPartEnum[] = ["Sword", "Armor", "Gear"];
-const delays = [
-  "motion-delay-200",
-  "motion-delay-[400ms]",
-  "motion-delay-[600ms]",
-];
 
 export function EquipmentsBar({
   equipments,
+  onClickEquipment,
 }: {
   equipments: PlayerEquipmentWithInfo[];
+  onClickEquipment?: (itemId: PlayerEquipmentWithInfo["itemId"]) => void;
 }) {
-  console.log(equipments);
   return (
     <div className="flex w-full flex-col items-center justify-center gap-2 px-4">
-      <h1 className="font-bold">Equipments</h1>
-      {equipmentsOrder.map((part, idx) => (
-        <Slot
-          key={part}
-          className={delays[idx]}
-          placeholderSrc={`/asset/props/${part.toLowerCase()}.png`}
-        />
-      ))}
+      <h1 className="motion-preset-pop font-bold motion-duration-200">
+        Equipments
+      </h1>
+      {equipmentsOrder.map((part) => {
+        const item = equipments.find(
+          (equipment) => equipment.part === part,
+        )?.item;
+        return (
+          <Slot
+            key={part + item?.id}
+            className={cn(item && "hover:cursor-pointer")}
+            placeholderSrc={
+              item?.image ?? `/asset/props/${part.toLowerCase()}.png`
+            }
+            onClick={() => {
+              if (item) {
+                onClickEquipment?.(item.id);
+              }
+            }}
+          />
+        );
+      })}
     </div>
   );
 }

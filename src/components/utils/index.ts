@@ -9,8 +9,9 @@ export function constrain(value: number, min: number, max: number): number {
   return Math.max(Math.min(value, max), min);
 }
 
-export function nonNullable<T>(value: T): NonNullable<T> {
+export function nonNullable<T>(value: T, onError?: () => void): NonNullable<T> {
   if (value === null || value === undefined) {
+    onError?.();
     throw new Error("value is null or undefined");
   }
   return value;

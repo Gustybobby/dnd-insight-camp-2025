@@ -128,10 +128,7 @@ export class PlayerRepository implements IPlayerRepository {
       await tx.insert(playerStatLogsTable).values(data);
       return tx
         .update(playerStatsTable)
-        .set({
-          type: data.type,
-          value: sql`${playerStatsTable.value} + ${data.value}`,
-        })
+        .set({ value: sql`${playerStatsTable.value} + ${data.value}` })
         .where(
           and(
             eq(playerStatsTable.type, data.type),

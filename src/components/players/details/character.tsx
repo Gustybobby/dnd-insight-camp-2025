@@ -1,3 +1,4 @@
+import type { PlayerEquipmentWithInfo } from "@/server/domain/aggregates";
 import type { Character } from "@/server/domain/models";
 
 import { TitleBanner } from "@/components/players/components";
@@ -29,9 +30,13 @@ export function CharacterModel({ character }: { character: Character }) {
 export function CharacterInfo({
   playerId,
   character,
+  playerEquipments,
+  onClickEquipment,
 }: {
   playerId: number;
   character: Character | null;
+  playerEquipments: PlayerEquipmentWithInfo[] | null;
+  onClickEquipment?: (itemId: PlayerEquipmentWithInfo["itemId"]) => void;
 }) {
   return (
     <>
@@ -40,7 +45,12 @@ export function CharacterInfo({
         <div className="col-span-2">
           {character && <CharacterModel character={character} />}
         </div>
-        <EquipmentsBar equipments={[]} />
+        {playerEquipments && (
+          <EquipmentsBar
+            equipments={playerEquipments}
+            onClickEquipment={onClickEquipment}
+          />
+        )}
       </div>
     </>
   );

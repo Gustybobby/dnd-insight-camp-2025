@@ -1,5 +1,5 @@
 import type { PlayerItemWithInfo } from "@/server/domain/aggregates";
-import type { StatTypeEnum } from "@/server/domain/models";
+import type { ItemTypeEnum, StatTypeEnum } from "@/server/domain/models";
 
 import { STAT_STYLE_MAP } from "@/components/players/style";
 import { cn } from "@/components/utils";
@@ -98,16 +98,28 @@ export function ItemSlot({
   );
 }
 
+const EQUIPPABLE_TYPES: ItemTypeEnum[] = ["Armor", "Weapon"];
+
 export function ItemInfo({
   item,
+  equipped,
   onClickBack,
+  onEquip,
+  onRemove,
 }: {
-  item: PlayerItemWithInfo["item"];
+  item: PlayerItemWithInfo["item"] | null;
+  equipped: boolean;
   onClickBack: () => void;
+  onEquip: (itemId: PlayerItemWithInfo["itemId"]) => void;
+  onRemove: (itemId: PlayerItemWithInfo["itemId"]) => void;
 }) {
+  if (!item) {
+    onClickBack();
+    return null;
+  }
   return (
-    <div className="w-full p-2">
-      <button className="mb-4 font-bold" onClick={onClickBack}>
+    <div className="flex h-full w-full flex-col items-start justify-between gap-4 p-2">
+      <button className="font-bold" onClick={onClickBack}>
         {"←"} Back
       </button>
       <div className="grid grid-cols-4 gap-4">
@@ -132,6 +144,25 @@ export function ItemInfo({
         </div>
         <p className="col-span-full text-left">{item.description}</p>
       </div>
+      {EQUIPPABLE_TYPES.includes(item.type) ? (
+        <>
+          {equipped ? (
+            <button
+              className="rounded-full border-2 border-black bg-lightorange px-4 py-1 font-bold"
+              onClick={() => onRemove(item.id)}
+            >
+              Remove
+            </button>
+          ) : (
+            <button
+              className="rounded-full border-2 border-black bg-lightorange px-4 py-1 font-bold"
+              onClick={() => onEquip(item.id)}
+            >
+              Equip
+            </button>
+          )}
+        </>
+      ) : null}
     </div>
   );
 }
