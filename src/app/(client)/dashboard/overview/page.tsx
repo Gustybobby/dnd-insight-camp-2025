@@ -1,10 +1,8 @@
 "use client";
 
-import {
-  getAllPlayers,
-  getAllPlayersInfo,
-  getPlayerStats,
-} from "@/server/controllers/player.controller";
+import Overview from "@/components/dashboard/overview/Overview";
+import { getAllPlayersInfo } from "@/server/controllers/player.controller";
+import { PlayerWithAllInfo } from "@/server/domain/aggregates";
 import { useQuery } from "@tanstack/react-query";
 
 export default function OverviewDashboard() {
@@ -14,5 +12,6 @@ export default function OverviewDashboard() {
   });
 
   console.log(players);
-  return <div>d</div>;
+
+  return <Overview players={players ?? []} />;
 }
