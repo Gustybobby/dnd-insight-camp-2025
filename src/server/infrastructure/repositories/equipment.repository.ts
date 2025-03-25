@@ -12,6 +12,16 @@ import { takeOne, takeOneOrThrow } from "@/db/util";
 import { and, eq, getTableColumns, sql } from "drizzle-orm";
 
 export class EquipmentRepository implements IEquipmentRepository {
+  async getAll(): Promise<PlayerEquipmentWithInfo[]> {
+    return db
+      .select({
+        ...getTableColumns(playerEquipmentsTable),
+        item: getTableColumns(itemsTable),
+      })
+      .from(playerEquipmentsTable)
+      .innerJoin(itemsTable, eq(itemsTable.id, playerEquipmentsTable.itemId));
+  }
+
   async getPlayerEquipments({
     playerId,
   }: {

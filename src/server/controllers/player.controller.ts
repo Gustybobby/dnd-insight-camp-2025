@@ -2,6 +2,7 @@
 
 import type {
   ICreatePlayerUseCase,
+  IGetAllPlayersInfoUseCase,
   IGetAllPlayersUseCase,
   IGetPlayerCharacterUseCase,
   IGetPlayerItemsUseCase,
@@ -23,9 +24,16 @@ import {
   GetPlayerStatsUseCase,
   GetPlayerUseCase,
 } from "@/server/applications/usecases/player";
+import { GetAllPlayersInfoUseCase } from "../applications/usecases/player/get-all-info.usecase";
+import { PlayerStatRepository } from "../infrastructure/repositories/player-stat.repository";
+import { EquipmentRepository } from "../infrastructure/repositories/equipment.repository";
+import { PlayerItemRepository } from "../infrastructure/repositories/player-item.repository";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
+const playerStatRepo = new PlayerStatRepository();
+const equipmentRepo = new EquipmentRepository();
+const playerItemRepo = new PlayerItemRepository();
 
 const sessionService = new SessionService();
 
@@ -37,6 +45,12 @@ const getPlayerCharacterUseCase = new GetPlayerCharacterUseCase(playerRepo);
 const getPlayerStatsUseCase = new GetPlayerStatsUseCase(playerRepo);
 const getPlayerItemsUseCase = new GetPlayerItemsUseCase(playerRepo);
 const createPlayerUseCase = new CreatePlayerUseCase(playerRepo);
+const getAllPlayersInfoUseCase = new GetAllPlayersInfoUseCase(
+  playerRepo,
+  playerStatRepo,
+  equipmentRepo,
+  playerItemRepo,
+);
 
 export async function getAllPlayers(): Promise<UseCaseReturn<IGetAllPlayersUseCase> | null> {
   return getAllPlayersUseCase.invoke().catch((error) => {
@@ -96,4 +110,13 @@ export async function createPlayer({
       console.error(error);
       return null;
     });
+}
+
+export async function getAllPlayersInfo(): Promise<UseCaseReturn<IGetAllPlayersInfoUseCase> | null> {
+  await authService.authStaff();
+
+  return getAllPlayersInfoUseCase.invoke().catch((error) => {
+    console.error(error);
+    return null;
+  });
 }

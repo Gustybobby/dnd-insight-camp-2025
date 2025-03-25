@@ -2,6 +2,8 @@ import type { PlayerEquipmentWithInfo } from "@/server/domain/aggregates";
 import type { PlayerEquipment } from "@/server/domain/models";
 
 export interface IEquipmentRepository {
+  getAll(): Promise<PlayerEquipmentWithInfo[]>;
+
   getPlayerEquipments({
     playerId,
   }: {
