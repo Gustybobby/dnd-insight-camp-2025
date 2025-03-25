@@ -1,8 +1,8 @@
 "use client";
 
 import Overview from "@/components/dashboard/overview/Overview";
+import { getAllPlayerStatLogsFullInfo } from "@/server/controllers/log.controller";
 import { getAllPlayersInfo } from "@/server/controllers/player.controller";
-import { PlayerWithAllInfo } from "@/server/domain/aggregates";
 import { useQuery } from "@tanstack/react-query";
 
 export default function OverviewDashboard() {
@@ -11,7 +11,13 @@ export default function OverviewDashboard() {
     queryFn: async () => await getAllPlayersInfo(),
   });
 
+  const { data: logs } = useQuery({
+    queryKey: ["getAllPlayerStatLogsFullInfo"],
+    queryFn: async () => await getAllPlayerStatLogsFullInfo(),
+  });
+
   console.log(players);
+  console.log(logs);
 
   return <Overview players={players ?? []} />;
 }

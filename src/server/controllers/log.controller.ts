@@ -1,6 +1,9 @@
 "use server";
 
-import type { IGetPlayerStatLogsUseCase } from "@/server/applications/interfaces/usecases/log";
+import type {
+  IGetAllPlayerStatLogsFullInfoUseCase,
+  IGetPlayerStatLogsUseCase,
+} from "@/server/applications/interfaces/usecases/log";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
@@ -8,7 +11,10 @@ import { PlayerStatLogRepository } from "@/server/infrastructure/repositories/pl
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
 import { AuthService } from "@/server/applications/services/auth.service";
-import { GetPlayerStatLogsUseCase } from "@/server/applications/usecases/log";
+import {
+  GetAllPlayerStatLogsFullInfoUseCase,
+  GetPlayerStatLogsUseCase,
+} from "@/server/applications/usecases/log";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
@@ -21,6 +27,8 @@ const authService = new AuthService(playerRepo, staffRepo, sessionService);
 const getPlayerStatLogsUseCase = new GetPlayerStatLogsUseCase(
   playerStatLogRepo,
 );
+const getAllPlayerStatLogsFullInfoUseCase =
+  new GetAllPlayerStatLogsFullInfoUseCase(playerStatLogRepo);
 
 export async function getPlayerStatLogs(
   params: UseCaseParams<IGetPlayerStatLogsUseCase>,
@@ -28,6 +36,15 @@ export async function getPlayerStatLogs(
   await authService.authStaff();
 
   return getPlayerStatLogsUseCase.invoke(params).catch((error) => {
+    console.error(error);
+    return null;
+  });
+}
+
+export async function getAllPlayerStatLogsFullInfo(): Promise<UseCaseReturn<IGetAllPlayerStatLogsFullInfoUseCase> | null> {
+  await authService.authStaff();
+
+  return getAllPlayerStatLogsFullInfoUseCase.invoke().catch((error) => {
     console.error(error);
     return null;
   });
