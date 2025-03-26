@@ -19,5 +19,5 @@ export default function OverviewDashboard() {
   console.log(players);
   console.log(logs);
 
-  return <Overview players={players ?? []} />;
+  return <Overview players={players ?? []} logs={logs ?? []} />;
 }
