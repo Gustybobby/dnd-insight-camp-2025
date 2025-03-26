@@ -1,5 +1,7 @@
-import { PlayerStatLogFullInfoPlusPlayerCharacter } from "@/server/domain/aggregates";
+import type { PlayerStatLogFullInfoPlusPlayerCharacter } from "@/server/domain/aggregates";
+
 import React from "react";
+
 import LogRow from "./LogRow";
 
 interface LogTableProp {

@@ -1,5 +1,7 @@
-import { PlayerItemWithInfo } from "@/server/domain/aggregates";
+import type { PlayerItemWithInfo } from "@/server/domain/aggregates";
+
 import React from "react";
+
 import Image from "next/image";
 
 interface ItemCellProp {

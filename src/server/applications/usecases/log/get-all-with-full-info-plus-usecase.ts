@@ -1,6 +1,6 @@
-import { IPlayerStatLogRepository } from "@/server/domain/interfaces/repositories";
-import { IGetAllPlayerStatLogsFullInfoUseCase } from "../../interfaces/usecases/log";
-import { PlayerStatLogFullInfoPlusPlayerCharacter } from "@/server/domain/aggregates";
+import type { IGetAllPlayerStatLogsFullInfoUseCase } from "../../interfaces/usecases/log";
+import type { IPlayerStatLogRepository } from "@/server/domain/interfaces/repositories";
+import type { PlayerStatLogFullInfoPlusPlayerCharacter } from "@/server/domain/aggregates";
 
 export class GetAllPlayerStatLogsFullInfoUseCase
   implements IGetAllPlayerStatLogsFullInfoUseCase

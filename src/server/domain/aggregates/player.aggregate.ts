@@ -1,5 +1,5 @@
 import type { Character, Player, PlayerStat } from "@/server/domain/models";
-import { PlayerEquipmentWithInfo, PlayerItemWithInfo } from ".";
+import type { PlayerEquipmentWithInfo, PlayerItemWithInfo } from ".";
 
 export interface PlayerWithCharater extends Player {
   character: Character;

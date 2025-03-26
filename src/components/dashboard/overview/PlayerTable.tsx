@@ -1,6 +1,9 @@
-import React from "react";
+import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
+
 import { ALL_STAT_TYPES } from "@/shared/stat";
-import { PlayerWithAllInfo } from "@/server/domain/aggregates";
+
+import React from "react";
+
 import PlayerRow from "./PlayerRow";
 
 interface PlayerTableProp {

@@ -1,11 +1,11 @@
-import {
+import type { IGetAllPlayersInfoUseCase } from "../../interfaces/usecases/player";
+import type {
   IEquipmentRepository,
   IPlayerRepository,
   IPlayerStatRepository,
 } from "@/server/domain/interfaces/repositories";
-import { IGetAllPlayersInfoUseCase } from "../../interfaces/usecases/player";
-import { PlayerWithAllInfo } from "@/server/domain/aggregates";
-import { IPlayerItemRepository } from "@/server/domain/interfaces/repositories/player-item.repository.interface";
+import type { IPlayerItemRepository } from "@/server/domain/interfaces/repositories/player-item.repository.interface";
+import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
 
 export class GetAllPlayersInfoUseCase implements IGetAllPlayersInfoUseCase {
   constructor(

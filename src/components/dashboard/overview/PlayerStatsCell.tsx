@@ -1,6 +1,8 @@
-import { PlayerStat } from "@/server/domain/models";
-import React from "react";
+import type { PlayerStat } from "@/server/domain/models";
+
 import { ALL_STAT_TYPES } from "@/shared/stat";
+
+import React from "react";
 
 interface PlayerStatsCellProp {
   stats: PlayerStat[];

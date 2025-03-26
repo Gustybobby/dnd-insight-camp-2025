@@ -1,8 +1,10 @@
-import { PlayerWithAllInfo } from "@/server/domain/aggregates";
+import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
+
 import React from "react";
-import PlayerStatsCell from "./PlayerStatsCell";
-import ItemCell from "./ItemCell";
+
 import EquipmentCell from "./Equipment";
+import ItemCell from "./ItemCell";
+import PlayerStatsCell from "./PlayerStatsCell";
 
 interface PlayerRowProp {
   player: PlayerWithAllInfo;

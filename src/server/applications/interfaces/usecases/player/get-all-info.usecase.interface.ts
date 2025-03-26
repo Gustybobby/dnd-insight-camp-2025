@@ -1,4 +1,4 @@
-import { PlayerWithAllInfo } from "@/server/domain/aggregates";
+import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
 
 export interface IGetAllPlayersInfoUseCase {
   invoke(): Promise<PlayerWithAllInfo[]>;

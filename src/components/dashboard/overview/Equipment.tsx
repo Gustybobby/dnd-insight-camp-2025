@@ -1,5 +1,7 @@
-import { PlayerEquipmentWithInfo } from "@/server/domain/aggregates";
+import type { PlayerEquipmentWithInfo } from "@/server/domain/aggregates";
+
 import React from "react";
+
 import Image from "next/image";
 
 interface EquipmentCellProp {

@@ -10,8 +10,8 @@ import {
   charactersTable,
   effectsTable,
   itemsTable,
-  playerStatLogsTable,
   playersTable,
+  playerStatLogsTable,
   staffsTable,
   usersTable,
 } from "@/db/schema";

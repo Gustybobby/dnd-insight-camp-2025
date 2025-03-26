@@ -24,10 +24,11 @@ import {
   GetPlayerStatsUseCase,
   GetPlayerUseCase,
 } from "@/server/applications/usecases/player";
+
 import { GetAllPlayersInfoUseCase } from "../applications/usecases/player/get-all-info.usecase";
-import { PlayerStatRepository } from "../infrastructure/repositories/player-stat.repository";
 import { EquipmentRepository } from "../infrastructure/repositories/equipment.repository";
 import { PlayerItemRepository } from "../infrastructure/repositories/player-item.repository";
+import { PlayerStatRepository } from "../infrastructure/repositories/player-stat.repository";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();

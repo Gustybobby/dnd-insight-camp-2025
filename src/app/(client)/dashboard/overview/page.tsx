@@ -1,9 +1,11 @@
 "use client";
 
-import Overview from "@/components/dashboard/overview/Overview";
 import { getAllPlayerStatLogsFullInfo } from "@/server/controllers/log.controller";
 import { getAllPlayersInfo } from "@/server/controllers/player.controller";
+
 import { useQuery } from "@tanstack/react-query";
+
+import Overview from "@/components/dashboard/overview/Overview";
 
 export default function OverviewDashboard() {
   const { data: players } = useQuery({
