@@ -7,6 +7,7 @@ import React from "react";
 
 import LogTable from "./LogTable";
 import PlayerTable from "./PlayerTable";
+import ResetDataButton from "./ResetDataButton";
 
 interface OverViewProp {
   players: PlayerWithAllInfo[];
@@ -18,6 +19,7 @@ export default function Overview({ players, logs }: OverViewProp) {
     <div className="flex w-full flex-col items-center space-y-12 p-12">
       <PlayerTable players={players} />
       <LogTable logs={logs} />
+      <ResetDataButton></ResetDataButton>
     </div>
   );
 }

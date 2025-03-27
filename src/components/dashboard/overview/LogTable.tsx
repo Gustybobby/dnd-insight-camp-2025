@@ -1,8 +1,5 @@
 import type { PlayerStatLogFullInfoPlusPlayerCharacter } from "@/server/domain/aggregates";
-
 import React from "react";
-
-import LogRow from "./LogRow";
 
 interface LogTableProp {
   logs: PlayerStatLogFullInfoPlusPlayerCharacter[];
@@ -25,7 +22,16 @@ export default function LogTable({ logs }: LogTableProp) {
       </thead>
       <tbody>
         {logs.map((log) => (
-          <LogRow log={log} key={log.id} />
+          <tr className="border" key={log.id}>
+            <td>{log.character.name}</td>
+            <td>{log.player.name}</td>
+            <td>{log.type}</td>
+            <td>{log.value}</td>
+            <td>{log.staff?.name}</td>
+            <td>{log.effect?.type}</td>
+            <td>{log.item?.id}</td>
+            <td>{log.createdAt.toUTCString()}</td>
+          </tr>
         ))}
       </tbody>
     </table>

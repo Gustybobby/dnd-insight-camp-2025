@@ -1,21 +1,32 @@
 import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
-
 import React from "react";
-
 import EquipmentCell from "./Equipment";
 import ItemCell from "./ItemCell";
-import PlayerStatsCell from "./PlayerStatsCell";
+import { ALL_STAT_TYPES } from "@/shared/stat";
 
 interface PlayerRowProp {
   player: PlayerWithAllInfo;
 }
 
 export default function PlayerRow({ player }: PlayerRowProp) {
+  const statsValue = ALL_STAT_TYPES.map(
+    (type) => player.stats.find((element) => element.type === type)?.value,
+  );
   return (
     <tr className="border">
       <td>{player.character.name}</td>
       <td>{player.name}</td>
-      <PlayerStatsCell stats={player.stats} />
+
+      {/* Stat */}
+      <td>
+        <div className="flex">
+          {statsValue.map((value, index) => (
+            <div className="flex-1 text-center" key={index}>
+              {value}
+            </div>
+          ))}
+        </div>
+      </td>
 
       {/* Items */}
       <td>

@@ -8,6 +8,7 @@ import type {
   IGetPlayerItemsUseCase,
   IGetPlayerStatsUseCase,
   IGetPlayerUseCase,
+  IResetPlayerDataUseCase,
 } from "@/server/applications/interfaces/usecases/player";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
@@ -29,6 +30,7 @@ import { GetAllPlayersInfoUseCase } from "../applications/usecases/player/get-al
 import { EquipmentRepository } from "../infrastructure/repositories/equipment.repository";
 import { PlayerItemRepository } from "../infrastructure/repositories/player-item.repository";
 import { PlayerStatRepository } from "../infrastructure/repositories/player-stat.repository";
+import { ResetPlayerDataUseCase } from "../applications/usecases/player/reset.usecase";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
@@ -52,6 +54,7 @@ const getAllPlayersInfoUseCase = new GetAllPlayersInfoUseCase(
   equipmentRepo,
   playerItemRepo,
 );
+const resetPlayerDataUseCase = new ResetPlayerDataUseCase(playerRepo);
 
 export async function getAllPlayers(): Promise<UseCaseReturn<IGetAllPlayersUseCase> | null> {
   return getAllPlayersUseCase.invoke().catch((error) => {
@@ -120,4 +123,11 @@ export async function getAllPlayersInfo(): Promise<UseCaseReturn<IGetAllPlayersI
     console.error(error);
     return null;
   });
+}
+
+export async function resetPlayerData({
+  playerId,
+}: UseCaseParams<IResetPlayerDataUseCase>): Promise<UseCaseReturn<IResetPlayerDataUseCase> | null> {
+  await authService.authStaff();
+  return resetPlayerDataUseCase.invoke({ playerId });
 }
