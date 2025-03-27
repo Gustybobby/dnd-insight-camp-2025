@@ -3,12 +3,19 @@ import React from "react";
 import EquipmentCell from "./Equipment";
 import ItemCell from "./ItemCell";
 import { ALL_STAT_TYPES } from "@/shared/stat";
+import ResetDataButton from "./ResetDataButton";
 
 interface PlayerRowProp {
   player: PlayerWithAllInfo;
+  refetchPlayers: () => void;
+  refetchLogs: () => void;
 }
 
-export default function PlayerRow({ player }: PlayerRowProp) {
+export default function PlayerRow({
+  player,
+  refetchPlayers,
+  refetchLogs,
+}: PlayerRowProp) {
   const statsValue = ALL_STAT_TYPES.map(
     (type) => player.stats.find((element) => element.type === type)?.value,
   );
@@ -47,6 +54,15 @@ export default function PlayerRow({ player }: PlayerRowProp) {
             />
           ))}
         </div>
+      </td>
+      <td>Skill</td>
+      <td>Effect</td>
+      <td className="flex justify-center">
+        <ResetDataButton
+          playerId={player.id}
+          refetchPlayers={refetchPlayers}
+          refetchLogs={refetchLogs}
+        />
       </td>
     </tr>
   );

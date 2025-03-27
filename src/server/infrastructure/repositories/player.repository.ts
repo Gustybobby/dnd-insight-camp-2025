@@ -1,7 +1,9 @@
 import type { IPlayerRepository } from "@/server/domain/interfaces/repositories";
 import type {
   PlayerItemWithInfo,
+  PlayerWithAllInfo,
   PlayerWithCharater,
+  PlayerWithItemsAndEquipments,
 } from "@/server/domain/aggregates";
 import type {
   Character,
@@ -16,6 +18,7 @@ import { db } from "@/db";
 import {
   charactersTable,
   itemsTable,
+  playerEquipmentsTable,
   playerItemsTable,
   playersTable,
   playerStatLogsTable,
@@ -161,5 +164,27 @@ export class PlayerRepository implements IPlayerRepository {
       })
       .where(eq(playerStatsTable.playerId, data[0].playerId))
       .returning();
+  }
+
+  async removeAllItemsAndEquipments({
+    playerId,
+  }: {
+    playerId: number;
+  }): Promise<
+    Pick<PlayerWithItemsAndEquipments, "playerItems" | "equipments">
+  > {
+    return db.transaction(async (tx) => {
+      const playerItems = await tx
+        .delete(playerItemsTable)
+        .where(eq(playerItemsTable.playerId, playerId))
+        .returning();
+
+      const equipments = await tx
+        .delete(playerEquipmentsTable)
+        .where(eq(playerEquipmentsTable.playerId, playerId))
+        .returning();
+
+      return { playerItems, equipments };
+    });
   }
 }

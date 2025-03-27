@@ -1,6 +1,8 @@
 import type {
   PlayerItemWithInfo,
+  PlayerWithAllInfo,
   PlayerWithCharater,
+  PlayerWithItemsAndEquipments,
 } from "@/server/domain/aggregates";
 import type {
   Character,
@@ -39,4 +41,10 @@ export interface IPlayerRepository {
   updateStat({ data }: { data: PlayerStatLogCreate }): Promise<PlayerStat>;
 
   setStats({ data }: { data: PlayerStat[] }): Promise<PlayerStat[]>;
+
+  removeAllItemsAndEquipments({
+    playerId,
+  }: {
+    playerId: Player["id"];
+  }): Promise<Pick<PlayerWithItemsAndEquipments, "playerItems" | "equipments">>;
 }

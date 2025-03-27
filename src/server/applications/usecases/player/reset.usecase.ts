@@ -14,7 +14,8 @@ export class ResetPlayerDataUseCase implements IResetPlayerDataUseCase {
         value: 0,
       };
     });
-    console.log(stats);
+
     await this.playerRepo.setStats({ data: stats });
+    await this.playerRepo.removeAllItemsAndEquipments({ playerId });
   }
 }

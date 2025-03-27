@@ -8,9 +8,15 @@ import PlayerRow from "./PlayerRow";
 
 interface PlayerTableProp {
   players: PlayerWithAllInfo[];
+  refetchPlayers: () => void;
+  refetchLogs: () => void;
 }
 
-export default function PlayerTable({ players }: PlayerTableProp) {
+export default function PlayerTable({
+  players,
+  refetchPlayers,
+  refetchLogs,
+}: PlayerTableProp) {
   return (
     <table className="w-full border">
       <thead>
@@ -28,13 +34,18 @@ export default function PlayerTable({ players }: PlayerTableProp) {
           <th className="w-56">Equipment</th>
           <th className="w-56">Skill</th>
           <th className="w-56">Effect</th>
-          <th>Reset</th>
+          <th className="text-center">Reset</th>
         </tr>
       </thead>
 
       <tbody>
         {players.map((player) => (
-          <PlayerRow player={player} key={player.id}></PlayerRow>
+          <PlayerRow
+            player={player}
+            key={player.id}
+            refetchPlayers={refetchPlayers}
+            refetchLogs={refetchLogs}
+          ></PlayerRow>
         ))}
       </tbody>
     </table>
