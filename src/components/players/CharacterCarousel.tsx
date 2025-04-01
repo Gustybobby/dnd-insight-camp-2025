@@ -38,7 +38,7 @@ export function CharacterCarousel({
         width={500}
         height={500}
         className={cn(
-          "aspect-square h-full max-w-fit motion-duration-300",
+          "h-full max-w-fit motion-duration-300",
           slideFromRight
             ? "motion-preset-slide-right-md"
             : "motion-preset-slide-left-md",
