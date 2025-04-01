@@ -1,5 +1,5 @@
-import type { IEffectService } from "@/server/applications/interfaces/services/applications";
 import type { IPlayerRepository } from "@/server/domain/interfaces/repositories";
+import type { IEffectService } from "@/server/domain/interfaces/services/applications";
 import type { ModEffectCreate, PlayerStatLog } from "@/server/domain/models";
 
 import { db } from "@/db";

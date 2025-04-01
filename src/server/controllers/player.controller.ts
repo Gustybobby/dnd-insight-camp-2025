@@ -11,10 +11,10 @@ import type {
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
 import { Player, PlayerCreate } from "@/server/domain/models";
+import { AuthService } from "@/server/domain/services/auth.service";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
-import { AuthService } from "@/server/applications/services/auth.service";
 import {
   CreatePlayerUseCase,
   GetAllPlayersUseCase,

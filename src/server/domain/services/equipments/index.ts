@@ -1,16 +1,16 @@
 import type {
-  IEffectService,
-  IEquipmentService,
-  IItemService,
-} from "@/server/applications/interfaces/services/applications";
-import type {
   IEquipmentRepository,
   IItemRepository,
 } from "@/server/domain/interfaces/repositories";
+import type {
+  IEffectService,
+  IEquipmentService,
+  IItemService,
+} from "@/server/domain/interfaces/services/applications";
 import type { Item, ItemTypeEnum } from "@/server/domain/models";
 
-import { BaseEquipmentService } from "@/server/applications/services/equipments/base.service";
-import { NormalArmorService } from "@/server/applications/services/equipments/normal-armor.service";
+import { BaseEquipmentService } from "@/server/domain/services/equipments/base.service";
+import { NormalArmorService } from "@/server/domain/services/equipments/normal-armor.service";
 
 export class EquipmentService {
   private readonly serviceMap: Record<
