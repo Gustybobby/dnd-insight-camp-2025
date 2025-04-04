@@ -1,7 +1,7 @@
+import { AuthService } from "@/server/domain/services/auth.service";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
-import { AuthService } from "@/server/applications/services/auth.service";
 
 // eslint-disable-next-line
 export type UseCaseParams<T extends { invoke: (...args: any) => any }> =

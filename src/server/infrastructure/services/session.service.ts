@@ -1,7 +1,7 @@
 import type {
   AuthSession,
   ISessionService,
-} from "@/server/applications/interfaces/services/infrastructure";
+} from "@/server/domain/interfaces/services/infrastructure";
 import type { DefaultSession } from "next-auth";
 
 import { db } from "@/db";

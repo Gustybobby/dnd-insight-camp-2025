@@ -1,5 +1,5 @@
-import type { IEffectService } from "@/server/applications/interfaces/services/applications";
 import type { ICreateModEffectUseCase } from "@/server/applications/interfaces/usecases/effect";
+import type { IEffectService } from "@/server/domain/interfaces/services/applications";
 import type {
   ModEffect,
   ModEffectCreate,

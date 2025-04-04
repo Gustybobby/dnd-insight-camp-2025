@@ -7,15 +7,15 @@ import type {
 } from "@/server/applications/interfaces/usecases/player/equipment";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
+import { AuthService } from "@/server/domain/services/auth.service";
+import { EffectService } from "@/server/domain/services/effect.service";
+import { EquipmentService } from "@/server/domain/services/equipments";
+import { ItemService } from "@/server/domain/services/item.service";
 import { EquipmentRepository } from "@/server/infrastructure/repositories/equipment.repository";
 import { ItemRepository } from "@/server/infrastructure/repositories/item.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
-import { AuthService } from "@/server/applications/services/auth.service";
-import { EffectService } from "@/server/applications/services/effect.service";
-import { EquipmentService } from "@/server/applications/services/equipments";
-import { ItemService } from "@/server/applications/services/item.service";
 import {
   EquipEquipmentUseCase,
   GetAllPlayerEquipmentsUseCase,

@@ -1,12 +1,12 @@
-import type { IAuthService } from "@/server/applications/interfaces/services/applications";
-import type {
-  AuthSession,
-  ISessionService,
-} from "@/server/applications/interfaces/services/infrastructure";
 import type {
   IPlayerRepository,
   IStaffRepository,
 } from "@/server/domain/interfaces/repositories";
+import type { IAuthService } from "@/server/domain/interfaces/services/applications";
+import type {
+  AuthSession,
+  ISessionService,
+} from "@/server/domain/interfaces/services/infrastructure";
 
 export class AuthService implements IAuthService {
   constructor(
