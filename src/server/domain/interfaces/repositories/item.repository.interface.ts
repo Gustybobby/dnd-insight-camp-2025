@@ -6,4 +6,9 @@ export interface IItemRepository {
   getByIdOrThrow({ itemId }: { itemId: Item["id"] }): Promise<Item>;
 
   createPlayerItem({ data }: { data: PlayerItem }): Promise<PlayerItem>;
+
+  deletePlayerItem({
+    playerId,
+    itemId,
+  }: Omit<PlayerItem, "amount">): Promise<PlayerItem>;
 }

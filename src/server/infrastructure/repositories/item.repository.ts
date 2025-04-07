@@ -38,4 +38,20 @@ export class ItemRepository implements IItemRepository {
       )
       .then(takeOneOrThrow);
   }
+
+  async deletePlayerItem({
+    playerId,
+    itemId,
+  }: Omit<PlayerItem, "amount">): Promise<PlayerItem> {
+    return db
+      .delete(playerItemsTable)
+      .where(
+        and(
+          eq(playerItemsTable.playerId, playerId),
+          eq(playerItemsTable.itemId, itemId),
+        ),
+      )
+      .returning()
+      .then(takeOneOrThrow);
+  }
 }

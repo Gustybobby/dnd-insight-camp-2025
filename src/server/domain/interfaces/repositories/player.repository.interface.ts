@@ -1,6 +1,5 @@
 import type {
   PlayerItemWithInfo,
-  PlayerWithAllInfo,
   PlayerWithCharater,
   PlayerWithItemsAndEquipments,
 } from "@/server/domain/aggregates";

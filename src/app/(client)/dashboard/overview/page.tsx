@@ -6,29 +6,27 @@ import { getAllPlayersInfo } from "@/server/controllers/player.controller";
 import { useQuery } from "@tanstack/react-query";
 
 import Overview from "@/components/dashboard/overview/Overview";
+import { getAllItems } from "@/server/controllers/items.controller";
 
 export default function OverviewDashboard() {
-  const { data: players, refetch: refetchPlayers } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["getPlayerAllStats"],
-    queryFn: async () => await getAllPlayersInfo(),
+    queryFn: async () => {
+      const [players, logs, items] = await Promise.all([
+        getAllPlayersInfo(),
+        getAllPlayerStatLogsFullInfo(),
+        getAllItems(),
+      ]);
+      return { players, logs, items };
+    },
     refetchInterval: 5000,
   });
-
-  const { data: logs, refetch: refetchLogs } = useQuery({
-    queryKey: ["getAllPlayerStatLogsFullInfo"],
-    queryFn: async () => await getAllPlayerStatLogsFullInfo(),
-    refetchInterval: 5000,
-  });
-
-  console.log(players);
-  console.log(logs);
 
   return (
     <Overview
-      players={players ?? []}
-      logs={logs ?? []}
-      refetchPlayer={refetchPlayers}
-      refetchLogs={refetchLogs}
+      players={data?.players ?? []}
+      logs={data?.logs ?? []}
+      refetch={refetch}
     />
   );
 }

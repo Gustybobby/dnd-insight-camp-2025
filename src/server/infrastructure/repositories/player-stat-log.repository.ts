@@ -43,6 +43,7 @@ export class PlayerStatLogRepository implements IPlayerStatLogRepository {
       .leftJoin(usersTable, eq(usersTable.id, staffsTable.userId))
       .leftJoin(effectsTable, eq(effectsTable.id, playerStatLogsTable.effectId))
       .leftJoin(itemsTable, eq(itemsTable.id, effectsTable.itemId))
+      .limit(10)
       .orderBy(desc(playerStatLogsTable.createdAt));
   }
 

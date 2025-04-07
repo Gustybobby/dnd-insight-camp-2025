@@ -5,29 +5,19 @@ import type {
 
 import React from "react";
 
-import LogTable from "./LogTable";
-import PlayerTable from "./PlayerTable";
+import LogTable from "./logs/LogTable";
+import PlayerTable from "./players/PlayerTable";
 
 interface OverViewProp {
   players: PlayerWithAllInfo[];
   logs: PlayerStatLogFullInfoPlusPlayerCharacter[];
-  refetchPlayer: () => void;
-  refetchLogs: () => void;
+  refetch: () => void;
 }
 
-export default function Overview({
-  players,
-  logs,
-  refetchPlayer,
-  refetchLogs,
-}: OverViewProp) {
+export default function Overview({ players, logs, refetch }: OverViewProp) {
   return (
     <div className="flex w-full flex-col items-center space-y-12 p-12">
-      <PlayerTable
-        players={players}
-        refetchPlayers={refetchPlayer}
-        refetchLogs={refetchLogs}
-      />
+      <PlayerTable players={players} refetch={refetch} />
       <LogTable logs={logs} />
     </div>
   );

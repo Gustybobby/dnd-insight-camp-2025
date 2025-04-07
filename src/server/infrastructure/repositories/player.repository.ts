@@ -1,7 +1,6 @@
 import type { IPlayerRepository } from "@/server/domain/interfaces/repositories";
 import type {
   PlayerItemWithInfo,
-  PlayerWithAllInfo,
   PlayerWithCharater,
   PlayerWithItemsAndEquipments,
 } from "@/server/domain/aggregates";

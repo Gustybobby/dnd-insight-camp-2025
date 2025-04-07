@@ -16,10 +16,13 @@ export class GetAllPlayersInfoUseCase implements IGetAllPlayersInfoUseCase {
   ) {}
 
   async invoke(): Promise<PlayerWithAllInfo[]> {
-    const playersWithCharacter = await this.playerRepo.getAllWithCharacter();
-    const playerStats = await this.playerStatRepo.getAll();
-    const playerEquipments = await this.equipmentRepo.getAll();
-    const playerItems = await this.playerItemRepo.getAll();
+    const [playersWithCharacter, playerStats, playerEquipments, playerItems] =
+      await Promise.all([
+        this.playerRepo.getAllWithCharacter(),
+        this.playerStatRepo.getAll(),
+        this.equipmentRepo.getAll(),
+        this.playerItemRepo.getAll(),
+      ]);
 
     return playersWithCharacter.map((player) => {
       const stats = playerStats.filter(
@@ -41,16 +44,3 @@ export class GetAllPlayersInfoUseCase implements IGetAllPlayersInfoUseCase {
     });
   }
 }
-
-// const playersWithStat = await this.playerRepo.getAllStatsAllPlayers().then((stats)=>
-//     stats.reduce<PlayerWithReducedStats[]>((acc,stat)=>{
-//         const existing = acc.find((element)=>element.id===stat.playerId);
-//         if (existing){
-//             existing.stats.push(stat);
-//         }
-//         else{
-//             acc.push({id:stat.playerId, stats:[stat]})
-//         }
-//         return acc
-//     },[])
-// )
