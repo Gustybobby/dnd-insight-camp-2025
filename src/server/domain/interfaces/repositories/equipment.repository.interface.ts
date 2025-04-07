@@ -10,6 +10,11 @@ export interface IEquipmentRepository {
     playerId: PlayerEquipmentWithInfo["playerId"];
   }): Promise<PlayerEquipmentWithInfo[]>;
 
+  delete({
+    playerId,
+    itemId,
+  }: Pick<PlayerEquipment, "playerId" | "itemId">): Promise<PlayerEquipment>;
+
   playerEquipmentExists({
     playerId,
     part,

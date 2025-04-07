@@ -13,7 +13,11 @@ import { UseCaseParams } from "@/server/controllers/utils";
 import { IDeletePlayerItemUseCase } from "@/server/applications/interfaces/usecases/item";
 import ResetDataButton from "./ResetDataButton";
 import { IRemoveEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
-import { playerRemoveEquipment } from "@/server/controllers/equipment.controller";
+import {
+  deletePlayerEquipment,
+  playerRemoveEquipment,
+} from "@/server/controllers/equipment.controller";
+import { IDeletePlayerEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
 
 interface PlayerRowProp {
   player: PlayerWithAllInfo;
@@ -25,8 +29,11 @@ export default function PlayerRow({ player, refetch }: PlayerRowProp) {
   const deletePlayerItemMutation = useMutation({
     mutationFn: deletePlayerItem,
   });
-  const deleteEquipmentMutation = useMutation({
+  const unequipEquipmentMutation = useMutation({
     mutationFn: playerRemoveEquipment,
+  });
+  const deleteEquipmentMutation = useMutation({
+    mutationFn: deletePlayerEquipment,
   });
 
   const handleOnResetPlayer = (
@@ -41,7 +48,7 @@ export default function PlayerRow({ player, refetch }: PlayerRowProp) {
           refetch();
         },
         onError: (error) => {
-          console.error("Mutation failed:", error);
+          console.error(error);
         },
       },
     );
@@ -59,7 +66,25 @@ export default function PlayerRow({ player, refetch }: PlayerRowProp) {
           refetch();
         },
         onError: (error) => {
-          console.error("Mutation failed:", error);
+          console.error(error);
+        },
+      },
+    );
+  };
+
+  const handleOnUnequipEquipment = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    { playerId, itemId }: UseCaseParams<IRemoveEquipmentUseCase>,
+  ) => {
+    event.stopPropagation();
+    unequipEquipmentMutation.mutate(
+      { playerId, itemId },
+      {
+        onSuccess: () => {
+          refetch();
+        },
+        onError: (error) => {
+          console.error(error);
         },
       },
     );
@@ -67,7 +92,7 @@ export default function PlayerRow({ player, refetch }: PlayerRowProp) {
 
   const handleOnDeleteEquipment = (
     event: React.MouseEvent<HTMLButtonElement>,
-    { playerId, itemId }: UseCaseParams<IRemoveEquipmentUseCase>,
+    { playerId, itemId }: UseCaseParams<IDeletePlayerEquipmentUseCase>,
   ) => {
     event.stopPropagation();
     deleteEquipmentMutation.mutate(
@@ -77,7 +102,7 @@ export default function PlayerRow({ player, refetch }: PlayerRowProp) {
           refetch();
         },
         onError: (error) => {
-          console.error("Mutation failed:", error);
+          console.error(error);
         },
       },
     );
@@ -131,6 +156,8 @@ export default function PlayerRow({ player, refetch }: PlayerRowProp) {
             {player.equipments.map((equipment) => (
               <EquipmentCell
                 equipment={equipment}
+                handleOnDeleteEquipment={handleOnDeleteEquipment}
+                handleOnUnequipEquipment={handleOnUnequipEquipment}
                 key={equipment.itemId}
               ></EquipmentCell>
             ))}

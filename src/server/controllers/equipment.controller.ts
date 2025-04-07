@@ -21,6 +21,8 @@ import {
   GetAllPlayerEquipmentsUseCase,
   RemoveEquipmentUseCase,
 } from "@/server/applications/usecases/player/equipment";
+import { IDeletePlayerEquipmentUseCase } from "../applications/interfaces/usecases/player/equipment/delete.usecase.interface";
+import { DeletePlayerEquipmentUseCase } from "../applications/usecases/player/equipment/delete.usecase";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
@@ -49,6 +51,20 @@ export async function getPlayerEquipments(
   return getAllPlayerEquipmentsUseCase.invoke(params).catch((error) => {
     console.error(error);
     return null;
+  });
+}
+
+export async function deletePlayerEquipment(
+  params: UseCaseParams<IDeletePlayerEquipmentUseCase>,
+): Promise<UseCaseReturn<IDeletePlayerEquipmentUseCase> | null> {
+  await authService.authStaff();
+
+  const deletePlayerEquipmentUseCase = new DeletePlayerEquipmentUseCase(
+    equipmentRepo,
+  );
+  return deletePlayerEquipmentUseCase.invoke({
+    playerId: params.playerId,
+    itemId: params.itemId,
   });
 }
 

@@ -22,6 +22,22 @@ export class EquipmentRepository implements IEquipmentRepository {
       .innerJoin(itemsTable, eq(itemsTable.id, playerEquipmentsTable.itemId));
   }
 
+  async delete({
+    playerId,
+    itemId,
+  }: Pick<PlayerEquipment, "playerId" | "itemId">): Promise<PlayerEquipment> {
+    return db
+      .delete(playerEquipmentsTable)
+      .where(
+        and(
+          eq(playerEquipmentsTable.playerId, playerId),
+          eq(playerEquipmentsTable.itemId, itemId),
+        ),
+      )
+      .returning()
+      .then(takeOneOrThrow);
+  }
+
   async getPlayerEquipments({
     playerId,
   }: {
