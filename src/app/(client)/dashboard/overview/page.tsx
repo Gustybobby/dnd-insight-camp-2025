@@ -19,13 +19,14 @@ export default function OverviewDashboard() {
       ]);
       return { players, logs, items };
     },
-    refetchInterval: 5000,
+    refetchInterval: 10000000,
   });
 
   return (
     <Overview
       players={data?.players ?? []}
       logs={data?.logs ?? []}
+      items={data?.items ?? []}
       refetch={refetch}
     />
   );

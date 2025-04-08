@@ -20,7 +20,7 @@ export default function ItemCell({
 }: ItemCellProp) {
   return (
     <div
-      className="flex w-full items-center space-x-4 px-4"
+      className="flex w-full items-center space-x-4 rounded-lg border border-black bg-white px-4"
       key={playerItem.itemId}
     >
       <Image
@@ -32,7 +32,7 @@ export default function ItemCell({
       <div className="w-full text-wrap">
         {playerItem.item.name} ({playerItem.amount})
       </div>
-      <div className="flex pr-12">
+      <div className="flex">
         <button
           className="size-8 rounded-full bg-gray-400"
           onClick={(event) =>

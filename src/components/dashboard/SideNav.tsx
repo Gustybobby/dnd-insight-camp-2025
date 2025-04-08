@@ -19,7 +19,7 @@ const menu = [
 
 export default function SideNav() {
   return (
-    <div className="h-full w-64 bg-gray-800 text-white">
+    <div className="fixed h-full w-64 bg-gray-800 text-white">
       <h2 className="p-4 text-2xl font-bold">Dashboard</h2>
       <ul className="space-y-2">
         <li>

@@ -28,7 +28,7 @@ export default function EquipmentCell({
 }: EquipmentCellProp) {
   return (
     <div
-      className="flex w-full items-center space-x-4 px-4"
+      className="flex w-full items-center space-x-4 rounded-lg border border-black bg-white px-4"
       key={equipment.itemId}
     >
       <Image
@@ -40,7 +40,7 @@ export default function EquipmentCell({
       <div className="w-full text-wrap">
         {equipment.item.name} ({equipment.part})
       </div>
-      <div className="flex gap-3 pr-12">
+      <div className="flex gap-3">
         {/* Unequip */}
         <button
           className="size-8 rounded-full bg-gray-400"

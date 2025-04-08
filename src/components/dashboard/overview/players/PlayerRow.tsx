@@ -7,10 +7,16 @@ import ItemCell from "./ItemCell";
 import { ALL_STAT_TYPES } from "@/shared/stat";
 import { useMutation } from "@tanstack/react-query";
 import { resetPlayerData } from "@/server/controllers/player.controller";
-import { deletePlayerItem } from "@/server/controllers/items.controller";
-import { Player } from "@/server/domain/models";
+import {
+  addPlayerItem,
+  deletePlayerItem,
+} from "@/server/controllers/items.controller";
+import { Item, Player } from "@/server/domain/models";
 import { UseCaseParams } from "@/server/controllers/utils";
-import { IDeletePlayerItemUseCase } from "@/server/applications/interfaces/usecases/item";
+import {
+  IAddPlayerItemUseCase,
+  IDeletePlayerItemUseCase,
+} from "@/server/applications/interfaces/usecases/item";
 import ResetDataButton from "./ResetDataButton";
 import { IRemoveEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
 import {
@@ -18,13 +24,15 @@ import {
   playerRemoveEquipment,
 } from "@/server/controllers/equipment.controller";
 import { IDeletePlayerEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
+import AddItemSection from "./AddItemSection";
 
 interface PlayerRowProp {
   player: PlayerWithAllInfo;
+  items: Item[];
   refetch: () => void;
 }
 
-export default function PlayerRow({ player, refetch }: PlayerRowProp) {
+export default function PlayerRow({ player, items, refetch }: PlayerRowProp) {
   const resetPlayerMutation = useMutation({ mutationFn: resetPlayerData });
   const deletePlayerItemMutation = useMutation({
     mutationFn: deletePlayerItem,
@@ -35,6 +43,7 @@ export default function PlayerRow({ player, refetch }: PlayerRowProp) {
   const deleteEquipmentMutation = useMutation({
     mutationFn: deletePlayerEquipment,
   });
+  const addPlayerItemMutation = useMutation({ mutationFn: addPlayerItem });
 
   const handleOnResetPlayer = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -108,14 +117,36 @@ export default function PlayerRow({ player, refetch }: PlayerRowProp) {
     );
   };
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const handleOnAddNewItem = async (
+    event: React.FormEvent<HTMLFormElement>,
+    { data }: UseCaseParams<IAddPlayerItemUseCase>,
+  ) => {
+    event.preventDefault();
+
+    addPlayerItemMutation.mutate(
+      { data },
+      {
+        onSuccess: () => {
+          refetch();
+        },
+        onError: (error) => {
+          console.error(error);
+        },
+      },
+    );
+  };
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const statsValue = ALL_STAT_TYPES.map(
     (type) => player.stats.find((element) => element.type === type)?.value,
   );
   return (
-    <div className="group border" onClick={() => setIsExpanded(!isExpanded)}>
-      <div className="grid cursor-pointer grid-cols-9 py-1 group-hover:bg-slate-100">
+    <div
+      className="cursor-pointer border-b border-black px-4 hover:bg-slate-100"
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <div className="grid grid-cols-10 py-1">
         <p className="col-span-2">{player.character.name}</p>
         <p className="col-span-2">{player.name}</p>
 
@@ -127,7 +158,7 @@ export default function PlayerRow({ player, refetch }: PlayerRowProp) {
           ))}
         </div>
 
-        <div className="flex justify-center">
+        <div className="col-span-2 flex justify-end">
           <ResetDataButton
             playerId={player.id}
             handleOnResetPlayer={handleOnResetPlayer}
@@ -136,12 +167,11 @@ export default function PlayerRow({ player, refetch }: PlayerRowProp) {
       </div>
 
       {/* Dropdown */}
-      <div
-        className={`w-full ${isExpanded ? "block" : "hidden"} group-hover:bg-slate-100`}
-      >
-        <div className="grid grid-cols-2">
+      <div className={`w-full py-4 ${isOpen ? "block" : "hidden"} `}>
+        <div className="grid grid-cols-2 gap-12 px-12">
           {/* Items */}
-          <div className="flex flex-col">
+          <div className="flex flex-col items-center space-y-2">
+            <h2 className="font-bold">Items</h2>
             {player.playerItems.map((item) => (
               <ItemCell
                 playerItem={item}
@@ -149,10 +179,16 @@ export default function PlayerRow({ player, refetch }: PlayerRowProp) {
                 handleOnDeletePlayerItem={handleOnDeletePlayerItem}
               ></ItemCell>
             ))}
+            <AddItemSection
+              items={items}
+              playerId={player.id}
+              handleOnAddNewItem={handleOnAddNewItem}
+            />
           </div>
 
           {/* Equipments */}
-          <div className="flex flex-col">
+          <div className="flex flex-col items-center space-y-2">
+            <h2 className="font-bold">Equipments</h2>
             {player.equipments.map((equipment) => (
               <EquipmentCell
                 equipment={equipment}

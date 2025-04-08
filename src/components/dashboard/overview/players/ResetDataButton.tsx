@@ -20,7 +20,7 @@ export default function ResetDataButton({
 }: ResetDataButtonProp) {
   return (
     <button
-      className="text-red cursor-pointer rounded-lg bg-red-200 p-1 px-3 hover:bg-red-300"
+      className="text-red cursor-pointer rounded-lg bg-red-400 p-1 px-3 text-white hover:bg-red-500"
       onClick={(event) => handleOnResetPlayer(event, { playerId })}
     >
       Reset
