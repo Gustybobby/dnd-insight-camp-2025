@@ -1,7 +1,7 @@
+"use client";
+
 import type { PlayerEquipmentWithInfo } from "@/server/domain/aggregates";
-
-import React from "react";
-
+import React, { useState } from "react";
 import Image from "next/image";
 import { UseCaseParams } from "@/server/controllers/utils";
 import {
@@ -11,21 +11,29 @@ import {
 
 interface EquipmentCellProp {
   equipment: PlayerEquipmentWithInfo;
-  handleOnUnequipEquipment: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    { playerId, itemId }: UseCaseParams<IRemoveEquipmentUseCase>,
-  ) => void;
   handleOnDeleteEquipment: (
     event: React.MouseEvent<HTMLButtonElement>,
     { playerId, itemId }: UseCaseParams<IDeletePlayerEquipmentUseCase>,
-  ) => void;
+  ) => Promise<void>;
 }
 
 export default function EquipmentCell({
   equipment,
-  handleOnUnequipEquipment,
   handleOnDeleteEquipment,
 }: EquipmentCellProp) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleOnClickDelete = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setIsLoading(true);
+    await handleOnDeleteEquipment(event, {
+      playerId: equipment.playerId,
+      itemId: equipment.itemId,
+    });
+    setIsLoading(false);
+  };
+
   return (
     <div
       className="flex w-full items-center space-x-4 rounded-lg border border-black bg-white px-4"
@@ -41,26 +49,17 @@ export default function EquipmentCell({
         {equipment.item.name} ({equipment.part})
       </div>
       <div className="flex gap-3">
-        {/* Unequip */}
         <button
-          className="size-8 rounded-full bg-gray-400"
-          onClick={(event) =>
-            handleOnUnequipEquipment(event, {
-              playerId: equipment.playerId,
-              itemId: equipment.itemId,
-            })
-          }
-        ></button>
-
-        <button
-          className="size-8 rounded-full bg-gray-400"
-          onClick={(event) =>
-            handleOnDeleteEquipment(event, {
-              playerId: equipment.playerId,
-              itemId: equipment.itemId,
-            })
-          }
-        ></button>
+          className="rounded-lg bg-gray-400 p-1 px-2 text-sm hover:bg-gray-500"
+          disabled={isLoading}
+          onClick={(event) => handleOnClickDelete(event)}
+        >
+          {isLoading ? (
+            <div className="size-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+          ) : (
+            <p>Delete</p>
+          )}
+        </button>
       </div>
     </div>
   );

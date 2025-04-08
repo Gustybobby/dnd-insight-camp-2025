@@ -1,6 +1,7 @@
+"use client";
 import type { PlayerItemWithInfo } from "@/server/domain/aggregates";
 
-import React from "react";
+import React, { useState } from "react";
 
 import Image from "next/image";
 import { UseCaseParams } from "@/server/controllers/utils";
@@ -8,16 +9,27 @@ import { IDeletePlayerItemUseCase } from "@/server/applications/interfaces/useca
 
 interface ItemCellProp {
   playerItem: PlayerItemWithInfo;
-  handleOnDeletePlayerItem: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    { playerId, itemId }: UseCaseParams<IDeletePlayerItemUseCase>,
-  ) => void;
+  handleOnDeletePlayerItem: ({
+    playerId,
+    itemId,
+  }: UseCaseParams<IDeletePlayerItemUseCase>) => Promise<void>;
 }
 
 export default function ItemCell({
   playerItem,
   handleOnDeletePlayerItem,
 }: ItemCellProp) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleOnClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setIsLoading(true);
+    await handleOnDeletePlayerItem({
+      playerId: playerItem.playerId,
+      itemId: playerItem.itemId,
+    });
+    setIsLoading(false);
+  };
   return (
     <div
       className="flex w-full items-center space-x-4 rounded-lg border border-black bg-white px-4"
@@ -34,14 +46,16 @@ export default function ItemCell({
       </div>
       <div className="flex">
         <button
-          className="size-8 rounded-full bg-gray-400"
-          onClick={(event) =>
-            handleOnDeletePlayerItem(event, {
-              playerId: playerItem.playerId,
-              itemId: playerItem.itemId,
-            })
-          }
-        ></button>
+          className="rounded-lg bg-gray-400 p-1 px-2 text-sm hover:bg-gray-500"
+          onClick={(event) => handleOnClick(event)}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <div className="size-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+          ) : (
+            <p>Delete</p>
+          )}
+        </button>
       </div>
     </div>
   );

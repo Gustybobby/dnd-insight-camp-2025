@@ -18,11 +18,7 @@ import {
   IDeletePlayerItemUseCase,
 } from "@/server/applications/interfaces/usecases/item";
 import ResetDataButton from "./ResetDataButton";
-import { IRemoveEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
-import {
-  deletePlayerEquipment,
-  playerRemoveEquipment,
-} from "@/server/controllers/equipment.controller";
+import { deletePlayerEquipment } from "@/server/controllers/equipment.controller";
 import { IDeletePlayerEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
 import AddItemSection from "./AddItemSection";
 
@@ -37,84 +33,41 @@ export default function PlayerRow({ player, items, refetch }: PlayerRowProp) {
   const deletePlayerItemMutation = useMutation({
     mutationFn: deletePlayerItem,
   });
-  const unequipEquipmentMutation = useMutation({
-    mutationFn: playerRemoveEquipment,
-  });
   const deleteEquipmentMutation = useMutation({
     mutationFn: deletePlayerEquipment,
   });
   const addPlayerItemMutation = useMutation({ mutationFn: addPlayerItem });
 
-  const handleOnResetPlayer = (
+  const handleOnResetPlayer = async (
     event: React.MouseEvent<HTMLButtonElement>,
     { playerId }: { playerId: Player["id"] },
   ) => {
     event.preventDefault();
-    resetPlayerMutation.mutate(
-      { playerId },
-      {
-        onSuccess: () => {
-          refetch();
-        },
-        onError: (error) => {
-          console.error(error);
-        },
-      },
-    );
+    await resetPlayerMutation
+      .mutateAsync({ playerId })
+      .catch((error) => console.error(error));
+    refetch();
   };
 
-  const handleOnDeletePlayerItem = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    { playerId, itemId }: UseCaseParams<IDeletePlayerItemUseCase>,
-  ) => {
-    event.stopPropagation();
-    deletePlayerItemMutation.mutate(
-      { playerId, itemId },
-      {
-        onSuccess: () => {
-          refetch();
-        },
-        onError: (error) => {
-          console.error(error);
-        },
-      },
-    );
+  const handleOnDeletePlayerItem = async ({
+    playerId,
+    itemId,
+  }: UseCaseParams<IDeletePlayerItemUseCase>) => {
+    await deletePlayerItemMutation
+      .mutateAsync({ playerId, itemId })
+      .catch((error) => console.error(error));
+    refetch();
   };
 
-  const handleOnUnequipEquipment = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    { playerId, itemId }: UseCaseParams<IRemoveEquipmentUseCase>,
-  ) => {
-    event.stopPropagation();
-    unequipEquipmentMutation.mutate(
-      { playerId, itemId },
-      {
-        onSuccess: () => {
-          refetch();
-        },
-        onError: (error) => {
-          console.error(error);
-        },
-      },
-    );
-  };
-
-  const handleOnDeleteEquipment = (
+  const handleOnDeleteEquipment = async (
     event: React.MouseEvent<HTMLButtonElement>,
     { playerId, itemId }: UseCaseParams<IDeletePlayerEquipmentUseCase>,
   ) => {
     event.stopPropagation();
-    deleteEquipmentMutation.mutate(
-      { playerId, itemId },
-      {
-        onSuccess: () => {
-          refetch();
-        },
-        onError: (error) => {
-          console.error(error);
-        },
-      },
-    );
+    await deleteEquipmentMutation
+      .mutateAsync({ playerId, itemId })
+      .catch((error) => console.error(error));
+    refetch();
   };
 
   const handleOnAddNewItem = async (
@@ -122,18 +75,10 @@ export default function PlayerRow({ player, items, refetch }: PlayerRowProp) {
     { data }: UseCaseParams<IAddPlayerItemUseCase>,
   ) => {
     event.preventDefault();
-
-    addPlayerItemMutation.mutate(
-      { data },
-      {
-        onSuccess: () => {
-          refetch();
-        },
-        onError: (error) => {
-          console.error(error);
-        },
-      },
-    );
+    await addPlayerItemMutation
+      .mutateAsync({ data })
+      .catch((error) => console.error(error));
+    refetch();
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -193,7 +138,6 @@ export default function PlayerRow({ player, items, refetch }: PlayerRowProp) {
               <EquipmentCell
                 equipment={equipment}
                 handleOnDeleteEquipment={handleOnDeleteEquipment}
-                handleOnUnequipEquipment={handleOnUnequipEquipment}
                 key={equipment.itemId}
               ></EquipmentCell>
             ))}

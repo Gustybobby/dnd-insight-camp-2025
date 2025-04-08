@@ -1,7 +1,6 @@
 "use client";
 
 import { IAddPlayerItemUseCase } from "@/server/applications/interfaces/usecases/item";
-import { addPlayerItem } from "@/server/controllers/items.controller";
 import { UseCaseParams } from "@/server/controllers/utils";
 import { Item, Player } from "@/server/domain/models";
 import React, { useState } from "react";
@@ -12,7 +11,7 @@ interface AddItemSectionProp {
   handleOnAddNewItem: (
     event: React.FormEvent<HTMLFormElement>,
     { data }: UseCaseParams<IAddPlayerItemUseCase>,
-  ) => void;
+  ) => Promise<void>;
 }
 
 export default function AddItemSection({
@@ -21,9 +20,13 @@ export default function AddItemSection({
   handleOnAddNewItem,
 }: AddItemSectionProp) {
   const [isAdding, setIsAdding] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<string>("");
+  const [selectedItem, setSelectedItem] = useState<string>(
+    items[0].id.toString() || "",
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setIsLoading(true);
     const amount = new FormData(event.currentTarget).get("amount");
     const data: UseCaseParams<IAddPlayerItemUseCase> = {
       data: {
@@ -32,22 +35,23 @@ export default function AddItemSection({
         amount: Number(amount) || 1,
       },
     };
-    handleOnAddNewItem(event, data);
+    await handleOnAddNewItem(event, data);
     setIsAdding(false);
+    setIsLoading(false);
   };
 
   return (
     <div className="w-full" onClick={(event) => event.stopPropagation()}>
       {isAdding ? (
         <form
-          className="relative flex rounded-lg border border-seafoam text-seafoam"
+          className="relative flex space-x-4 text-black"
           onSubmit={(event) => handleOnSubmit(event)}
         >
           <select
             name="item"
             value={selectedItem}
             onChange={(event) => setSelectedItem(event.target.value)}
-            className="w-full"
+            className="flex-1 rounded-lg border-2 border-seafoam px-2"
           >
             {items.map((item) => (
               <option key={item.id} value={item.id}>
@@ -55,18 +59,34 @@ export default function AddItemSection({
               </option>
             ))}
           </select>
-          <input
-            name="amount"
-            placeholder="Amount:"
-            type="number"
-            min={1}
-            defaultValue={1}
-          ></input>
-          <button type="submit">Save</button>
+          <div className="flex space-x-2 rounded-lg border-2 border-seafoam bg-white px-2">
+            <label htmlFor="amount">Amount:</label>
+            <input
+              id="amount"
+              name="amount"
+              className="w-16 rounded-lg rounded-l-none"
+              placeholder="Amount:"
+              type="number"
+              min={1}
+              defaultValue={1}
+            ></input>
+          </div>
+
+          <button
+            type="submit"
+            className="rounded-lg bg-seafoam px-3"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="size-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+            ) : (
+              <p>Save</p>
+            )}
+          </button>
         </form>
       ) : (
         <button
-          className="w-full rounded-lg border border-seafoam bg-transparent text-center text-seafoam hover:bg-seafoam hover:text-white"
+          className="w-full rounded-lg border-2 border-seafoam bg-white text-center text-seafoam hover:bg-seafoam hover:text-white"
           onClick={() => {
             setIsAdding(true);
           }}

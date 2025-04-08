@@ -24,8 +24,14 @@ export default function Overview({
 }: OverViewProp) {
   return (
     <div className="flex w-full flex-col items-center space-y-12 p-16">
-      <PlayerTable players={players} items={items} refetch={refetch} />
-      <LogTable logs={logs} />
+      <div className="w-full">
+        <h1 className="mb-4 text-xl font-bold">Players</h1>
+        <PlayerTable players={players} items={items} refetch={refetch} />
+      </div>
+      <div className="w-full">
+        <h1 className="mb-4 text-xl font-bold">Logs</h1>
+        <LogTable logs={logs} />
+      </div>
     </div>
   );
 }
