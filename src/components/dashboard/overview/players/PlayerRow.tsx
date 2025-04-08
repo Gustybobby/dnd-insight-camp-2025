@@ -1,26 +1,30 @@
 "use client";
 
+import type {
+  IAddPlayerItemUseCase,
+  IDeletePlayerItemUseCase,
+} from "@/server/applications/interfaces/usecases/item";
+import type { IDeletePlayerEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
 import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
-import React, { useState } from "react";
-import EquipmentCell from "./Equipment";
-import ItemCell from "./ItemCell";
+import type { Item, Player } from "@/server/domain/models";
+import type { UseCaseParams } from "@/server/controllers/utils";
+
 import { ALL_STAT_TYPES } from "@/shared/stat";
-import { useMutation } from "@tanstack/react-query";
-import { resetPlayerData } from "@/server/controllers/player.controller";
+
+import { deletePlayerEquipment } from "@/server/controllers/equipment.controller";
 import {
   addPlayerItem,
   deletePlayerItem,
 } from "@/server/controllers/items.controller";
-import { Item, Player } from "@/server/domain/models";
-import { UseCaseParams } from "@/server/controllers/utils";
-import {
-  IAddPlayerItemUseCase,
-  IDeletePlayerItemUseCase,
-} from "@/server/applications/interfaces/usecases/item";
-import ResetDataButton from "./ResetDataButton";
-import { deletePlayerEquipment } from "@/server/controllers/equipment.controller";
-import { IDeletePlayerEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
+import { resetPlayerData } from "@/server/controllers/player.controller";
+
+import React, { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+
 import AddItemSection from "./AddItemSection";
+import EquipmentCell from "./Equipment";
+import ItemCell from "./ItemCell";
+import ResetDataButton from "./ResetDataButton";
 
 interface PlayerRowProp {
   player: PlayerWithAllInfo;

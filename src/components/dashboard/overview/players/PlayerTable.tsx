@@ -1,11 +1,11 @@
 import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
+import type { Item } from "@/server/domain/models";
 
 import { ALL_STAT_TYPES } from "@/shared/stat";
 
 import React from "react";
 
 import PlayerRow from "./PlayerRow";
-import { Item } from "@/server/domain/models";
 
 interface PlayerTableProp {
   players: PlayerWithAllInfo[];

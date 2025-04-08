@@ -1,4 +1,4 @@
-import { PlayerEquipment } from "@/server/domain/models";
+import type { PlayerEquipment } from "@/server/domain/models";
 
 export interface IDeletePlayerEquipmentUseCase {
   invoke({

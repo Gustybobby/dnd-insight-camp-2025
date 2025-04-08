@@ -1,9 +1,10 @@
 "use client";
 
+import type { IResetPlayerDataUseCase } from "@/server/applications/interfaces/usecases/player";
+import type { Player } from "@/server/domain/models";
+import type { UseCaseParams } from "@/server/controllers/utils";
+
 import React, { useState } from "react";
-import { Player } from "@/server/domain/models";
-import { IResetPlayerDataUseCase } from "@/server/applications/interfaces/usecases/player";
-import { UseCaseParams } from "@/server/controllers/utils";
 
 interface ResetDataButtonProp {
   playerId: Player["id"];

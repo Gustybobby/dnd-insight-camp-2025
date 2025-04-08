@@ -1,6 +1,7 @@
-import { IPlayerRepository } from "@/server/domain/interfaces/repositories";
-import { IResetPlayerDataUseCase } from "../../interfaces/usecases/player";
-import { PlayerStat } from "@/server/domain/models";
+import type { IResetPlayerDataUseCase } from "../../interfaces/usecases/player";
+import type { IPlayerRepository } from "@/server/domain/interfaces/repositories";
+import type { PlayerStat } from "@/server/domain/models";
+
 import { ALL_STAT_TYPES, DEFAULT_STAT_VALUES } from "@/shared/stat";
 
 export class ResetPlayerDataUseCase implements IResetPlayerDataUseCase {

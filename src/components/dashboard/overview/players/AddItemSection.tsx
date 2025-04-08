@@ -1,8 +1,9 @@
 "use client";
 
-import { IAddPlayerItemUseCase } from "@/server/applications/interfaces/usecases/item";
-import { UseCaseParams } from "@/server/controllers/utils";
-import { Item, Player } from "@/server/domain/models";
+import type { IAddPlayerItemUseCase } from "@/server/applications/interfaces/usecases/item";
+import type { Item, Player } from "@/server/domain/models";
+import type { UseCaseParams } from "@/server/controllers/utils";
+
 import React, { useState } from "react";
 
 interface AddItemSectionProp {

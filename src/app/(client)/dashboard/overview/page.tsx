@@ -1,12 +1,12 @@
 "use client";
 
+import { getAllItems } from "@/server/controllers/items.controller";
 import { getAllPlayerStatLogsFullInfo } from "@/server/controllers/log.controller";
 import { getAllPlayersInfo } from "@/server/controllers/player.controller";
 
 import { useQuery } from "@tanstack/react-query";
 
 import Overview from "@/components/dashboard/overview/Overview";
-import { getAllItems } from "@/server/controllers/items.controller";
 
 export default function OverviewDashboard() {
   const { data, refetch } = useQuery({
@@ -19,7 +19,7 @@ export default function OverviewDashboard() {
       ]);
       return { players, logs, items };
     },
-    refetchInterval: 10000000,
+    refetchInterval: 10000,
   });
 
   return (

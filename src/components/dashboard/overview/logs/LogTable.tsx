@@ -1,5 +1,7 @@
 import type { PlayerStatLogFullInfoPlusPlayerCharacter } from "@/server/domain/aggregates";
+
 import React from "react";
+
 import ItemBox from "./ItemBox";
 
 interface LogTableProp {

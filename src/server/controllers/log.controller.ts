@@ -12,8 +12,8 @@ import { PlayerStatLogRepository } from "@/server/infrastructure/repositories/pl
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
 import {
-  GetPlayerStatLogsUseCase,
   GetAllPlayerStatLogsFullInfoUseCase,
+  GetPlayerStatLogsUseCase,
 } from "@/server/applications/usecases/log";
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();

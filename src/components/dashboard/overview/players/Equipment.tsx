@@ -1,13 +1,12 @@
 "use client";
 
+import type { IDeletePlayerEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
 import type { PlayerEquipmentWithInfo } from "@/server/domain/aggregates";
+import type { UseCaseParams } from "@/server/controllers/utils";
+
 import React, { useState } from "react";
+
 import Image from "next/image";
-import { UseCaseParams } from "@/server/controllers/utils";
-import {
-  IDeletePlayerEquipmentUseCase,
-  IRemoveEquipmentUseCase,
-} from "@/server/applications/interfaces/usecases/player/equipment";
 
 interface EquipmentCellProp {
   equipment: PlayerEquipmentWithInfo;

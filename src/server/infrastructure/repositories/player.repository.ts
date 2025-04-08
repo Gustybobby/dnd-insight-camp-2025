@@ -24,7 +24,8 @@ import {
   playerStatsTable,
 } from "@/db/schema";
 import { takeOne, takeOneOrThrow } from "@/db/util";
-import { and, asc, eq, getTableColumns, SQL, sql } from "drizzle-orm";
+import type { SQL} from "drizzle-orm";
+import { and, asc, eq, getTableColumns, sql } from "drizzle-orm";
 
 export class PlayerRepository implements IPlayerRepository {
   async getAllWithCharacter(): Promise<PlayerWithCharater[]> {

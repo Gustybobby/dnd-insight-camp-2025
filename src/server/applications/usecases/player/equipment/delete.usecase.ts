@@ -1,6 +1,6 @@
-import { IDeletePlayerEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment/delete.usecase.interface";
-import { IEquipmentRepository } from "@/server/domain/interfaces/repositories";
-import { PlayerEquipment } from "@/server/domain/models";
+import type { IDeletePlayerEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment/delete.usecase.interface";
+import type { IEquipmentRepository } from "@/server/domain/interfaces/repositories";
+import type { PlayerEquipment } from "@/server/domain/models";
 
 export class DeletePlayerEquipmentUseCase
   implements IDeletePlayerEquipmentUseCase

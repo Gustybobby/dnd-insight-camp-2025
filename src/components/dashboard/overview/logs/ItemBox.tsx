@@ -1,5 +1,7 @@
-import { Item } from "@/server/domain/models";
+import type { Item } from "@/server/domain/models";
+
 import React from "react";
+
 import Image from "next/image";
 
 interface ItemBoxProp {

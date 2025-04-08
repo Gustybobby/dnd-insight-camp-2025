@@ -27,10 +27,10 @@ import {
 } from "@/server/applications/usecases/player";
 
 import { GetAllPlayersInfoUseCase } from "../applications/usecases/player";
+import { ResetPlayerDataUseCase } from "../applications/usecases/player";
 import { EquipmentRepository } from "../infrastructure/repositories/equipment.repository";
 import { PlayerItemRepository } from "../infrastructure/repositories/player-item.repository";
 import { PlayerStatRepository } from "../infrastructure/repositories/player-stat.repository";
-import { ResetPlayerDataUseCase } from "../applications/usecases/player";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();

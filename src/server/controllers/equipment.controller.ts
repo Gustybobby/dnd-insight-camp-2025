@@ -1,5 +1,6 @@
 "use server";
 
+import type { IDeletePlayerEquipmentUseCase } from "../applications/interfaces/usecases/player/equipment/delete.usecase.interface";
 import type {
   IEquipEquipmentUseCase,
   IGetAllPlayerEquipmentsUseCase,
@@ -21,7 +22,7 @@ import {
   GetAllPlayerEquipmentsUseCase,
   RemoveEquipmentUseCase,
 } from "@/server/applications/usecases/player/equipment";
-import { IDeletePlayerEquipmentUseCase } from "../applications/interfaces/usecases/player/equipment/delete.usecase.interface";
+
 import { DeletePlayerEquipmentUseCase } from "../applications/usecases/player/equipment/delete.usecase";
 
 const playerRepo = new PlayerRepository();

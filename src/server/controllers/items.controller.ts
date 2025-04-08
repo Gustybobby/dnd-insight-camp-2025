@@ -12,16 +12,13 @@ import { AuthService } from "@/server/domain/services/auth.service";
 import { ItemRepository } from "@/server/infrastructure/repositories/item.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
-import {
-  SessionService,
-  auth,
-} from "@/server/infrastructure/services/session.service";
+import { SessionService } from "@/server/infrastructure/services/session.service";
 import {
   AddPlayerItemUseCase,
   GetAllItemsUseCase,
 } from "@/server/applications/usecases/item";
+
 import { DeletePlayerItemUseCase } from "../applications/usecases/item/delete-player-item.usecase";
-import { param } from "drizzle-orm";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();

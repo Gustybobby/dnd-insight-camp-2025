@@ -3,7 +3,7 @@ import type { PlayerItemWithInfo } from "@/server/domain/aggregates";
 
 import { db } from "@/db";
 import { itemsTable, playerItemsTable } from "@/db/schema";
-import { eq, getTableColumns, and } from "drizzle-orm";
+import { eq, getTableColumns } from "drizzle-orm";
 
 export class PlayerItemRepository implements IPlayerItemRepository {
   async getAll(): Promise<PlayerItemWithInfo[]> {

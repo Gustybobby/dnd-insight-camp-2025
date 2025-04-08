@@ -2,12 +2,12 @@ import type {
   PlayerStatLogFullInfoPlusPlayerCharacter,
   PlayerWithAllInfo,
 } from "@/server/domain/aggregates";
+import type { Item } from "@/server/domain/models";
 
 import React from "react";
 
 import LogTable from "./logs/LogTable";
 import PlayerTable from "./players/PlayerTable";
-import { Item } from "@/server/domain/models";
 
 interface OverViewProp {
   players: PlayerWithAllInfo[];
