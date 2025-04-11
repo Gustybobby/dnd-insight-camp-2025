@@ -2,6 +2,7 @@ import type { IPlayerRepository } from "@/server/domain/interfaces/repositories"
 import type {
   PlayerItemWithInfo,
   PlayerWithCharater,
+  PlayerWithItemsAndEquipments,
 } from "@/server/domain/aggregates";
 import type {
   Character,
@@ -16,12 +17,14 @@ import { db } from "@/db";
 import {
   charactersTable,
   itemsTable,
+  playerEquipmentsTable,
   playerItemsTable,
   playersTable,
   playerStatLogsTable,
   playerStatsTable,
 } from "@/db/schema";
 import { takeOne, takeOneOrThrow } from "@/db/util";
+import type { SQL} from "drizzle-orm";
 import { and, asc, eq, getTableColumns, sql } from "drizzle-orm";
 
 export class PlayerRepository implements IPlayerRepository {
@@ -137,6 +140,51 @@ export class PlayerRepository implements IPlayerRepository {
         )
         .returning()
         .then(takeOneOrThrow);
+    });
+  }
+
+  //Set multiple stats for 1 player
+  async setStats({ data }: { data: PlayerStat[] }): Promise<PlayerStat[]> {
+    if (data.length === 0) throw new Error("Empty Input");
+    const sqlChunks: SQL[] = [];
+
+    sqlChunks.push(sql`(case`);
+    for (const stat of data) {
+      sqlChunks.push(
+        sql`when ${playerStatsTable.type}=${stat.type} then ${stat.value}`,
+      );
+    }
+    sqlChunks.push(sql`else ${playerStatsTable.value} end)`);
+    const finalSql: SQL = sql.join(sqlChunks, sql.raw(" "));
+
+    return db
+      .update(playerStatsTable)
+      .set({
+        value: finalSql,
+      })
+      .where(eq(playerStatsTable.playerId, data[0].playerId))
+      .returning();
+  }
+
+  async removeAllItemsAndEquipments({
+    playerId,
+  }: {
+    playerId: number;
+  }): Promise<
+    Pick<PlayerWithItemsAndEquipments, "playerItems" | "equipments">
+  > {
+    return db.transaction(async (tx) => {
+      const playerItems = await tx
+        .delete(playerItemsTable)
+        .where(eq(playerItemsTable.playerId, playerId))
+        .returning();
+
+      const equipments = await tx
+        .delete(playerEquipmentsTable)
+        .where(eq(playerEquipmentsTable.playerId, playerId))
+        .returning();
+
+      return { playerItems, equipments };
     });
   }
 }
