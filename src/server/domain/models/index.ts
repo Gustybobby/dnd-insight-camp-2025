@@ -1,3 +1,5 @@
+export * from "./activity-session.model";
+export * from "./activity.model";
 export * from "./character.model";
 export * from "./effect.model";
 export * from "./item.model";
@@ -6,5 +8,6 @@ export * from "./player-item.model";
 export * from "./player-stat-log.model";
 export * from "./player-stat.model";
 export * from "./player.model";
+export * from "./session-turn.model";
 export * from "./staff.model";
 export * from "./user.model";
