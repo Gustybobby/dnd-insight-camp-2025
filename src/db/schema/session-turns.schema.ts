@@ -11,5 +11,8 @@ export const sessionTurnsTable = pgTable(
       .references(() => playersTable.id, { onDelete: "set null" }),
     order: integer().notNull(),
   },
-  (table) => [unique().on(table.sessionId, table.playerId, table.order)],
+  (table) => [
+    unique().on(table.sessionId, table.playerId),
+    unique().on(table.sessionId, table.playerId, table.order),
+  ],
 );

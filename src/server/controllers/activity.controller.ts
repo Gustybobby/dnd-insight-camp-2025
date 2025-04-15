@@ -4,9 +4,11 @@ import type {
   ICreateActivitySessionUseCase,
   IGetActivitySessionsUseCase,
   IGetAllActivitiesUseCase,
+  IUpsertSessionTurnUseCase,
 } from "@/server/applications/interfaces/usecases/activity";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
+import { SessionTurn } from "@/server/domain/models";
 import { AuthService } from "@/server/domain/services/auth.service";
 import { ActivityRepository } from "@/server/infrastructure/repositories/activity.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
@@ -16,6 +18,7 @@ import {
   CreateActivitySessionUseCase,
   GetActivitySessionsUseCase,
   GetAllActivitiesUseCase,
+  UpsertSessionTurnUseCase,
 } from "@/server/applications/usecases/activity";
 
 const playerRepo = new PlayerRepository();
@@ -31,6 +34,7 @@ const getActivitySessionsUseCase = new GetActivitySessionsUseCase(activityRepo);
 const createActivitySessionUseCase = new CreateActivitySessionUseCase(
   activityRepo,
 );
+const upsertSessionTurnUseCase = new UpsertSessionTurnUseCase(activityRepo);
 
 export async function getAllActivities(): Promise<
   UseCaseReturn<IGetAllActivitiesUseCase>
@@ -50,4 +54,14 @@ export async function createActivitySession(
   await authService.authStaff();
 
   return createActivitySessionUseCase.invoke(params);
+}
+
+export async function upsertSessionTurn(
+  params: UseCaseParams<IUpsertSessionTurnUseCase>,
+): Promise<UseCaseReturn<IUpsertSessionTurnUseCase>> {
+  await authService.authStaff();
+
+  return upsertSessionTurnUseCase.invoke({
+    data: SessionTurn.omit({ id: true }).parse(params.data),
+  });
 }

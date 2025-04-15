@@ -1,4 +1,8 @@
-import type { Activity, ActivitySession } from "@/server/domain/models";
+import type {
+  Activity,
+  ActivitySession,
+  SessionTurn,
+} from "@/server/domain/models";
 
 export interface IActivityRepository {
   getAll(): Promise<Activity[]>;
@@ -14,4 +18,10 @@ export interface IActivityRepository {
   }: {
     activityId: ActivitySession["activityId"];
   }): Promise<ActivitySession>;
+
+  upsertSessionTurn({
+    data,
+  }: {
+    data: Omit<SessionTurn, "id">;
+  }): Promise<SessionTurn>;
 }
