@@ -1,6 +1,9 @@
 import { cn } from "@/components/utils";
 import { PlayerItemWithInfo } from "@/server/domain/aggregates/player-item.aggregate";
 import Image from "next/image";
+import { InfoBadge } from "@/components/players/details/inventory";
+import { STAT_STYLE_MAP } from "@/components/players/style";
+import { StatTypeEnum } from "@/server/domain/models/player-stat.model";
 
 export function StatChanger({
   label,
@@ -68,17 +71,36 @@ export function ItemCard({
 }) {
   return (
     <div
-      className="flex flex-col items-center justify-center gap-4 rounded-md border-2 border-black bg-white p-4 shadow"
+      className="flex flex-row items-center gap-4 rounded-md border-2 border-black bg-white p-2 shadow"
       onClick={() => onClick(item)}
     >
-      <p>{item.name}</p>
-      <Image
-        src={item.image}
-        width={200}
-        height={200}
-        className="h-32"
-        alt={item.name}
-      />
+      <div className="flex h-8 w-8 items-center justify-center">
+        <Image
+          src={item.image}
+          width={50}
+          height={50}
+          className="h-auto w-auto"
+          alt={item.name}
+        />
+      </div>
+      <div className="flex flex-col">
+        <h1>{item.name}</h1>
+        <div className="flex items-center gap-2">
+          {item.stats
+            .map((statText) => statText.split(":"))
+            .map(([statType, value], idx) => (
+              <InfoBadge
+                key={idx}
+                className={
+                  STAT_STYLE_MAP[statType as StatTypeEnum].color +
+                  " text-xs font-semibold"
+                }
+              >
+                {statType} {value}
+              </InfoBadge>
+            ))}
+        </div>
+      </div>
     </div>
   );
 }

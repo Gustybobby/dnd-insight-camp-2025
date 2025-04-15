@@ -36,6 +36,7 @@ export default function Home() {
           </Link>
         ))}
       </div>
+      <Link href="/">Go to Home</Link>
     </div>
   );
 }

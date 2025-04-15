@@ -171,7 +171,7 @@ export function ItemInfo({
   );
 }
 
-function InfoBadge({
+export function InfoBadge({
   className,
   children,
 }: {

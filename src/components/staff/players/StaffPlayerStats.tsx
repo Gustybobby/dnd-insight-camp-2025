@@ -28,7 +28,6 @@ export function StaffPlayerStats({
         <button
           className={`mt-4 self-center rounded-md border-2 border-gray-100 bg-white p-2 text-black ${false ? "cursor-not-allowed bg-slate-300" : "cursor-pointer"}`}
           type="submit"
-          disabled
         >
           {false ? "Loading..." : "Submit"}
         </button>

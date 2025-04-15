@@ -19,6 +19,7 @@ import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
 import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
 import Link from "next/link";
 import { StaffPlayerItems } from "./StaffPlayerItem";
+import { getAllItems } from "@/server/controllers/items.controller";
 
 export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
   const router = useRouter();
@@ -29,19 +30,19 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
     refetchInterval: 5000,
   });
 
-  // const { data: items} = useQuery({
-  //   queryKey: ["getPlayerItems", playerId],
-  //   queryFn: async () => await getAll({ playerId }),
-  //   refetchInterval: 5000,
-  // });
-  const items = [] as Item[];
-
   const mutation = useMutation({
     mutationFn: (modEffectCreate: ModEffectCreate) =>
       createModEffect({ data: { ...modEffectCreate }, playerIds: [+playerId] }),
     onSuccess: () => {},
   });
 
+  // const giveItem = useMutation({
+  //   mutationFn: (itemId: number) => giveItem({ +playerId, itemId }),
+  // })
+  const { data: items } = useQuery({
+    queryKey: ["getAllItems"],
+    queryFn: async () => await getAllItems(),
+  });
   if (playerStats === null) {
     router.replace("/staff/players");
     return;
@@ -100,7 +101,9 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
             },
             {
               label: "Item",
-              node: <StaffPlayerItems items={items} onSubmit={() => {}} />,
+              node: (
+                <StaffPlayerItems items={items ?? null} onSubmit={() => {}}/>
+              ),
             },
             { label: "Skills", node: <div></div> },
           ]}
