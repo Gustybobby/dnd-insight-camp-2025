@@ -1,12 +1,12 @@
 import type {
-  IEffectService,
-  IEquipmentService,
-  IItemService,
-} from "@/server/applications/interfaces/services/applications";
-import type {
   IEquipmentRepository,
   IItemRepository,
 } from "@/server/domain/interfaces/repositories";
+import type {
+  IEffectService,
+  IEquipmentService,
+  IItemService,
+} from "@/server/domain/interfaces/services/applications";
 import type {
   EquipmentPartEnum,
   PlayerEquipment,

@@ -17,7 +17,15 @@ export default function CharacterMenuLayout({
 }>) {
   const pathname = usePathname();
   return (
-    <div className="relative size-full min-h-screen overflow-hidden bg-radial-gradient from-darkred to-dark">
+    <main className="relative flex size-full min-h-screen flex-col justify-between overflow-hidden bg-radial-gradient from-darkred to-dark">
+      <Image
+        src="/asset/cover/player_menu_bg.jpg"
+        alt="cover"
+        fill
+        priority
+        unoptimized
+        className="object-cover"
+      />
       <Image
         src="/asset/props/logo_wing.png"
         alt="wing"
@@ -44,6 +52,15 @@ export default function CharacterMenuLayout({
         />
       </Link>
       {children}
-    </div>
+      <div className="my-4 w-full text-center">
+        <Link
+          href={"https://www.instagram.com/sinnoclub.official/"}
+          target="_blank"
+          className="w-fit bg-gradient-to-r from-yellow-400 via-pink-300 to-violet-400 bg-clip-text text-lg text-transparent drop-shadow-2xl"
+        >
+          Powered By SINNO
+        </Link>
+      </div>
+    </main>
   );
 }

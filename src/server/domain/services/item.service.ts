@@ -1,7 +1,7 @@
 import type {
   IItemService,
   ItemGivenStat,
-} from "@/server/applications/interfaces/services/applications";
+} from "@/server/domain/interfaces/services/applications";
 import type { Item } from "@/server/domain/models";
 
 import { StatTypeEnum } from "@/server/domain/models";

@@ -2,11 +2,18 @@ import type { PlayerEquipmentWithInfo } from "@/server/domain/aggregates";
 import type { PlayerEquipment } from "@/server/domain/models";
 
 export interface IEquipmentRepository {
+  getAll(): Promise<PlayerEquipmentWithInfo[]>;
+
   getPlayerEquipments({
     playerId,
   }: {
     playerId: PlayerEquipmentWithInfo["playerId"];
   }): Promise<PlayerEquipmentWithInfo[]>;
+
+  delete({
+    playerId,
+    itemId,
+  }: Pick<PlayerEquipment, "playerId" | "itemId">): Promise<PlayerEquipment>;
 
   playerEquipmentExists({
     playerId,

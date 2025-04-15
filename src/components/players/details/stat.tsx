@@ -46,7 +46,6 @@ export function PlayerStats({
           iconSrc={`/asset/props/${stat.type.toLowerCase()}.png`}
           value={stat.value}
           max={100}
-          colorClassName={STAT_STYLE_MAP[stat.type].color}
           onClickIcon={onClickIcon}
         />
       ))}
@@ -69,7 +68,7 @@ export function StatInfo({
       </button>
       <div className="grid grid-cols-4 gap-4">
         <StatIcon
-          className={statStyle.color}
+          className={statStyle.iconColor}
           src={`/asset/props/${type.toLowerCase()}.png`}
           type={type}
         />
@@ -116,7 +115,6 @@ export function StatBar({
   iconSrc,
   value,
   max,
-  colorClassName,
   onClickIcon,
 }: {
   label: string;
@@ -124,14 +122,13 @@ export function StatBar({
   iconSrc: string;
   value: number;
   max: number;
-  colorClassName: string;
   onClickIcon?: (type: StatTypeEnum) => void;
 }) {
   return (
     <>
       <div className="flex items-center justify-center">
         <StatIcon
-          className={cn(colorClassName, "hover:cursor-pointer")}
+          className={cn(STAT_STYLE_MAP[type].iconColor, "hover:cursor-pointer")}
           src={iconSrc}
           type={type}
           onClick={onClickIcon}
@@ -146,7 +143,7 @@ export function StatBar({
           <div
             className={cn(
               "absolute h-[calc(1rem-4px)] origin-left rounded-full transition-all motion-scale-x-in-0",
-              colorClassName,
+              STAT_STYLE_MAP[type].bgColor,
             )}
             style={{
               width: `${constrain(Math.ceil((value / max) * 100), 0, 100)}%`,

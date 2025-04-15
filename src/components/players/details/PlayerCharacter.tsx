@@ -55,16 +55,25 @@ export function PlayerCharacter({
         className,
       )}
     >
-      <CharacterBox className="relative z-10 min-h-[38vh] p-2">
+      <CharacterBox className="relative z-10 min-h-[38vh] bg-[url(/asset/cover/paper_texture.jpg)] bg-center p-2">
         {window.type === "character" ? (
-          <CharacterInfo
-            playerId={playerId}
-            character={character ?? null}
-            playerEquipments={playerEquipments ?? null}
-            onClickEquipment={(itemId) =>
-              setWindow({ type: "itemInfo", itemId })
-            }
-          />
+          <>
+            <CharacterInfo
+              playerId={playerId}
+              character={character ?? null}
+              playerEquipments={playerEquipments ?? null}
+              onClickEquipment={(itemId) =>
+                setWindow({ type: "itemInfo", itemId })
+              }
+            />
+            <div className="mx-auto h-0.5 w-11/12 bg-black" />
+            <HealthBar
+              health={
+                playerStats?.find((stat) => stat.type === "HP")?.value ?? 0
+              }
+              max={100}
+            />
+          </>
         ) : window.type === "statInfo" ? (
           <StatInfo
             key={window.statType}
@@ -106,12 +115,6 @@ export function PlayerCharacter({
           />
         ) : null}
       </CharacterBox>
-      <CharacterBox className="relative z-10">
-        <HealthBar
-          health={playerStats?.find((stat) => stat.type === "HP")?.value ?? 0}
-          max={100}
-        />
-      </CharacterBox>
       <PlayerTabs
         tabs={[
           {
@@ -134,7 +137,7 @@ export function PlayerCharacter({
           },
           { label: "Status", node: <div></div> },
           {
-            label: "Items",
+            label: "Inventory",
             node: (
               <>
                 {playerItems && (

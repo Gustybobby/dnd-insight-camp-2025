@@ -1,7 +1,12 @@
-import type { PlayerStatLogFullInfo } from "@/server/domain/aggregates";
+import type {
+  PlayerStatLogFullInfo,
+  PlayerStatLogFullInfoPlusPlayerCharacter,
+} from "@/server/domain/aggregates";
 import type { PlayerStatLog } from "@/server/domain/models";
 
 export interface IPlayerStatLogRepository {
+  getAllWithFullInfoPlus(): Promise<PlayerStatLogFullInfoPlusPlayerCharacter[]>;
+
   getMany({
     limit,
     playerId,

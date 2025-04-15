@@ -1,5 +1,6 @@
 "use server";
 
+import type { IDeletePlayerEquipmentUseCase } from "../applications/interfaces/usecases/player/equipment/delete.usecase.interface";
 import type {
   IEquipEquipmentUseCase,
   IGetAllPlayerEquipmentsUseCase,
@@ -7,20 +8,22 @@ import type {
 } from "@/server/applications/interfaces/usecases/player/equipment";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
+import { AuthService } from "@/server/domain/services/auth.service";
+import { EffectService } from "@/server/domain/services/effect.service";
+import { EquipmentService } from "@/server/domain/services/equipments";
+import { ItemService } from "@/server/domain/services/item.service";
 import { EquipmentRepository } from "@/server/infrastructure/repositories/equipment.repository";
 import { ItemRepository } from "@/server/infrastructure/repositories/item.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
-import { AuthService } from "@/server/applications/services/auth.service";
-import { EffectService } from "@/server/applications/services/effect.service";
-import { EquipmentService } from "@/server/applications/services/equipments";
-import { ItemService } from "@/server/applications/services/item.service";
 import {
   EquipEquipmentUseCase,
   GetAllPlayerEquipmentsUseCase,
   RemoveEquipmentUseCase,
 } from "@/server/applications/usecases/player/equipment";
+
+import { DeletePlayerEquipmentUseCase } from "../applications/usecases/player/equipment/delete.usecase";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
@@ -49,6 +52,20 @@ export async function getPlayerEquipments(
   return getAllPlayerEquipmentsUseCase.invoke(params).catch((error) => {
     console.error(error);
     return null;
+  });
+}
+
+export async function deletePlayerEquipment(
+  params: UseCaseParams<IDeletePlayerEquipmentUseCase>,
+): Promise<UseCaseReturn<IDeletePlayerEquipmentUseCase> | null> {
+  await authService.authStaff();
+
+  const deletePlayerEquipmentUseCase = new DeletePlayerEquipmentUseCase(
+    equipmentRepo,
+  );
+  return deletePlayerEquipmentUseCase.invoke({
+    playerId: params.playerId,
+    itemId: params.itemId,
   });
 }
 

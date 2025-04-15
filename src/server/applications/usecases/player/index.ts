@@ -4,3 +4,5 @@ export * from "./get-character.usecase";
 export * from "./get-items.usecase";
 export * from "./get-stats.usecase";
 export * from "./get.usecase";
+export * from "./reset.usecase";
+export * from "./get-all-info.usecase";

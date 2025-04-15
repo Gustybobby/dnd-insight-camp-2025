@@ -7,10 +7,12 @@ import Image from "next/image";
 
 export function Slot({
   className,
+  imageClassName,
   placeholderSrc,
   onClick,
 }: {
   className?: string;
+  imageClassName?: string;
   placeholderSrc: string;
   onClick?: () => void;
 }) {
@@ -27,7 +29,7 @@ export function Slot({
         alt="placeholder"
         width={128}
         height={128}
-        className="size-8"
+        className={cn("size-8", imageClassName)}
       />
     </div>
   );
@@ -56,6 +58,7 @@ export function EquipmentsBar({
             placeholderSrc={
               item?.image ?? `/asset/props/${part.toLowerCase()}.png`
             }
+            imageClassName={cn(!item && "opacity-40")}
             onClick={() => {
               if (item) {
                 onClickEquipment?.(item.id);
