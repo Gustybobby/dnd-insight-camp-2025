@@ -102,4 +102,5 @@ export async function playerUseSkill({
     console.error(error);
     return null;
   });
+  //If return null => skill is on cooldown or no remaining uses.
 }

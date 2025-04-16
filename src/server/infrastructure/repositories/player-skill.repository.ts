@@ -68,8 +68,7 @@ export class PlayerSkillRepository implements IPlayerSkillRepository {
         cooldown: skillsTable.cooldown,
         remainingUses: sql`${playerSkillsTable.remainingUses}-1`,
       })
-      .from(playerSkillsTable)
-      .innerJoin(skillsTable, eq(playerSkillsTable.skillId, skillsTable.id))
+      .from(skillsTable)
       .where(
         and(
           eq(playerSkillsTable.playerId, playerId),
@@ -92,7 +91,6 @@ export class PlayerSkillRepository implements IPlayerSkillRepository {
       .set({
         cooldown: sql`${playerSkillsTable.cooldown}-1`,
       })
-      .from(playerSkillsTable)
       .where(
         and(
           eq(playerSkillsTable.playerId, playerId),
