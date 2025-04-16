@@ -1,4 +1,4 @@
-import type { Item, PlayerItem } from "@/server/domain/models";
+import type { Item, ItemCreate, PlayerItem } from "@/server/domain/models";
 
 export interface IItemRepository {
   getAll(): Promise<Item[]>;
@@ -11,4 +11,7 @@ export interface IItemRepository {
     playerId,
     itemId,
   }: Omit<PlayerItem, "amount">): Promise<PlayerItem>;
+
+  createItem({ data }: { data: ItemCreate }): Promise<Item>;
+  deleteItem({ itemId }: { itemId: Item["id"] }): Promise<Item>;
 }

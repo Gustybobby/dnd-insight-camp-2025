@@ -11,3 +11,6 @@ export * from "./player.model";
 export * from "./session-turn.model";
 export * from "./staff.model";
 export * from "./user.model";
+export * from "./global.model";
+export * from "./skill.model";
+export * from "./player-skill.model";
