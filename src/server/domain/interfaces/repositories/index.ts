@@ -1,4 +1,6 @@
+export * from "./activity.repository.interface";
 export * from "./character.repository.interface";
+export * from "./effect.repository.interface";
 export * from "./equipment.repository.interface";
 export * from "./item.repository.interface";
 export * from "./player-stat-log.repository.interface";

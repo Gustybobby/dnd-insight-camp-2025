@@ -12,6 +12,7 @@ import { AuthService } from "@/server/domain/services/auth.service";
 import { EffectService } from "@/server/domain/services/effect.service";
 import { EquipmentService } from "@/server/domain/services/equipments";
 import { ItemService } from "@/server/domain/services/item.service";
+import { EffectRepository } from "@/server/infrastructure/repositories/effect.repository";
 import { EquipmentRepository } from "@/server/infrastructure/repositories/equipment.repository";
 import { ItemRepository } from "@/server/infrastructure/repositories/item.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
@@ -25,6 +26,7 @@ import {
 
 import { DeletePlayerEquipmentUseCase } from "../applications/usecases/player/equipment/delete.usecase";
 
+const effectRepo = new EffectRepository();
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
 const equipmentRepo = new EquipmentRepository();
@@ -34,7 +36,7 @@ const sessionService = new SessionService();
 
 const authService = new AuthService(playerRepo, staffRepo, sessionService);
 const itemService = new ItemService();
-const effectService = new EffectService(playerRepo);
+const effectService = new EffectService(effectRepo, playerRepo);
 const equipmentService = new EquipmentService(
   equipmentRepo,
   itemRepo,

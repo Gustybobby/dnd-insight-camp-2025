@@ -77,7 +77,7 @@ export function CarouselPreview({
   )?.character;
   return (
     <div className={className}>
-      <div className="flex items-center justify-center gap-8">
+      <div className="flex h-[12vh] items-center justify-center gap-8">
         {leftCharacter && (
           <Image
             key={leftCharacter.id + "_left"}
@@ -87,7 +87,7 @@ export function CarouselPreview({
             width={500}
             height={500}
             className={cn(
-              "aspect-square h-full opacity-30 motion-duration-300",
+              "h-full opacity-30 motion-duration-300",
               slideFromRight
                 ? "motion-preset-slide-right-lg"
                 : "motion-preset-slide-left-lg",
@@ -102,7 +102,7 @@ export function CarouselPreview({
           width={500}
           height={500}
           className={cn(
-            "aspect-square h-full motion-duration-300",
+            "h-full motion-duration-300",
             slideFromRight
               ? "motion-preset-slide-right-lg"
               : "motion-preset-slide-left-lg",
@@ -117,7 +117,7 @@ export function CarouselPreview({
             width={500}
             height={500}
             className={cn(
-              "aspect-square h-full opacity-30 motion-duration-300",
+              "h-full opacity-30 motion-duration-300",
               slideFromRight
                 ? "motion-preset-slide-right-lg"
                 : "motion-preset-slide-left-lg",
