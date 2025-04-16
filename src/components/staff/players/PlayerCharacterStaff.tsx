@@ -19,40 +19,38 @@ import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
 import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
 import Link from "next/link";
 import { StaffPlayerItems } from "./StaffPlayerItem";
-import { getAllItems } from "@/server/controllers/items.controller";
+import {
+  addPlayerItem,
+  getAllItems,
+} from "@/server/controllers/items.controller";
+
+export interface OnSubmitItemInput {
+  itemId: number;
+  amount: number;
+}
 
 export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
-  const router = useRouter();
-
+  //Stats
   const { data: playerStats, refetch: refetchPlayerStats } = useQuery({
     queryKey: ["getPlayerStats", playerId],
     queryFn: async () => await getPlayerStats({ playerId }),
     refetchInterval: 5000,
   });
 
-  const mutation = useMutation({
+  const statMutation = useMutation({
     mutationFn: (modEffectCreate: ModEffectCreate) =>
       createModEffect({ data: { ...modEffectCreate }, playerIds: [+playerId] }),
-    onSuccess: () => {},
+    onSuccess: () => {alert("Stat changed successfully!")}
   });
 
-  const { data: items } = useQuery({
-    queryKey: ["getAllItems"],
-    queryFn: async () => await getAllItems(),
-  });
-  if (playerStats === null) {
-    router.replace("/staff/players");
-    return;
-  }
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onStatSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const statChange = Object.fromEntries(
       formData.entries().filter(([, value]) => +value !== 0),
     );
     const mutationPromises = Object.entries(statChange).map(([key, value]) => {
-      return mutation.mutateAsync({
+      return statMutation.mutateAsync({
         stat: key as StatTypeEnum,
         value: +value,
         itemId: null,
@@ -68,6 +66,29 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
     e.currentTarget.reset();
   };
 
+  //Items
+  const itemMutation = useMutation({
+    mutationFn: ({ itemId, amount }: OnSubmitItemInput) =>
+      addPlayerItem({
+        data: { itemId: itemId, playerId: playerId, amount: amount },
+      }),
+    onSuccess: () => {
+      // Refetch the items or update the state to reflect the new item
+      alert("Item given successfully!");
+      
+    },
+  });
+
+  const { data: items } = useQuery({
+    queryKey: ["getAllItems"],
+    queryFn: async () => await getAllItems(),
+    refetchInterval: 10000,
+  });
+  const onItemSubmit = async ({ itemId, amount }: OnSubmitItemInput) => {
+    console.log(itemId, amount);
+    itemMutation.mutate({ itemId, amount });
+  };
+
   return (
     <div className="flex flex-col">
       <div className="px-4">
@@ -76,7 +97,7 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
           <h1>Player</h1>
         </div>
       </div>
-      <div className="grid w-full grid-cols-2 gap-x-4 bg-radial-gradient from-darkred to-dark overflow-y-auto">
+      <div className="grid w-full grid-cols-2 gap-x-4 overflow-y-auto bg-radial-gradient from-darkred to-dark">
         <PlayerCharacter playerId={playerId} isPlayer={true} className="mt-0" />
         <StaffPlayerUtils
           tabs={[
@@ -92,14 +113,18 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
                         playerId: 0,
                       },
                   )}
-                  onSubmit={onSubmit}
+                  onSubmit={onStatSubmit}
                 />
               ),
             },
             {
               label: "Item",
               node: (
-                <StaffPlayerItems items={items ?? null} onSubmit={() => {}}/>
+                <StaffPlayerItems
+                  items={items ?? null}
+                  onSubmit={onItemSubmit}
+                  playerId={playerId}
+                />
               ),
             },
             { label: "Skills", node: <div></div> },

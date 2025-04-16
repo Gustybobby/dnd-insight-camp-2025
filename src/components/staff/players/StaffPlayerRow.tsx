@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import { PlayerStat } from "@/server/domain/models";
+import { STAT_STYLE_MAP } from "@/components/players/style";
 
 export interface StaffPlayerRow {
   id: number;
@@ -14,22 +15,23 @@ export interface StaffPlayerRow {
 }
 
 function StaffPlayerRow({ id, name, player, playerStats }: StaffPlayerRow) {
+  const sortedStats = sortStats(playerStats);
   return (
     <Link
       className="bg-brown-gradient flex w-full flex-row items-center justify-between rounded-md border-2 border-black p-4 shadow transition-transform hover:scale-[1.02]"
       href={`staff/players/${id}`}
     >
-      <div className="flex flex-row gap-x-4">
-        <p>Group {id}</p>
-        <p className="font-[family-name:var(--noto-sans-thai)]">
-          {player.name}
+      <div className="flex flex-row gap-x-4 text-sm font-light items-center">
+        <p className="w-[50px]">Group {id}</p>
+        <p className="font-[family-name:var(--noto-sans-thai)] text-sm overflow-ellipsis truncate w-[100px]">
+          {name}
         </p>
       </div>
-      <div>
-        {playerStats?.map((stat) => (
+      <div className="grid w-full grid-cols-5">
+        {sortedStats?.map((stat) => (
           <div
             key={`${player.name}-${stat.type}`}
-            className="flex flex-row gap-x-2"
+            className={`flex flex-row gap-x-2 font-bold ${STAT_STYLE_MAP[stat.type].textColor}`}
           >
             <p>{stat.type}</p>
             <p>{stat.value}</p>
@@ -48,3 +50,20 @@ function StaffPlayerRow({ id, name, player, playerStats }: StaffPlayerRow) {
 }
 
 export default StaffPlayerRow;
+
+function sortStats(playerStats: PlayerStat[] | undefined) {
+  const order = ["Str", "Dex", "Chr", "Int", "HP"] as const;
+
+  const priority: Record<(typeof order)[number], number> = {
+    Str: 0,
+    Dex: 1,
+    Chr: 2,
+    Int: 3,
+    HP: 4,
+  };
+
+  const sortedStats = playerStats?.slice().sort((a, b) => {
+    return priority[a.type] - priority[b.type];
+  });
+  return sortedStats;
+}

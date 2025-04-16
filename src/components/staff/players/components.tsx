@@ -42,8 +42,8 @@ export function StatChanger({
             />
           </div>
         </div>
-        <div className="flex w-full flex-col items-center justify-center">
-          <p className={cn("text-4xl font-bold", textColorClassName)}>
+        <div className={cn(`flex w-full flex-col items-center justify-center rounded-3xl bg-black border-black border-2`,colorClassName)}>
+          <p className={cn("text-2xl font-bold black")}>
             {value}
           </p>
         </div>
@@ -52,7 +52,7 @@ export function StatChanger({
         </div>
         <input
           className={cn(
-            "border-1 bg-lightcream w-full rounded-2xl border-2 border-oldcream text-center text-2xl",
+            "border-1 bg-lightcream w-full border-2 border-oldcream text-center text-2xl rounded-3xl",
             textColorClassName,
           )}
           name={type}
@@ -60,6 +60,14 @@ export function StatChanger({
           value={statChangeValue}
           onChange={(e) => {
             const value = parseInt(e.target.value);
+            if(isNaN(value)){
+              setStatChangeValue(0);
+              return;
+            }
+            if(statChangeValue===0){
+              setStatChangeValue(value);
+              return;
+            }
             setStatChangeValue(value);
           }}
           required
@@ -119,3 +127,46 @@ export function ItemCard({
     </div>
   );
 }
+
+// export function SkillCard({
+//   skill,
+//   onClick,
+// }: {
+//   skill: PlayerItemWithInfo["item"];
+//   onClick: (item: PlayerItemWithInfo["item"]) => void;
+// }) {
+//   return (
+//     <div
+//       className="flex flex-row items-center gap-4 rounded-md border-2 border-black bg-white p-2 shadow"
+//       onClick={() => onClick(item)}
+//     >
+//       <div className="flex h-8 w-8 items-center justify-center">
+//         <Image
+//           src={item.image}
+//           width={50}
+//           height={50}
+//           className="h-auto w-auto"
+//           alt={item.name}
+//         />
+//       </div>
+//       <div className="flex flex-col">
+//         <h1>{item.name}</h1>
+//         <div className="flex items-center gap-2">
+//           {item.stats
+//             .map((statText) => statText.split(":"))
+//             .map(([statType, value], idx) => (
+//               <InfoBadge
+//                 key={idx}
+//                 className={
+//                   STAT_STYLE_MAP[statType as StatTypeEnum].bgColor +
+//                   " text-xs font-semibold"
+//                 }
+//               >
+//                 {statType} {value}
+//               </InfoBadge>
+//             ))}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }

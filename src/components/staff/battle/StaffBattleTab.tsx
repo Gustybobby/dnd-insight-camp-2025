@@ -7,23 +7,26 @@ interface StaffBattleTabProps {
 }
 function StaffBattleTab({ players }: StaffBattleTabProps) {
   return (
-    <div className="w-full flex flex-col gap-y-1 p-2">
-      <div className="w-full flex flex-row justify-between">
-        <p className="text-center text-2xl font-bold w-[250px]">Name</p>
+    <div className="flex w-full flex-col gap-y-1 p-2">
+      <div className="flex w-full flex-row justify-between">
+        <p className="w-[250px] text-center text-2xl font-bold">Name</p>
         <p className="text-center text-2xl font-bold">Status</p>
         <p className="text-center text-2xl font-bold">Select</p>
         <p className="text-center text-2xl font-bold">Turn</p>
-
       </div>
       {players?.map((player) => (
         <StaffBattleRow
           key={player.id}
           id={player.id}
           name={player.name}
-          player={player.character}
+          character={player.character}
           inBattle={false}
+          maxTurn={20}
         />
       ))}
+      <div>
+        Add monster
+      </div>
     </div>
   );
 }
