@@ -40,9 +40,7 @@ export default function StaffDashboard({
       <div className="relative flex h-full w-full bg-center">
         {tabs.find((tab) => tab.label === active)?.node}
       </div>
-      <Link href={"/"}>
-        Go Back to Home
-      </Link>
+      <Link href={"/"}>Go Back to Home</Link>
     </div>
   );
 }

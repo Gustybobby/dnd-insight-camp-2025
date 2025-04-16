@@ -25,13 +25,13 @@ function ItemModal({
         <div className="flex flex-row justify-center gap-x-2">
           <button
             onClick={() => onSubmit({ itemId: itemId, amount: 1 })}
-            className="bg-brown-gradient rounded-lg border border-black px-4 py-2 text-black"
+            className="rounded-lg border border-black bg-brown-gradient px-4 py-2 text-black"
           >
             Give Item
           </button>
           <button
             onClick={closeModal}
-            className="bg-brown-gradient rounded-lg border border-black px-4 py-2 text-black"
+            className="rounded-lg border border-black bg-brown-gradient px-4 py-2 text-black"
           >
             Close
           </button>

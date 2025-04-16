@@ -44,17 +44,20 @@ export function StatChanger({
             />
           </div>
         </div>
-        <div className={cn(`flex w-full flex-col items-center justify-center rounded-3xl bg-black border-black border-2`,colorClassName)}>
-          <p className={cn("text-2xl font-bold black")}>
-            {value}
-          </p>
+        <div
+          className={cn(
+            `flex w-full flex-col items-center justify-center rounded-3xl border-2 border-black bg-black`,
+            colorClassName,
+          )}
+        >
+          <p className={cn("black text-2xl font-bold")}>{value}</p>
         </div>
         <div className="flex w-full flex-col items-center justify-center">
           <p className={cn("text-4xl font-bold", textColorClassName)}>+</p>
         </div>
         <input
           className={cn(
-            "border-1 bg-lightcream w-full border-2 border-oldcream text-center text-2xl rounded-3xl",
+            "border-1 w-full rounded-3xl border-2 border-oldcream bg-lightcream text-center text-2xl",
             textColorClassName,
           )}
           name={type}
@@ -62,11 +65,11 @@ export function StatChanger({
           value={statChangeValue}
           onChange={(e) => {
             const value = parseInt(e.target.value);
-            if(isNaN(value)){
+            if (isNaN(value)) {
               setStatChangeValue(0);
               return;
             }
-            if(statChangeValue===0){
+            if (statChangeValue === 0) {
               setStatChangeValue(value);
               return;
             }
