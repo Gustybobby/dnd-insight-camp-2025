@@ -1,10 +1,12 @@
 "use client";
 
+import { getPlayerCharacter } from "@/server/controllers/player.controller";
+
+import { useQuery } from "@tanstack/react-query";
+
 import { TitleBanner } from "@/components/players/components";
 import { StyledLink } from "@/components/ui/link";
 import { cn } from "@/components/utils";
-import { getPlayerCharacter } from "@/server/controllers/player.controller";
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
 export default function ActivitySessionPage() {
