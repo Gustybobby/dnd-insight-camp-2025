@@ -11,4 +11,4 @@ export const PlayerSkillCreate = PlayerSkill.pick({
   skillId: true,
   remainingUses: true,
 });
-export type PlayerSkillCreate = z.infer<typeof PlayerSkill>;
+export type PlayerSkillCreate = z.infer<typeof PlayerSkillCreate>;

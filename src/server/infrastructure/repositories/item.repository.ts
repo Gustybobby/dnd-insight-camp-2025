@@ -1,9 +1,9 @@
 import type { IItemRepository } from "@/server/domain/interfaces/repositories";
-import type { Item, PlayerItem } from "@/server/domain/models";
+import type { Item, PlayerItem, ItemCreate } from "@/server/domain/models";
 
 import { db } from "@/db";
 import { itemsTable, playerItemsTable } from "@/db/schema";
-import { takeOneOrThrow } from "@/db/util";
+import { takeOne, takeOneOrThrow } from "@/db/util";
 import { and, eq, sql } from "drizzle-orm";
 
 export class ItemRepository implements IItemRepository {
@@ -51,6 +51,25 @@ export class ItemRepository implements IItemRepository {
           eq(playerItemsTable.itemId, itemId),
         ),
       )
+      .returning()
+      .then(takeOneOrThrow);
+  }
+
+  async createItem({ data }: { data: ItemCreate }): Promise<Item> {
+    return db
+      .insert(itemsTable)
+      .values({
+        ...data,
+        image: "/asset/props/gear.png",
+      })
+      .returning()
+      .then(takeOneOrThrow);
+  }
+
+  async deleteItem({ itemId }: { itemId: Item["id"] }): Promise<Item> {
+    return db
+      .delete(itemsTable)
+      .where(eq(itemsTable.id, itemId))
       .returning()
       .then(takeOneOrThrow);
   }

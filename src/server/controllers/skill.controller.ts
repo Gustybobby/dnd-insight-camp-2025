@@ -23,6 +23,7 @@ import { AddPlayerSkillUseCase } from "../applications/usecases/player/skill";
 import { RemovePlayerSkillUseCase } from "../applications/usecases/player/skill";
 import { RemoveAllPlayerSkillsUseCase } from "../applications/usecases/player/skill";
 import { PlayerUseSkillUseCase } from "../applications/usecases/player/skill";
+import { PlayerSkillCreate } from "../domain/models";
 
 const skillRepo = new SkillRepository();
 const playerSkillRepo = new PlayerSkillRepository();
@@ -51,14 +52,16 @@ export async function getAllPlayerSkills({
   });
 }
 
-export async function addPlayerSkill({
-  data,
-}: UseCaseParams<IAddPlayerSkillUseCase>): Promise<UseCaseReturn<IAddPlayerSkillUseCase> | null> {
+export async function addPlayerSkill(
+  params: UseCaseParams<IAddPlayerSkillUseCase>,
+): Promise<UseCaseReturn<IAddPlayerSkillUseCase> | null> {
   const addPlayerSkillUseCase = new AddPlayerSkillUseCase(playerSkillRepo);
-  return addPlayerSkillUseCase.invoke({ data }).catch((error) => {
-    console.error(error);
-    return null;
-  });
+  return addPlayerSkillUseCase
+    .invoke({ data: PlayerSkillCreate.parse(params.data) })
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
 }
 
 export async function removePlayerSkill({
