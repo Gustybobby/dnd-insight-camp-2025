@@ -8,3 +8,6 @@ export * from "./player-stats.schema";
 export * from "./players.schema";
 export * from "./staffs.schema";
 export * from "./users.schema";
+export * from "./skills.schema";
+export * from "./player-skills.schema";
+export * from "./global.schema";
