@@ -79,6 +79,8 @@ export async function removePlayerSkill({
 export async function removeAllPlayerSkills({
   playerId,
 }: UseCaseParams<IRemoveAllPlayerSkillsUseCase>): Promise<UseCaseReturn<IRemoveAllPlayerSkillsUseCase> | null> {
+  await authService.authStaff();
+
   const removeAllPlayerSkillsUseCase = new RemoveAllPlayerSkillsUseCase(
     playerSkillRepo,
   );

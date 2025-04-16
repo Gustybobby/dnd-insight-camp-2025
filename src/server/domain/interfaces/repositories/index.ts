@@ -8,3 +8,4 @@ export * from "./staff.repository.interface";
 export * from "./player-stat.repository.interface";
 export * from "./player-skill.repository.interface";
 export * from "./skill.repository.interface";
+export * from "./global.repository.interface";
