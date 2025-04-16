@@ -3,7 +3,7 @@ import type { PlayerStat } from "@/server/domain/models";
 import { StatChanger } from "./components";
 import { STAT_TEXT_STYLE_MAP } from "./style";
 import { STAT_STYLE_MAP } from "@/components/players/style";
-
+    
 export function StaffPlayerStats({
   playerStats,
   onSubmit,
@@ -12,13 +12,13 @@ export function StaffPlayerStats({
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }) {
   return (
-    <div className="flex flex-col items-center gap-2 p-2">
-      <form onSubmit={onSubmit}>
+    <div className="p-2">
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
         {playerStats.map((stat) => (
           <StatChanger
             key={stat.type}
             label={STAT_STYLE_MAP[stat.type].label}
-            iconSrc={`/asset/props/${stat.type.toLowerCase()}.png`}
+            iconSrc={stat.type.toLowerCase() != "hp" ? `/asset/props/${stat.type.toLowerCase()}.png` : `/asset/props/heart.png`}
             value={stat.value}
             colorClassName={STAT_STYLE_MAP[stat.type].iconColor}
             textColorClassName={STAT_TEXT_STYLE_MAP[stat.type].color}
@@ -26,10 +26,10 @@ export function StaffPlayerStats({
           />
         ))}
         <button
-          className="mt-4 self-center rounded-md border-2 border-gray-100 bg-white p-2 text-black"
+          className={`mt-4 self-center rounded-md border-2 border-gray-100 bg-white p-2 text-black ${false ? "cursor-not-allowed bg-slate-300" : "cursor-pointer"}`}
           type="submit"
         >
-          Submit
+          {false ? "Loading..." : "Submit"}
         </button>
       </form>
     </div>

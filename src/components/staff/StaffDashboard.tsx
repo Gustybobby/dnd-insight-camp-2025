@@ -1,25 +1,27 @@
 import React, { useState } from "react";
 
-import { CharacterBox } from "@/components/players/components";
 import { cn } from "@/components/utils";
+import Link from "next/link";
 
-export function StaffPlayerUtils({
+export default function StaffDashboard({
   tabs,
   defaultTab,
 }: {
-  tabs: { label: string; node: React.ReactNode }[];
+  tabs: { label: string; node?: React.ReactNode }[];
   defaultTab: string;
 }) {
   const [active, setActive] = useState<string>(defaultTab);
-
   return (
-    <div className="relative py-2 px-4">
+    <div className="w-md flex h-full w-full flex-col items-center gap-y-4 rounded-md bg-cream p-4">
+      <h1 className="text-center text-4xl font-bold text-darkred">
+        Staff Dashboard
+      </h1>
       <div className="flex w-full items-center gap-2 px-1.5">
         {tabs.map((tab) => (
           <div key={tab.label} className="relative w-full">
             <button
               className={cn(
-                "w-full rounded-t-3xl text-lg font-semibold",
+                "w-full rounded-xl border-2 border-black text-lg font-semibold",
                 tab.label === active ? "bg-cream" : "bg-oldcream",
               )}
               onClick={() => setActive(tab.label)}
@@ -35,9 +37,12 @@ export function StaffPlayerUtils({
           </div>
         ))}
       </div>
-      <CharacterBox className="h-full max-h-[90%] min-h-[32vh] w-full border-oldcream">
+      <div className="relative flex h-full w-full bg-center">
         {tabs.find((tab) => tab.label === active)?.node}
-      </CharacterBox>
+      </div>
+      <Link href={"/"}>
+        Go Back to Home
+      </Link>
     </div>
   );
 }
