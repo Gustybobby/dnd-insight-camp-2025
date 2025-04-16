@@ -32,6 +32,7 @@ export default {
         },
         seafoam: "#94d2bd",
         cream: "#d5c395",
+        lightcream: "#f6ead2",
         oldcream: "#80826e",
         oldpurple: "#7d5c9d",
         gold: "#ffca22",
@@ -40,6 +41,7 @@ export default {
       },
       backgroundImage: {
         "radial-gradient": "radial-gradient(circle, var(--tw-gradient-stops))",
+        "brown-gradient": "linear-gradient(to bottom, #D0C1A0, #AE9A84)",
       },
     },
   },

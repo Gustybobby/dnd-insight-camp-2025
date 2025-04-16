@@ -3,7 +3,7 @@
 import type { Item, StatTypeEnum } from "@/server/domain/models";
 import type { ModEffectCreate } from "@/server/domain/models/effect.model";
 
-import { ORDERED_STAT_TYPES } from "@/shared/stat";
+import { ALL_STAT_TYPES, ORDERED_STAT_TYPES } from "@/shared/stat";
 
 import { createModEffect } from "@/server/controllers/effect.controller";
 import {
@@ -36,9 +36,6 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
     onSuccess: () => {},
   });
 
-  // const giveItem = useMutation({
-  //   mutationFn: (itemId: number) => giveItem({ +playerId, itemId }),
-  // })
   const { data: items } = useQuery({
     queryKey: ["getAllItems"],
     queryFn: async () => await getAllItems(),
@@ -79,7 +76,7 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
           <h1>Player</h1>
         </div>
       </div>
-      <div className="grid w-full grid-cols-2 gap-x-4 bg-radial-gradient from-darkred to-dark">
+      <div className="grid w-full grid-cols-2 gap-x-4 bg-radial-gradient from-darkred to-dark overflow-y-auto">
         <PlayerCharacter playerId={playerId} isPlayer={true} className="mt-0" />
         <StaffPlayerUtils
           tabs={[
@@ -87,7 +84,7 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
               label: "Stats",
               node: (
                 <StaffPlayerStats
-                  playerStats={ORDERED_STAT_TYPES.map(
+                  playerStats={ALL_STAT_TYPES.map(
                     (type) =>
                       playerStats?.find((stat) => stat.type === type) ?? {
                         type,

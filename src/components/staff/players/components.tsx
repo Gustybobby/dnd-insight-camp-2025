@@ -4,6 +4,7 @@ import Image from "next/image";
 import { InfoBadge } from "@/components/players/details/inventory";
 import { STAT_STYLE_MAP } from "@/components/players/style";
 import { StatTypeEnum } from "@/server/domain/models/player-stat.model";
+import React from "react";
 
 export function StatChanger({
   label,
@@ -20,10 +21,11 @@ export function StatChanger({
   textColorClassName: string;
   type: string;
 }) {
+  const [statChangeValue, setStatChangeValue] = React.useState(0);
   return (
     <div className="flex flex-col gap-2">
       <p className={cn("font-bold", textColorClassName)}>{label}</p>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-6 gap-1">
         <div className="flex items-center justify-center">
           <div
             className={cn(
@@ -34,29 +36,42 @@ export function StatChanger({
             <Image
               src={iconSrc}
               alt={label}
-              className="size-8"
+              className="h-7 w-auto"
               width={128}
               height={128}
             />
           </div>
         </div>
         <div className="flex w-full flex-col items-center justify-center">
-          <p className={cn("text-5xl font-bold", textColorClassName)}>
+          <p className={cn("text-4xl font-bold", textColorClassName)}>
             {value}
           </p>
         </div>
         <div className="flex w-full flex-col items-center justify-center">
-          <p className={cn("text-5xl font-bold", textColorClassName)}>+</p>
+          <p className={cn("text-4xl font-bold", textColorClassName)}>+</p>
         </div>
         <input
           className={cn(
-            "border-1 w-full rounded-md border-2 border-darkred text-center text-2xl",
+            "border-1 bg-lightcream w-full rounded-2xl border-2 border-oldcream text-center text-2xl",
             textColorClassName,
           )}
           name={type}
-          defaultValue={0}
+          type="number"
+          value={statChangeValue}
+          onChange={(e) => {
+            const value = parseInt(e.target.value);
+            setStatChangeValue(value);
+          }}
           required
         />
+        <div className="flex w-full flex-col items-center justify-center">
+          <p className={cn("text-4xl font-bold", textColorClassName)}>=</p>
+        </div>
+        <div className="flex w-full flex-col items-center justify-center">
+          <p className={cn("text-4xl font-bold", textColorClassName)}>
+            {value + statChangeValue}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -92,7 +107,7 @@ export function ItemCard({
               <InfoBadge
                 key={idx}
                 className={
-                  STAT_STYLE_MAP[statType as StatTypeEnum].color +
+                  STAT_STYLE_MAP[statType as StatTypeEnum].bgColor +
                   " text-xs font-semibold"
                 }
               >

@@ -1,42 +1,44 @@
 "use client";
 
-import { getAllPlayers } from "@/server/controllers/player.controller";
-
+import StaffBattleTab from "@/components/staff/battle/StaffBattleTab";
+import StaffPlayerRow from "@/components/staff/players/StaffPlayerRow";
+import StaffDashboard from "@/components/staff/StaffDashboard";
+import { getAllPlayers, getAllPlayersInfo } from "@/server/controllers/player.controller";
 import { useQuery } from "@tanstack/react-query";
-
-import Image from "next/image";
-import Link from "next/link";
 
 export default function Home() {
   const { data: players } = useQuery({
     queryKey: ["getAllPlayers"],
-    queryFn: async () => await getAllPlayers(),
+    queryFn: async () => await getAllPlayersInfo(),
     refetchInterval: 5000,
   });
 
+  console.log(players);
+
   return (
-    <div className="flex flex-col items-center gap-y-4 rounded-md bg-cream p-4">
-      <h1 className="text-4xl">Players</h1>
-      <div className="grid grid-cols-4 gap-x-4 gap-y-2">
-        {players?.map((player) => (
-          <Link
-            className="flex flex-col items-center rounded-md border-2 border-black bg-white p-4 shadow"
-            key={player.id}
-            href={`staff/players/${player.id}`}
-          >
-            <p>Group {player.id}</p>
-            <p>{player.name}</p>
-            <Image
-              src={player.character.image}
-              width={200}
-              height={200}
-              className="h-32"
-              alt={player.character.name}
-            />
-          </Link>
-        ))}
-      </div>
-      <Link href="/">Go to Home</Link>
-    </div>
+    <StaffDashboard
+      defaultTab="Players"
+      tabs={[
+        {
+          label: "Players",
+          node: (
+            <div className="flex flex-col gap-y-1 p-2 w-full">
+              {players?.map((player) => (
+                <StaffPlayerRow
+                  key={player.id}
+                  id={player.id}
+                  name={player.name}
+                  player={player.character}
+                />
+              ))}
+            </div>
+          ),
+        },
+        {
+          label: "Battle",
+          node: <StaffBattleTab players={players} />,
+        },
+      ]}
+    />
   );
 }

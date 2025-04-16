@@ -3,7 +3,7 @@ import type { PlayerStat } from "@/server/domain/models";
 import { StatChanger } from "./components";
 import { STAT_TEXT_STYLE_MAP } from "./style";
 import { STAT_STYLE_MAP } from "@/components/players/style";
-
+    
 export function StaffPlayerStats({
   playerStats,
   onSubmit,
@@ -18,7 +18,7 @@ export function StaffPlayerStats({
           <StatChanger
             key={stat.type}
             label={STAT_STYLE_MAP[stat.type].label}
-            iconSrc={`/asset/props/${stat.type.toLowerCase()}.png`}
+            iconSrc={stat.type.toLowerCase() != "hp" ? `/asset/props/${stat.type.toLowerCase()}.png` : `/asset/props/heart.png`}
             value={stat.value}
             colorClassName={STAT_STYLE_MAP[stat.type].iconColor}
             textColorClassName={STAT_TEXT_STYLE_MAP[stat.type].color}
