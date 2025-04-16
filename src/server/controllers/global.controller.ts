@@ -1,11 +1,10 @@
 "use server";
 
-import { IGetGlobalUseCase } from "@/server/applications/interfaces/usecases/global";
-import { GetGlobalUseCase } from "@/server/applications/usecases/global";
-
-import { UseCaseParams, UseCaseReturn } from "./utils";
+import type { IGetGlobalUseCase } from "@/server/applications/interfaces/usecases/global";
+import type { UseCaseReturn } from "./utils";
 
 import { GlobalRepository } from "@/server/infrastructure/repositories/global.repository";
+import { GetGlobalUseCase } from "@/server/applications/usecases/global";
 
 const globalRepo = new GlobalRepository();
 

@@ -1,5 +1,5 @@
-import { skillsTable } from "@/db/schema/skills.schema";
 import { playersTable } from "@/db/schema/players.schema";
+import { skillsTable } from "@/db/schema/skills.schema";
 import { integer, pgTable, primaryKey } from "drizzle-orm/pg-core";
 
 export const playerSkillsTable = pgTable(

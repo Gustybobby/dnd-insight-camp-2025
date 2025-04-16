@@ -1,4 +1,4 @@
-import { PlayerSkillWithInfo } from "@/server/domain/aggregates";
+import type { PlayerSkillWithInfo } from "@/server/domain/aggregates";
 
 export interface IGetAllPlayerSkillsUseCase {
   invoke({

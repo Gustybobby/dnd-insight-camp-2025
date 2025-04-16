@@ -1,4 +1,4 @@
-import type { Skill, PlayerSkill } from "@/server/domain/models";
+import type { Skill } from "@/server/domain/models";
 
 export interface ISkillRepository {
   getAll(): Promise<Skill[]>;

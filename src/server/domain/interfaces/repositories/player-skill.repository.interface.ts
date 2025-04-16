@@ -1,9 +1,5 @@
-import type {
-  Skill,
-  PlayerSkill,
-  PlayerSkillCreate,
-} from "@/server/domain/models";
-import { PlayerSkillWithInfo } from "@/server/domain/aggregates/player-skill.aggregate";
+import type { PlayerSkillWithInfo } from "@/server/domain/aggregates/player-skill.aggregate";
+import type { PlayerSkill, PlayerSkillCreate } from "@/server/domain/models";
 
 export interface IPlayerSkillRepository {
   getAll({

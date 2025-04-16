@@ -1,9 +1,9 @@
 import type { IItemRepository } from "@/server/domain/interfaces/repositories";
-import type { Item, PlayerItem, ItemCreate } from "@/server/domain/models";
+import type { Item, ItemCreate, PlayerItem } from "@/server/domain/models";
 
 import { db } from "@/db";
 import { itemsTable, playerItemsTable } from "@/db/schema";
-import { takeOne, takeOneOrThrow } from "@/db/util";
+import { takeOneOrThrow } from "@/db/util";
 import { and, eq, sql } from "drizzle-orm";
 
 export class ItemRepository implements IItemRepository {
