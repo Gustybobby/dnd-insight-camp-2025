@@ -1,10 +1,12 @@
-import { cn } from "@/components/utils";
-import { PlayerItemWithInfo } from "@/server/domain/aggregates/player-item.aggregate";
-import Image from "next/image";
+import type { PlayerItemWithInfo } from "@/server/domain/aggregates/player-item.aggregate";
+import type { StatTypeEnum } from "@/server/domain/models/player-stat.model";
+
+import React from "react";
+
 import { InfoBadge } from "@/components/players/details/inventory";
 import { STAT_STYLE_MAP } from "@/components/players/style";
-import { StatTypeEnum } from "@/server/domain/models/player-stat.model";
-import React from "react";
+import { cn } from "@/components/utils";
+import Image from "next/image";
 
 export function StatChanger({
   label,

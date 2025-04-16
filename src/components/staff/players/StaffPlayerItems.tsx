@@ -1,13 +1,13 @@
 import type { Item } from "@/server/domain/models";
-import { ItemCard } from "./components";
-import { PlayerItemWithInfo } from "@/server/domain/aggregates";
+
 import { useState } from "react";
+
+import { ItemCard } from "./components";
 import ItemModal from "./ItemModal";
 
-export function StaffPlayerItems({
+export default function StaffPlayerItems({
   onSubmit,
   items,
-  playerId,
 }: {
   onSubmit: ({
     itemId,
@@ -17,12 +17,11 @@ export function StaffPlayerItems({
     amount: number;
   }) => Promise<void>;
   items: Item[] | null;
-  playerId: number;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemName, setItemName] = useState("");
 
-  const openModal = (itemName: string, itemId: number) => {
+  const openModal = (itemName: string) => {
     setItemName(itemName);
     setIsModalOpen(true);
   };
@@ -36,7 +35,7 @@ export function StaffPlayerItems({
         <ItemCard
           key={item.id}
           item={item}
-          onClick={() => openModal(item.name, item.id)}
+          onClick={() => openModal(item.name)}
         />
       ))}
       {isModalOpen && (

@@ -1,5 +1,7 @@
-import { PlayerWithAllInfo } from "@/server/domain/aggregates";
+import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
+
 import React from "react";
+
 import StaffBattleRow from "./StaffBattleRow";
 
 interface StaffBattleTabProps {

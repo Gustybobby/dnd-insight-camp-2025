@@ -1,28 +1,24 @@
 "use client";
 
-import type { Item, StatTypeEnum } from "@/server/domain/models";
+import type { StatTypeEnum } from "@/server/domain/models";
 import type { ModEffectCreate } from "@/server/domain/models/effect.model";
 
-import { ALL_STAT_TYPES, ORDERED_STAT_TYPES } from "@/shared/stat";
+import { ALL_STAT_TYPES } from "@/shared/stat";
 
 import { createModEffect } from "@/server/controllers/effect.controller";
-import {
-  getPlayerItems,
-  getPlayerStats,
-} from "@/server/controllers/player.controller";
-
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-
-import { StaffPlayerStats } from "./StaffPlayerStats";
-import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
-import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
-import Link from "next/link";
-import { StaffPlayerItems } from "./StaffPlayerItem";
 import {
   addPlayerItem,
   getAllItems,
 } from "@/server/controllers/items.controller";
+import { getPlayerStats } from "@/server/controllers/player.controller";
+
+import { useMutation, useQuery } from "@tanstack/react-query";
+
+import StaffPlayerItem from "./StaffPlayerItems";
+import { StaffPlayerStats } from "./StaffPlayerStats";
+import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
+import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
+import Link from "next/link";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -40,7 +36,9 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
   const statMutation = useMutation({
     mutationFn: (modEffectCreate: ModEffectCreate) =>
       createModEffect({ data: { ...modEffectCreate }, playerIds: [+playerId] }),
-    onSuccess: () => {alert("Stat changed successfully!")}
+    onSuccess: () => {
+      alert("Stat changed successfully!");
+    },
   });
 
   const onStatSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -75,7 +73,6 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
     onSuccess: () => {
       // Refetch the items or update the state to reflect the new item
       alert("Item given successfully!");
-      
     },
   });
 
@@ -120,10 +117,9 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
             {
               label: "Item",
               node: (
-                <StaffPlayerItems
+                <StaffPlayerItem
                   items={items ?? null}
                   onSubmit={onItemSubmit}
-                  playerId={playerId}
                 />
               ),
             },

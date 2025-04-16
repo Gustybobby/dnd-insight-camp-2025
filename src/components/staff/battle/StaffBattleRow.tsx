@@ -1,7 +1,8 @@
-import Link from "next/link";
+import type { PlayerStat } from "@/server/domain/models";
+
 import React from "react";
+
 import Image from "next/image";
-import { PlayerStat } from "@/server/domain/models";
 
 export interface StaffPlayerRow {
   id: number;
@@ -24,8 +25,7 @@ export default function StaffBattleRow({
   maxTurn,
 }: StaffPlayerRow) {
   //placeholder
-  playerStats;
-  name;
+  console.log(playerStats);
   return (
     <div className="bg-brown-gradient flex w-full flex-row items-center justify-between rounded-md border-2 border-black p-4 shadow transition-transform hover:scale-[1.02]">
       <div className="flex w-[200px] flex-row items-center gap-x-4">
