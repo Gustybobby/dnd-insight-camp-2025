@@ -48,6 +48,9 @@ export function PlayerCharacter({
     return;
   }
 
+  const currentHealth =
+    playerStats?.find((stat) => stat.type === "HP")?.value ?? 0;
+
   return (
     <div
       className={cn(
@@ -68,10 +71,8 @@ export function PlayerCharacter({
             />
             <div className="mx-auto h-0.5 w-11/12 bg-black" />
             <HealthBar
-              health={
-                playerStats?.find((stat) => stat.type === "HP")?.value ?? 0
-              }
-              max={100}
+              health={currentHealth}
+              max={Math.max(100, currentHealth)}
             />
           </>
         ) : window.type === "statInfo" ? (
