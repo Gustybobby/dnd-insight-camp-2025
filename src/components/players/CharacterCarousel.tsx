@@ -1,4 +1,3 @@
-import type { PlayerWithCharater } from "@/server/domain/aggregates";
 import type { Character } from "@/server/domain/models";
 
 import { cn } from "@/components/utils";
@@ -62,19 +61,17 @@ export function CharacterCarousel({
 export function CarouselPreview({
   className,
   currentIdx,
-  players,
+  characters,
   slideFromRight,
 }: {
   className?: string;
   currentIdx: number;
-  players: PlayerWithCharater[];
+  characters: Character[];
   slideFromRight: boolean;
 }) {
-  const leftCharacter = players.at(currentIdx - 1)?.character;
-  const character = players[currentIdx].character;
-  const rightCharacter = players.at(
-    (currentIdx + 1) % players.length,
-  )?.character;
+  const leftCharacter = characters.at(currentIdx - 1);
+  const character = characters[currentIdx];
+  const rightCharacter = characters.at((currentIdx + 1) % characters.length);
   return (
     <div className={className}>
       <div className="flex h-[12vh] items-center justify-center gap-8">

@@ -10,9 +10,13 @@ export interface IActivityRepository {
 
   getSessions({
     activityId,
+    filterActive,
   }: {
     activityId: ActivitySession["activityId"];
-  }): Promise<ActivitySession[]>;
+    filterActive?: boolean;
+  }): Promise<ActivitySessionAllInfo[]>;
+
+  getActiveTurns(): Promise<SessionTurn[]>;
 
   getSession({
     sessionId,
@@ -31,4 +35,10 @@ export interface IActivityRepository {
   }: {
     data: Omit<SessionTurn, "id">;
   }): Promise<SessionTurn>;
+
+  updateNextTurn({
+    sessionId,
+  }: {
+    sessionId: ActivitySession["id"];
+  }): Promise<void>;
 }

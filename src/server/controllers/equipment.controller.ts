@@ -74,7 +74,7 @@ export async function deletePlayerEquipment(
 export async function playerEquipEquipment(
   params: UseCaseParams<IEquipEquipmentUseCase>,
 ): Promise<UseCaseReturn<IEquipEquipmentUseCase> | null> {
-  await authService.authPlayer();
+  await authService.authSessionPlayer({ playerId: params.playerId });
 
   const equipEquipmentUseCase = new EquipEquipmentUseCase(
     await equipmentService.use({ itemId: params.itemId }),
@@ -88,7 +88,7 @@ export async function playerEquipEquipment(
 export async function playerRemoveEquipment(
   params: UseCaseParams<IRemoveEquipmentUseCase>,
 ): Promise<UseCaseReturn<IRemoveEquipmentUseCase> | null> {
-  await authService.authPlayer();
+  await authService.authSessionPlayer({ playerId: params.playerId });
 
   const removeEquipmentUseCase = new RemoveEquipmentUseCase(
     await equipmentService.use({ itemId: params.itemId }),

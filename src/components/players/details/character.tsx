@@ -41,7 +41,7 @@ export function CharacterInfo({
 }) {
   return (
     <>
-      <TitleBanner>Group {playerId}</TitleBanner>
+      <TitleBanner>Player {playerId}</TitleBanner>
       <div className="mx-auto h-0.5 w-11/12 bg-black" />
       <div className="grid grid-cols-3 place-items-center p-2 px-8">
         <div className="col-span-2">

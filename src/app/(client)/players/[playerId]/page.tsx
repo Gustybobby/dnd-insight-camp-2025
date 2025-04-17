@@ -22,6 +22,9 @@ export default async function PlayerCharacterPage({
   const session = await pageAuth.authPlayer().catch(() => null);
 
   return (
-    <PlayerCharacter playerId={+playerId} isPlayer={!!session?.user.playerId} />
+    <PlayerCharacter
+      playerId={+playerId}
+      isPlayer={session?.user.playerId === +playerId}
+    />
   );
 }

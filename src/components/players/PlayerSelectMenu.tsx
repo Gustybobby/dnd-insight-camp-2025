@@ -1,6 +1,6 @@
 "use client";
 
-import { getGlobal } from "@/server/controllers/global.controller";
+import { getActiveTurns } from "@/server/controllers/activity.controller";
 import { getAllPlayers } from "@/server/controllers/player.controller";
 
 import { useRef, useState } from "react";
@@ -29,9 +29,9 @@ export function PlayerSelectMenu({
     queryFn: async () => await getAllPlayers(),
   });
 
-  const { data: global } = useQuery({
-    queryKey: ["getGlobal"],
-    queryFn: async () => await getGlobal(),
+  const { data: activeTurns } = useQuery({
+    queryKey: ["getActiveTurns"],
+    queryFn: async () => await getActiveTurns(),
     refetchInterval: 5000,
   });
 
@@ -50,11 +50,15 @@ export function PlayerSelectMenu({
 
   const character = players?.[currentIdx].character;
 
-  if (!global || !character) {
+  if (!global || !character || !activeTurns) {
     return null;
   }
 
   const isCurrentPlayer = isPlayer && players?.[currentIdx].id === playerId;
+
+  const currentPlayerTurn = activeTurns.find(
+    (turn) => turn.playerId === players?.[currentIdx].id,
+  );
 
   return (
     <>
@@ -87,50 +91,46 @@ export function PlayerSelectMenu({
 
       <CarouselPreview
         className="absolute bottom-[22%] left-0 right-0 mx-auto w-[20%]"
-        players={players}
+        characters={players.map((player) => player.character)}
         currentIdx={currentIdx}
         slideFromRight={slideInFromRight()}
       />
 
       <div className="absolute bottom-[8%] w-full">
-        {global.phase === "Choosing" ? (
+        <StyledLink
+          href={`/players/${players?.[currentIdx].id}`}
+          className="motion-preset-bounce mb-2 px-8 py-4 text-3xl motion-delay-300"
+          spanClassName="bg-brown-gradient border-black"
+        >
+          Character Insight
+        </StyledLink>
+
+        {!!currentPlayerTurn && (
           <StyledLink
-            href="#"
-            className="motion-preset-bounce mb-2 px-8 py-4 text-3xl motion-delay-300"
-            spanClassName="bg-brown-gradient border-black"
+            href={
+              isCurrentPlayer
+                ? `/activities/${currentPlayerTurn.sessionId}/players/${currentPlayerTurn.playerId}`
+                : `/activities/${currentPlayerTurn.sessionId}`
+            }
+            className="motion-delay-400 motion-preset-bounce px-4 py-2 text-lg"
+            spanClassName={
+              isCurrentPlayer
+                ? "bg-lightorange border-black"
+                : "bg-radial-gradient border-black"
+            }
           >
-            Choose Character
-          </StyledLink>
-        ) : (
-          <StyledLink
-            href={`/players/${players?.[currentIdx].id}`}
-            className="motion-preset-bounce mb-2 px-8 py-4 text-3xl motion-delay-300"
-            spanClassName="bg-brown-gradient border-black"
-          >
-            Character Insight
+            <p
+              className={cn(
+                "",
+                isCurrentPlayer
+                  ? "font-bold text-black"
+                  : "font-normal text-white",
+              )}
+            >
+              {isCurrentPlayer ? "Enter Battle" : "View Battle"}
+            </p>
           </StyledLink>
         )}
-
-        <StyledLink
-          href={`/players/${players?.[currentIdx].id}/battle`}
-          className="motion-delay-400 motion-preset-bounce px-4 py-2 text-lg"
-          spanClassName={
-            isCurrentPlayer
-              ? "bg-lightorange border-black"
-              : "bg-radial-gradient border-black"
-          }
-        >
-          <p
-            className={cn(
-              "",
-              isCurrentPlayer
-                ? "font-bold text-black"
-                : "font-normal text-white",
-            )}
-          >
-            {isCurrentPlayer ? "Enter Battle" : "View Battle"}
-          </p>
-        </StyledLink>
       </div>
     </>
   );
