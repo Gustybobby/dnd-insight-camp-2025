@@ -7,8 +7,10 @@ export default function StaffLayout({
 }>) {
   return (
     <SessionProvider>
-      <div className="fixed left-0 flex h-screen w-full flex-row border-2 border-gray-200 bg-radial-gradient from-darkred to-dark p-4">
-        {children}
+      <div className="fixed left-0 flex bg-black flex-row justify-center w-full h-screen">
+        <div className="flex h-screen w-full max-w-[768px] flex-row bg-radial-gradient from-darkred to-dark p-4">
+          {children}
+        </div>
       </div>
     </SessionProvider>
   );

@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  getActivitySessions,
+  getAllActivities,
+} from "@/server/controllers/activity.controller";
 import { getAllPlayersInfo } from "@/server/controllers/player.controller";
 
 import { useQuery } from "@tanstack/react-query";
@@ -15,6 +19,9 @@ export default function Home() {
     queryKey: ["getSession"],
     queryFn: async () =>
       await getSession().then((session) => {
+        if (!session) {
+          redirect("/");
+        }
         if (session?.user?.staffId == null) {
           redirect("/");
         }
@@ -25,6 +32,21 @@ export default function Home() {
     queryKey: ["getAllPlayers"],
     queryFn: async () => await getAllPlayersInfo(),
     refetchInterval: 5000,
+  });
+  const { data: activities } = useQuery({
+    queryKey: ["getAllActivities"],
+    queryFn: async () => await getAllActivities(),
+  });
+  const { data: battleSessions } = useQuery({
+    queryKey: ["getActivitySessions"],
+    queryFn: async () =>
+      await getActivitySessions({
+        activityId:
+          activities?.find(
+            (activity) => activity.name.toLowerCase() === "battle",
+          )?.id ?? 1,
+      }),
+    refetchInterval: 2000,
   });
 
   return (
@@ -49,7 +71,12 @@ export default function Home() {
         },
         {
           label: "Battle",
-          node: <StaffBattleTab players={players} />,
+          node: (
+            <StaffBattleTab
+              players={players}
+              activitySessions={battleSessions ?? null}
+            />
+          ),
         },
       ]}
     />

@@ -1,16 +1,28 @@
 import React, { useState } from "react";
 
-import { CharacterBox } from "@/components/players/components";
+import { Modal } from "./components";
 import { cn } from "@/components/utils";
 
 export function StaffPlayerUtils({
   tabs,
   defaultTab,
+  isModalOpen,
+  setIsModalOpen,
 }: {
-  tabs: { label: string; node: React.ReactNode }[];
+  tabs: {
+    label: string;
+    node: React.ReactNode;
+    modal: React.ReactNode;
+  }[];
   defaultTab: string;
+  isModalOpen: boolean;
+  setIsModalOpen: (isOpen: boolean) => void;
 }) {
   const [active, setActive] = useState<string>(defaultTab);
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="relative px-4 py-2">
@@ -35,9 +47,17 @@ export function StaffPlayerUtils({
           </div>
         ))}
       </div>
-      <CharacterBox className="h-full max-h-[90%] min-h-[32vh] w-full border-oldcream">
+
+      <section
+        className={
+          "h-full max-h-[680px] min-h-[32vh] w-full overflow-scroll rounded-lg border-4 border-oldcream bg-cream"
+        }
+      >
         {tabs.find((tab) => tab.label === active)?.node}
-      </CharacterBox>
+      </section>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {tabs.find((tab) => tab.label === active)?.modal}
+      </Modal>
     </div>
   );
 }

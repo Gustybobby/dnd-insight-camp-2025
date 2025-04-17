@@ -44,6 +44,9 @@ export default {
         "brown-gradient": "linear-gradient(to bottom, #D0C1A0, #AE9A84)",
       },
     },
+    fontFamily: {
+      notosansthai: ['var(--font-noto-sans-thai)'],
+    },
   },
   plugins: [require("tailwindcss-motion")],
 } satisfies Config;

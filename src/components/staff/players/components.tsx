@@ -1,7 +1,8 @@
 import type { PlayerItemWithInfo } from "@/server/domain/aggregates/player-item.aggregate";
+import type { Skill } from "@/server/domain/models";
 import type { StatTypeEnum } from "@/server/domain/models/player-stat.model";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 import { InfoBadge } from "@/components/players/details/inventory";
 import { STAT_STYLE_MAP } from "@/components/players/style";
@@ -112,7 +113,7 @@ export function ItemCard({
         />
       </div>
       <div className="flex flex-col">
-        <h1>{item.name}</h1>
+        <h1 className="font-notosansthai">{item.name}</h1>
         <div className="flex items-center gap-2">
           {item.stats
             .map((statText) => statText.split(":"))
@@ -121,13 +122,99 @@ export function ItemCard({
                 key={idx}
                 className={
                   STAT_STYLE_MAP[statType as StatTypeEnum].bgColor +
-                  " text-xs font-semibold"
+                  " px-2 text-xs font-semibold"
                 }
               >
                 {statType} {value}
               </InfoBadge>
             ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+export function SkillCard({
+  skill,
+  onClick,
+}: {
+  skill: Skill;
+  onClick: (skill: Skill) => void;
+}) {
+  return (
+    <div
+      className="flex flex-row items-center gap-4 rounded-md border-2 border-black bg-white p-2 shadow"
+      onClick={() => onClick(skill)}
+    >
+      <div className="flex h-8 w-8 items-center justify-center">
+        <Image
+          src={skill.image}
+          width={50}
+          height={50}
+          className="h-auto w-auto"
+          alt={skill.name}
+        />
+      </div>
+      <div className="flex flex-col">
+        <h1 className="font-notosansthai">{skill.name}</h1>
+        <div className="flex items-center gap-2">
+          {/* {item.stats
+            .map((statText) => statText.split(":"))
+            .map(([statType, value], idx) => (
+              <InfoBadge
+                key={idx}
+                className={
+                  STAT_STYLE_MAP[statType as StatTypeEnum].bgColor +
+                  " px-2 text-xs font-semibold"
+                }
+              >
+                {statType} {value}
+              </InfoBadge>
+            ))} */}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function Modal({
+  children,
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose(); // click outside modal -> close
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div
+        ref={modalRef}
+        className="w-72 rounded-xl border-4 border-oldcream bg-cream p-6 text-center motion-scale-in-0 motion-opacity-in-0"
+      >
+        {children}
       </div>
     </div>
   );
