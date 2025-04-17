@@ -3,9 +3,8 @@ import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
 import React from "react";
 
 import StaffBattleRow from "./StaffBattlePlayerRow";
-import { ActivitySession, ModEffectCreate } from "@/server/domain/models";
+import { ActivitySession } from "@/server/domain/models";
 import StaffBattleSessionRow from "./StaffBattleSessionRow";
-import { createModEffect } from "@/server/controllers/effect.controller";
 import { useMutation } from "@tanstack/react-query";
 import {
   createActivitySession,
@@ -42,6 +41,7 @@ function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
     },
   });
 
+  
   const battleSessionMutation = useMutation({
     mutationFn: async ({ activityId }: CreateActivitySessionMutationType) => {
       return await createActivitySession({ activityId });
@@ -52,7 +52,7 @@ function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
 
       variables?.players.forEach((player, index) => {
         upsertPlayerMutation.mutate({
-          sessionId: session.id,
+          sessionId: session?.id ?? 1,
           playerId: player.id,
           order: index,
         });
@@ -102,7 +102,7 @@ function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
         <div className="flex w-full flex-col justify-between">
           {activitySessions?.map((session) => (
             <StaffBattleSessionRow
-              key={session.id}
+              key={`battle-session-${session.id}`}
               activitySession={session}
               currentPlayer={
                 players?.find(
@@ -123,7 +123,7 @@ function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
         <form onSubmit={handleSubmit}>
           {players?.map((player) => (
             <StaffBattleRow
-              key={player.id}
+              key={`player-${player.id}-battle`}
               id={player.id}
               name={player.name}
               character={player.character}
