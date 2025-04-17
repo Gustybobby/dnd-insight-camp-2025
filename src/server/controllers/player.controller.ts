@@ -1,6 +1,7 @@
 "use server";
 
 import type {
+  IChooseCharacterUseCase,
   ICreatePlayerUseCase,
   IGetAllPlayersInfoUseCase,
   IGetAllPlayersUseCase,
@@ -18,6 +19,7 @@ import { PlayerRepository } from "@/server/infrastructure/repositories/player.re
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
 import {
+  ChooseCharacterUseCase,
   CreatePlayerUseCase,
   GetAllPlayersUseCase,
   GetPlayerCharacterUseCase,
@@ -47,6 +49,7 @@ const getPlayerUseCase = new GetPlayerUseCase(playerRepo);
 const getPlayerCharacterUseCase = new GetPlayerCharacterUseCase(playerRepo);
 const getPlayerStatsUseCase = new GetPlayerStatsUseCase(playerRepo);
 const getPlayerItemsUseCase = new GetPlayerItemsUseCase(playerRepo);
+const chooseCharacterUseCase = new ChooseCharacterUseCase(playerRepo);
 const createPlayerUseCase = new CreatePlayerUseCase(playerRepo);
 const getAllPlayersInfoUseCase = new GetAllPlayersInfoUseCase(
   playerRepo,
@@ -101,6 +104,14 @@ export async function getPlayerItems({
     console.error(error);
     return null;
   });
+}
+
+export async function chooseCharacter(
+  params: UseCaseParams<IChooseCharacterUseCase>,
+): Promise<UseCaseReturn<IChooseCharacterUseCase>> {
+  await authService.authSessionPlayer({ playerId: params.playerId });
+
+  return chooseCharacterUseCase.invoke(params);
 }
 
 export async function createPlayer({

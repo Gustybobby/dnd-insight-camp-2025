@@ -122,6 +122,19 @@ export class PlayerRepository implements IPlayerRepository {
       .then(takeOneOrThrow);
   }
 
+  async updateCharacter({
+    playerId,
+    characterId,
+  }: {
+    playerId: Player["id"];
+    characterId: Character["id"];
+  }): Promise<void> {
+    await db
+      .update(playersTable)
+      .set({ characterId })
+      .where(eq(playersTable.id, playerId));
+  }
+
   async updateStat({
     data,
   }: {

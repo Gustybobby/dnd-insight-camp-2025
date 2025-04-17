@@ -37,6 +37,14 @@ export interface IPlayerRepository {
 
   createStat({ data }: { data: PlayerStat }): Promise<PlayerStat>;
 
+  updateCharacter({
+    playerId,
+    characterId,
+  }: {
+    playerId: Player["id"];
+    characterId: Character["id"];
+  }): Promise<void>;
+
   updateStat({ data }: { data: PlayerStatLogCreate }): Promise<PlayerStat>;
 
   setStats({ data }: { data: PlayerStat[] }): Promise<PlayerStat[]>;
