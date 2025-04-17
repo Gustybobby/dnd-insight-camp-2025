@@ -1,11 +1,9 @@
-import type { PlayerStat } from "@/server/domain/models";
+import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
+import type { ActivitySession } from "@/server/domain/models";
 
 import React from "react";
 
 import Image from "next/image";
-
-import { ActivitySession } from "@/server/domain/models";
-import { PlayerWithAllInfo } from "@/server/domain/aggregates";
 import Link from "next/link";
 
 export default function StaffBattleSessionRow({

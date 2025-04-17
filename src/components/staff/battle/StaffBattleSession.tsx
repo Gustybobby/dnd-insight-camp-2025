@@ -1,27 +1,30 @@
 "use client";
 
-import type { StatTypeEnum } from "@/server/domain/models";
-import type { ModEffectCreate } from "@/server/domain/models/effect.model";
+// import type { StatTypeEnum } from "@/server/domain/models";
+// import type { ModEffectCreate } from "@/server/domain/models/effect.model";
 
-import { ALL_STAT_TYPES } from "@/shared/stat";
+// import { ALL_STAT_TYPES } from "@/shared/stat";
 
-import { createModEffect } from "@/server/controllers/effect.controller";
-import {
-  addPlayerItem,
-  getAllItems,
-} from "@/server/controllers/items.controller";
-import { getPlayerStats } from "@/server/controllers/player.controller";
+// import { createModEffect } from "@/server/controllers/effect.controller";
+// import {
+//   addPlayerItem,
+//   getAllItems,
+// } from "@/server/controllers/items.controller";
+import { getActivitySession } from "@/server/controllers/activity.controller";
+import { getAllPlayersInfo } from "@/server/controllers/player.controller";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+// import ItemModal from "../players/ItemModal";
+// import SkillModal from "../players/SkillModal";
+// import StaffPlayerSkills from "../players/StaffPlayerSkills";
+// import { StaffPlayerStats } from "../players/StaffPlayerStats";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
-import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
+// import { PlayerWithAllInfo } from "@/server/domain/aggregates";
+import StaffBattlePlayersInfo from "./StaffBattlePlayersInfo";
+// import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
+// import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
 import Link from "next/link";
-import {
-  getActivitySession,
-  getActivitySessions,
-} from "@/server/controllers/activity.controller";
-import { PlayerWithAllInfo } from "@/server/domain/aggregates";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -36,13 +39,30 @@ export default function StaffBattleSession({
   // players: PlayerWithAllInfo[];
 }) {
   //Stats
-  const { data: activitySession, refetch: refetchSession } = useQuery({
+  const { data: activitySession } = useQuery({
     queryKey: ["getActivitySession", sessionId],
     queryFn: async () => await getActivitySession({ sessionId: sessionId }),
     refetchInterval: 5000,
   });
 
-  activitySession?.turns.forEach((turn) => {});
+  const { data: allPlayers } = useQuery({
+    queryKey: ["getAllPlayers", sessionId],
+    queryFn: async () => await getAllPlayersInfo(),
+    refetchInterval: 5000,
+  });
+
+  const players = allPlayers
+    ?.filter((player) => {
+      return activitySession?.turns.some((turn) => turn.playerId === player.id);
+    })
+    .map((player) => {
+      return {
+        ...player,
+        order:
+          activitySession?.turns.find((turn) => turn.playerId === player.id)
+            ?.order ?? -1,
+      };
+    });
 
   // const statMutation = useMutation({
   //   mutationFn: (modEffectCreate: ModEffectCreate) =>
@@ -75,6 +95,8 @@ export default function StaffBattleSession({
   //   e.currentTarget.reset();
   // };
 
+  const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
+
   //Items
   // const itemMutation = useMutation({
   //   mutationFn: ({ itemId, amount }: OnSubmitItemInput) =>
@@ -96,6 +118,7 @@ export default function StaffBattleSession({
   //   console.log(itemId, amount);
   //   itemMutation.mutate({ itemId, amount });
   // };
+  // useEffect(() => {}), [selectedPlayerId];
   return (
     <div className="flex w-full flex-col">
       <div className="px-4">
@@ -105,6 +128,76 @@ export default function StaffBattleSession({
           </Link>
           <h1 className="text-center">{`Battle Session ${sessionId}`}</h1>
         </div>
+      </div>
+      <div className="grid max-h-[100%] w-full grid-cols-2 gap-x-4 overflow-y-auto">
+        {/* <PlayerCharacter playerId={playerId} isPlayer={true} className="mt-0" /> */}
+        <StaffBattlePlayersInfo
+          players={players}
+          selectedPlayerId={selectedPlayerId}
+          setSelectedPlayerId={setSelectedPlayerId}
+        ></StaffBattlePlayersInfo>
+        {/* <StaffPlayerUtils
+          tabs={[
+            {
+              label: "Stats",
+              node: (
+                <StaffPlayerStats
+                  playerStats={ALL_STAT_TYPES.map(
+                    (type) =>
+                      playerStats?.find((stat) => stat.type === type) ?? {
+                        type,
+                        value: 0,
+                        playerId: 0,
+                      },
+                  )}
+                  onSubmit={onStatSubmit}
+                />
+              ),
+              modal: <></>,
+            },
+            {
+              label: "Item",
+              node: (
+                <StaffPlayerItem
+                  items={items ?? null}
+                  onClickItem={openModal}
+                />
+              ),
+              modal: (
+                <ItemModal
+                  item={item ?? null}
+                  modalOpen={modalIsOpen}
+                  closeModal={() => setModalIsOpen(false)}
+                  onSubmit={() =>
+                    onItemSubmit({ itemId: item?.id ?? 0, amount: 0 })
+                  }
+                />
+              ),
+            },
+            {
+              label: "Skills",
+              node: (
+                <StaffPlayerSkills
+                  skills={skills ?? null}
+                  onClickSkill={openModal}
+                />
+              ),
+              modal: (
+                <SkillModal
+                  skill={skill ?? null}
+                  modalOpen={modalIsOpen}
+                  closeModal={() => setModalIsOpen(false)}
+                  onSubmit={() =>
+                    onSkillSubmit({ skillId: skill?.id ?? 0, remainingUses: 0 })
+                  }
+                ></SkillModal>
+              ),
+            },
+          ]}
+          defaultTab="Stats"
+          isModalOpen={modalIsOpen}
+          setIsModalOpen={setModalIsOpen}
+        /> */}
       </div>
       <div className="grid w-full grid-cols-2 gap-x-4 overflow-y-auto bg-radial-gradient from-darkred to-dark"></div>
     </div>

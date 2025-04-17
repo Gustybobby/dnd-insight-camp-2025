@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
-import { CharacterBox } from "@/components/players/components";
-import { cn } from "@/components/utils";
 import { Modal } from "./components";
+import { cn } from "@/components/utils";
 
 export function StaffPlayerUtils({
   tabs,

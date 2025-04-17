@@ -1,9 +1,6 @@
 import type { Item } from "@/server/domain/models";
 
-import { useState } from "react";
-
 import { ItemCard } from "./components";
-import ItemModal from "./ItemModal";
 
 export default function StaffPlayerItems({
   items,

@@ -1,4 +1,5 @@
 import type { PlayerItemWithInfo } from "@/server/domain/aggregates/player-item.aggregate";
+import type { Skill } from "@/server/domain/models";
 import type { StatTypeEnum } from "@/server/domain/models/player-stat.model";
 
 import React, { useEffect, useRef } from "react";
@@ -7,7 +8,6 @@ import { InfoBadge } from "@/components/players/details/inventory";
 import { STAT_STYLE_MAP } from "@/components/players/style";
 import { cn } from "@/components/utils";
 import Image from "next/image";
-import { Skill } from "@/server/domain/models";
 
 export function StatChanger({
   label,

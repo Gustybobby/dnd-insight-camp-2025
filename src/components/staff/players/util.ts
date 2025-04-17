@@ -1,3 +1,6 @@
+import type { ModEffectCreate} from "@/server/domain/models";
+import type { OnSubmitItemInput, OnSubmitSkillInput } from "./PlayerCharacterStaff";
+
 import { createModEffect } from "@/server/controllers/effect.controller";
 import {
   addPlayerItem,
@@ -5,12 +8,11 @@ import {
 } from "@/server/controllers/items.controller";
 import { getPlayerStats } from "@/server/controllers/player.controller";
 import {
-  getAllSkills,
   addPlayerSkill,
+  getAllSkills,
 } from "@/server/controllers/skill.controller";
-import { ModEffectCreate, StatTypeEnum } from "@/server/domain/models";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { OnSubmitItemInput, OnSubmitSkillInput } from "./PlayerCharacterStaff";
+
+import { useMutation,useQuery } from "@tanstack/react-query";
 
 export function useStaffQuery({ playerId }: { playerId: number }) {
   const { data: playerStats, refetch: refetchPlayerStats } = useQuery({
@@ -78,5 +80,6 @@ export function useStaffQuery({ playerId }: { playerId: number }) {
     items,
     onItemSubmit,
     skills,
+    skillMutation
   };
 }

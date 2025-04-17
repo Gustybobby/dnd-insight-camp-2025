@@ -1,6 +1,6 @@
+import type { Item } from "@/server/domain/models";
+
 import React from "react";
-import { Modal } from "./components";
-import { Item } from "@/server/domain/models";
 
 function ItemModal({
   item,
@@ -19,6 +19,7 @@ function ItemModal({
     amount: number;
   }) => Promise<void>;
 }) {
+  console.log(modalOpen);
   return (
     <div>
       <h2 className="mb-4 text-xl font-semibold">{item?.name}</h2>

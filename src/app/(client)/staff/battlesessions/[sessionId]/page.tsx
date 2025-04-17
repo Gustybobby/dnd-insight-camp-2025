@@ -1,5 +1,4 @@
 import StaffBattleSession from "@/components/staff/battle/StaffBattleSession";
-import { PlayerCharacterStaff } from "@/components/staff/players/PlayerCharacterStaff";
 
 export default async function StaffSessionPage({
   params,

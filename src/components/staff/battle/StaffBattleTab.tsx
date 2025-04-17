@@ -1,15 +1,16 @@
 import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
+import type { ActivitySession } from "@/server/domain/models";
 
-import React from "react";
-
-import StaffBattleRow from "./StaffBattlePlayerRow";
-import { ActivitySession } from "@/server/domain/models";
-import StaffBattleSessionRow from "./StaffBattleSessionRow";
-import { useMutation } from "@tanstack/react-query";
 import {
   createActivitySession,
   upsertSessionTurn,
 } from "@/server/controllers/activity.controller";
+
+import React from "react";
+import { useMutation } from "@tanstack/react-query";
+
+import StaffBattleRow from "./StaffBattlePlayerRow";
+import StaffBattleSessionRow from "./StaffBattleSessionRow";
 
 interface UpsertPlayerMutationType {
   sessionId: number;

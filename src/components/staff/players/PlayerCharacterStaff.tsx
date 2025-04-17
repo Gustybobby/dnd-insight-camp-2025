@@ -1,6 +1,7 @@
 "use client";
 
 import type { Skill, StatTypeEnum } from "@/server/domain/models";
+import type { Item } from "@/server/domain/models";
 import type { ModEffectCreate } from "@/server/domain/models/effect.model";
 
 import { ALL_STAT_TYPES } from "@/shared/stat";
@@ -11,24 +12,22 @@ import {
   getAllItems,
 } from "@/server/controllers/items.controller";
 import { getPlayerStats } from "@/server/controllers/player.controller";
-
-import { useMutation, useQuery } from "@tanstack/react-query";
-
-import StaffPlayerItem from "./StaffPlayerItems";
-import { StaffPlayerStats } from "./StaffPlayerStats";
-import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
-import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
-import Link from "next/link";
 import {
   addPlayerSkill,
   getAllSkills,
 } from "@/server/controllers/skill.controller";
-import StaffPlayerSkills from "./StaffPlayerSkills";
-import { Modal } from "./components";
-import ItemModal from "./ItemModal";
+
 import React from "react";
-import type { Item } from "@/server/domain/models";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
+import ItemModal from "./ItemModal";
 import SkillModal from "./SkillModal";
+import StaffPlayerItem from "./StaffPlayerItems";
+import StaffPlayerSkills from "./StaffPlayerSkills";
+import { StaffPlayerStats } from "./StaffPlayerStats";
+import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
+import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
+import Link from "next/link";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -219,7 +218,7 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
                   modalOpen={modalIsOpen}
                   closeModal={() => setModalIsOpen(false)}
                   onSubmit={() =>
-                    onSkillSubmit({ skillId: skill?.id ?? 0, remainingUses: 0 })
+                    onSkillSubmit({ skillId: skill?.id ?? 0, remainingUses: 2 })
                   }
                 ></SkillModal>
               ),

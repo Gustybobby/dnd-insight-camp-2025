@@ -1,6 +1,6 @@
+import type { Skill } from "@/server/domain/models";
+
 import React from "react";
-import { Modal } from "./components";
-import { Item, Skill } from "@/server/domain/models";
 
 function ItemModal({
   skill,
@@ -19,16 +19,19 @@ function ItemModal({
     remainingUses: number;
   }) => Promise<void>;
 }) {
+  console.log(modalOpen);
   return (
     <div>
       <h2 className="mb-4 text-xl font-semibold">{skill?.name}</h2>
       <p className="mb-4">{`Give ${skill?.name}`}</p>
       <div className="flex flex-row justify-center gap-x-2">
         <button
-          onClick={() => onSubmit({ skillId: skill?.id ?? 0, remainingUses: 1 })}
+          onClick={() =>
+            onSubmit({ skillId: skill?.id ?? 0, remainingUses: 1 })
+          }
           className="rounded-lg border border-black bg-brown-gradient px-4 py-2 text-black"
         >
-          Give Item
+          Give Skill
         </button>
         <button
           onClick={closeModal}

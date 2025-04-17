@@ -14,6 +14,7 @@ export default function StaffPlayerSkills({
       {skills?.map((skill) => {
         return (
           <SkillCard
+            key={`skillcard-${skill.id}`}
             skill={skill}
             onClick={() => onClickSkill({ label: "Skill", data: skill })}
           />
