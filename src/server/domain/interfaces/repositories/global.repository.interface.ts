@@ -1,5 +1,5 @@
-import type { Global } from "@/server/domain/models";
+import type { GlobalType } from "@/server/domain/models";
 
 export interface IGlobalRepository {
-  getAll(): Promise<Global>;
+  getAll(): Promise<GlobalType>;
 }
