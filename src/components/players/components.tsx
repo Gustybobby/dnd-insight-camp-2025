@@ -27,7 +27,7 @@ export function TitleBanner({ children }: { children: React.ReactNode }) {
         width={200}
         height={200}
       />
-      <p className="z-10 mb-8 text-2xl">{children}</p>
+      <div className="z-10 mb-8 text-2xl">{children}</div>
     </div>
   );
 }

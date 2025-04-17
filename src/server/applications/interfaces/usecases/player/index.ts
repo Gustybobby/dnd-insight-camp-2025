@@ -1,3 +1,4 @@
+export * from "./choose-character.usecase.interface";
 export * from "./create.usecase.interface";
 export * from "./get-all.usecase.interface";
 export * from "./get-character.usecase.interface";

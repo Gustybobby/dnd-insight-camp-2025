@@ -3,5 +3,7 @@ import type { AuthSession } from "@/server/domain/interfaces/services/infrastruc
 export interface IAuthService {
   authPlayer(): Promise<AuthSession>;
 
+  authSessionPlayer({ playerId }: { playerId: number }): Promise<AuthSession>;
+
   authStaff(): Promise<AuthSession>;
 }
