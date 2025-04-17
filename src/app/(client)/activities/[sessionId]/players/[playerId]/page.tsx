@@ -21,7 +21,7 @@ export default async function ActivitySessionPlayerCharacterPage({
 
   const session = await pageAuth.authPlayer().catch(() => null);
 
-  const isSessionPlayer = !!session?.user.playerId;
+  const isSessionPlayer = session?.user.playerId === +playerId;
   if (!isSessionPlayer) {
     redirect(`/activities/${sessionId}`);
   }
