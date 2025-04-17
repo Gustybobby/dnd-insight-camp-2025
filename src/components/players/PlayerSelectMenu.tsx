@@ -32,6 +32,7 @@ export function PlayerSelectMenu({
   const { data: global } = useQuery({
     queryKey: ["getGlobal"],
     queryFn: async () => await getGlobal(),
+    refetchInterval: 5000,
   });
 
   function slideInFromRight(): boolean {
