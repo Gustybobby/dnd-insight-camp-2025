@@ -17,7 +17,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
 import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
 import Link from "next/link";
-import { getActivitySessions } from "@/server/controllers/activity.controller";
+import {
+  getActivitySession,
+  getActivitySessions,
+} from "@/server/controllers/activity.controller";
 import { PlayerWithAllInfo } from "@/server/domain/aggregates";
 
 export interface OnSubmitItemInput {
@@ -27,22 +30,20 @@ export interface OnSubmitItemInput {
 
 export default function StaffBattleSession({
   sessionId,
-  activityId,
-  players
+  // players
 }: {
   sessionId: number;
-  activityId: number;
-  players: PlayerWithAllInfo[];
+  // players: PlayerWithAllInfo[];
 }) {
   //Stats
-  const { data: activitySessions, refetch: refetchSessions } = useQuery({
-    queryKey: ["getPlayerStats", activityId],
-    queryFn: async () => await getActivitySessions({ activityId: activityId }),
+  const { data: activitySession, refetch: refetchSession } = useQuery({
+    queryKey: ["getActivitySession", sessionId],
+    queryFn: async () => await getActivitySession({ sessionId: sessionId }),
     refetchInterval: 5000,
   });
 
-  const activitySession = activitySessions?.find((session) => session.id === sessionId);
-  activitySession?.
+  activitySession?.turns.forEach((turn) => {});
+
   // const statMutation = useMutation({
   //   mutationFn: (modEffectCreate: ModEffectCreate) =>
   //     createModEffect({ data: { ...modEffectCreate }, playerIds: [+playerId] }),
@@ -95,9 +96,8 @@ export default function StaffBattleSession({
   //   console.log(itemId, amount);
   //   itemMutation.mutate({ itemId, amount });
   // };
-
   return (
-    <div className="flex flex-col">
+    <div className="flex w-full flex-col">
       <div className="px-4">
         <div className="flex w-full flex-row items-center justify-between rounded-md border-2 border-oldcream bg-cream px-4 py-2 text-xl">
           <Link href={"/staff"}>Back</Link>
@@ -105,7 +105,7 @@ export default function StaffBattleSession({
         </div>
       </div>
       <div className="grid w-full grid-cols-2 gap-x-4 overflow-y-auto bg-radial-gradient from-darkred to-dark">
-        <PlayerCharacter playerId={playerId} isPlayer={true} className="mt-0" />
+        {/* <PlayerCharacter playerId={playerId} isPlayer={true} className="mt-0" /> */}
       </div>
     </div>
   );

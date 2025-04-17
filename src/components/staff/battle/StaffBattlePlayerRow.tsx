@@ -41,8 +41,8 @@ export default function StaffBattleRow({
         />
       </div>
       {inBattle ? "In Battle" : "Not in Battle"}
-      <input className="size-6" type="checkbox" name={`${id}-check`} />
-      <input className="size-6 text-center" type="number" max={maxTurn}></input>
+      <input className="size-6" type="checkbox" name={`player-${id}-check`} />
+      <input className="size-6 text-center" type="number" max={maxTurn} name ={`player-${id}-turn`}></input>
     </div>
   );
 }

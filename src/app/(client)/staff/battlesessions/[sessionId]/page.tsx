@@ -8,5 +8,5 @@ export default async function StaffSessionPage({
 }) {
   const { sessionId } = await params;
 
-  return <StaffBattleSession playerId={+sessionId} />;
+  return <StaffBattleSession sessionId={+sessionId} />;
 }

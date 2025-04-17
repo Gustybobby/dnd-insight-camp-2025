@@ -17,7 +17,7 @@ export default function StaffBattleSessionRow({
 }) {
   //placeholder
   return (
-    <Link href = {`battlesessions/${activitySession.id}`} className="flex w-full flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.02]">
+    <Link href = {`/staff/battlesessions/${activitySession.id}`} className="flex w-full flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.02]">
       <div>
         <div>Session {activitySession.id}</div>
         <div>{activitySession.battleLogs.at(-1)}</div>
