@@ -1,6 +1,6 @@
 import type { PlayerStat } from "@/server/domain/models";
 
-import {ALL_STAT_TYPES } from "@/shared/stat";
+import { ALL_STAT_TYPES } from "@/shared/stat";
 
 import React from "react";
 
@@ -29,13 +29,13 @@ export default function StaffPlayerRow({
       a.type as (typeof ALL_STAT_TYPES)[number],
     );
     const indexB = ALL_STAT_TYPES.indexOf(
-      b.type as (typeof ALL_STAT_TYPES )[number],
+      b.type as (typeof ALL_STAT_TYPES)[number],
     );
     return indexA - indexB;
   });
   return (
     <Link
-      className="bg-brown-gradient flex w-full flex-row items-center justify-between rounded-md border-2 border-black p-4 shadow transition-transform hover:scale-[1.02]"
+      className="flex w-full flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.02]"
       href={`staff/players/${id}`}
     >
       <div className="flex flex-row items-center gap-x-4 text-sm font-light">
@@ -55,7 +55,7 @@ export default function StaffPlayerRow({
           </div>
         ))}
       </div>
-      <div className="flex justify-center w-[80px]">
+      <div className="flex w-[80px] justify-center">
         <Image
           src={player.image}
           width={100}

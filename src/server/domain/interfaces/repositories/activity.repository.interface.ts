@@ -1,3 +1,4 @@
+import type { ActivitySessionAllInfo } from "@/server/domain/aggregates";
 import type {
   Activity,
   ActivitySession,
@@ -12,6 +13,12 @@ export interface IActivityRepository {
   }: {
     activityId: ActivitySession["activityId"];
   }): Promise<ActivitySession[]>;
+
+  getSession({
+    sessionId,
+  }: {
+    sessionId: ActivitySession["id"];
+  }): Promise<ActivitySessionAllInfo>;
 
   createSession({
     activityId,

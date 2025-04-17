@@ -126,9 +126,9 @@ export function ItemInfo({
       <button className="font-bold" onClick={onClickBack}>
         {"←"} Back
       </button>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid w-full grid-cols-4 gap-4">
         <ItemIcon item={item} />
-        <h1 className="col-span-3 rounded-full bg-oldcream px-8 py-2 text-center text-xl font-bold">
+        <h1 className="col-span-3 rounded-full bg-oldcream px-8 py-2 text-center font-[family-name:var(--noto-sans-thai)] text-xl font-bold">
           {item.name}
         </h1>
         <div className="col-span-full flex items-center justify-between">
@@ -146,7 +146,9 @@ export function ItemInfo({
               ))}
           </div>
         </div>
-        <p className="col-span-full text-left">{item.description}</p>
+        <p className="col-span-full text-left font-[family-name:var(--noto-sans-thai)]">
+          {item.description}
+        </p>
       </div>
       {showPlayerOptions && EQUIPPABLE_ITEM_TYPES.includes(item.type) ? (
         <>

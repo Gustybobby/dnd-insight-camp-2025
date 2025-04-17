@@ -13,7 +13,7 @@ export function StaffPlayerUtils({
   const [active, setActive] = useState<string>(defaultTab);
 
   return (
-    <div className="relative py-2 px-4">
+    <div className="relative px-4 py-2">
       <div className="flex w-full items-center gap-2 px-1.5">
         {tabs.map((tab) => (
           <div key={tab.label} className="relative w-full">

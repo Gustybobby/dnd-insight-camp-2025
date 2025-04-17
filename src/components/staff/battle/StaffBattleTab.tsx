@@ -26,9 +26,7 @@ function StaffBattleTab({ players }: StaffBattleTabProps) {
           maxTurn={20}
         />
       ))}
-      <div>
-        Add monster
-      </div>
+      <div>Add monster</div>
     </div>
   );
 }

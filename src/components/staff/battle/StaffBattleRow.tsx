@@ -27,12 +27,10 @@ export default function StaffBattleRow({
   //placeholder
   console.log(playerStats);
   return (
-    <div className="bg-brown-gradient flex w-full flex-row items-center justify-between rounded-md border-2 border-black p-4 shadow transition-transform hover:scale-[1.02]">
+    <div className="flex w-full flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.02]">
       <div className="flex w-[200px] flex-row items-center gap-x-4">
         <p>Group {id}</p>
-        <p className="font-[family-name:var(--noto-sans-thai)]">
-          {name}
-        </p>
+        <p className="font-[family-name:var(--noto-sans-thai)]">{name}</p>
         <Image
           src={character.image}
           width={100}

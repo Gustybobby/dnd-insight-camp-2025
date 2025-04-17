@@ -3,6 +3,7 @@
 import type {
   ICreateActivitySessionUseCase,
   IGetActivitySessionsUseCase,
+  IGetActivitySessionUseCase,
   IGetAllActivitiesUseCase,
   IUpsertSessionTurnUseCase,
 } from "@/server/applications/interfaces/usecases/activity";
@@ -17,6 +18,7 @@ import { SessionService } from "@/server/infrastructure/services/session.service
 import {
   CreateActivitySessionUseCase,
   GetActivitySessionsUseCase,
+  GetActivitySessionUseCase,
   GetAllActivitiesUseCase,
   UpsertSessionTurnUseCase,
 } from "@/server/applications/usecases/activity";
@@ -31,6 +33,7 @@ const authService = new AuthService(playerRepo, staffRepo, sessionService);
 
 const getAllActivitiesUseCase = new GetAllActivitiesUseCase(activityRepo);
 const getActivitySessionsUseCase = new GetActivitySessionsUseCase(activityRepo);
+const getActivitySessionUseCase = new GetActivitySessionUseCase(activityRepo);
 const createActivitySessionUseCase = new CreateActivitySessionUseCase(
   activityRepo,
 );
@@ -46,6 +49,12 @@ export async function getActivitySessions(
   params: UseCaseParams<IGetActivitySessionsUseCase>,
 ): Promise<UseCaseReturn<IGetActivitySessionsUseCase>> {
   return getActivitySessionsUseCase.invoke(params);
+}
+
+export async function getActivitySession(
+  params: UseCaseParams<IGetActivitySessionUseCase>,
+): Promise<UseCaseReturn<IGetActivitySessionUseCase>> {
+  return getActivitySessionUseCase.invoke(params);
 }
 
 export async function createActivitySession(
