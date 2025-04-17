@@ -37,7 +37,7 @@ export default function StaffDashboard({
           </div>
         ))}
       </div>
-      <div className="relative flex h-full w-full bg-center overflow-scroll">
+      <div className="relative flex h-full w-full overflow-scroll bg-center">
         {tabs.find((tab) => tab.label === active)?.node}
       </div>
       <Link href={"/"}>Go Back to Home</Link>

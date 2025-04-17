@@ -1,10 +1,10 @@
 "use client";
 
+import type { IDeleteItemUseCase } from "@/server/applications/interfaces/usecases/item";
 import type { Item } from "@/server/domain/models";
 import type { UseCaseParams } from "@/server/controllers/utils";
 
 import React, { useState } from "react";
-import { IDeleteItemUseCase } from "@/server/applications/interfaces/usecases/item";
 
 interface ResetDataButtonProp {
   itemId: Item["id"];

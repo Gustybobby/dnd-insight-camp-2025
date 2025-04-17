@@ -21,7 +21,7 @@ export default function StaffBattleSessionPlayerRow({
       onClick={() => onClick}
       className={cn(
         "flex w-full flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.02]",
-        selected ? "border-4 border-red" : "",
+        selected ? "border-red border-4" : "",
       )}
     >
       <div className="flex w-[200px] flex-row items-center gap-x-4">

@@ -9,4 +9,15 @@ export class GlobalRepository implements IGlobalRepository {
   async getAll(): Promise<GlobalType> {
     return db.select().from(globalTable).then(takeOneOrThrow);
   }
+  async setPhase({
+    phase,
+  }: {
+    phase: GlobalType["phase"];
+  }): Promise<GlobalType> {
+    return db
+      .update(globalTable)
+      .set({ phase })
+      .returning()
+      .then(takeOneOrThrow);
+  }
 }

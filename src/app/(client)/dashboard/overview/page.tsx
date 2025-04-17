@@ -1,10 +1,9 @@
 "use client";
 
+import { getGlobal } from "@/server/controllers/global.controller";
 import { getAllItems } from "@/server/controllers/items.controller";
 import { getAllPlayerStatLogsFullInfo } from "@/server/controllers/log.controller";
 import { getAllPlayersInfo } from "@/server/controllers/player.controller";
-import { getGlobal } from "@/server/controllers/global.controller";
-import { getAllSkills } from "@/server/controllers/skill.controller";
 
 import { useQuery } from "@tanstack/react-query";
 
