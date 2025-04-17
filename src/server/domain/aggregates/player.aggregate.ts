@@ -7,7 +7,7 @@ import type {
 } from "@/server/domain/models";
 import type { PlayerEquipmentWithInfo, PlayerItemWithInfo } from ".";
 
-export interface PlayerWithCharater extends Player {
+export interface PlayerWithCharacter extends Player {
   character: Character;
 }
 

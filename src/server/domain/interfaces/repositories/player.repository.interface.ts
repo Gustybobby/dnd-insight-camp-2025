@@ -1,6 +1,6 @@
 import type {
   PlayerItemWithInfo,
-  PlayerWithCharater,
+  PlayerWithCharacter,
   PlayerWithItemsAndEquipments,
 } from "@/server/domain/aggregates";
 import type {
@@ -13,7 +13,7 @@ import type {
 } from "@/server/domain/models";
 
 export interface IPlayerRepository {
-  getAllWithCharacter(): Promise<PlayerWithCharater[]>;
+  getAllWithCharacter(): Promise<PlayerWithCharacter[]>;
 
   getByIdOrThrow({ playerId }: { playerId: Player["id"] }): Promise<Player>;
 

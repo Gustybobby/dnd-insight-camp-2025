@@ -1,5 +1,5 @@
-import type { PlayerWithCharater } from "@/server/domain/aggregates";
+import type { PlayerWithCharacter } from "@/server/domain/aggregates";
 
 export interface IGetAllPlayersUseCase {
-  invoke(): Promise<PlayerWithCharater[]>;
+  invoke(): Promise<PlayerWithCharacter[]>;
 }

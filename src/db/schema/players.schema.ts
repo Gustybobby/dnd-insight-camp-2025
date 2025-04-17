@@ -7,8 +7,7 @@ export const playersTable = pgTable("players", {
   name: text("name").notNull(),
   characterId: integer("character_id")
     .notNull()
-    .references(() => charactersTable.id)
-    .unique(),
+    .references(() => charactersTable.id),
   userId: uuid("user_id")
     .references(() => usersTable.id)
     .unique(),

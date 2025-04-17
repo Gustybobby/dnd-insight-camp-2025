@@ -1,7 +1,6 @@
 "use client";
 
 import { getActiveTurns } from "@/server/controllers/activity.controller";
-import { getGlobal } from "@/server/controllers/global.controller";
 import { getAllPlayers } from "@/server/controllers/player.controller";
 
 import { useRef, useState } from "react";
@@ -28,12 +27,6 @@ export function PlayerSelectMenu({
   const { data: players } = useQuery({
     queryKey: ["getAllPlayers"],
     queryFn: async () => await getAllPlayers(),
-  });
-
-  const { data: global } = useQuery({
-    queryKey: ["getGlobal"],
-    queryFn: async () => await getGlobal(),
-    refetchInterval: 5000,
   });
 
   const { data: activeTurns } = useQuery({
@@ -98,31 +91,21 @@ export function PlayerSelectMenu({
 
       <CarouselPreview
         className="absolute bottom-[22%] left-0 right-0 mx-auto w-[20%]"
-        players={players}
+        characters={players.map((player) => player.character)}
         currentIdx={currentIdx}
         slideFromRight={slideInFromRight()}
       />
 
       <div className="absolute bottom-[8%] w-full">
-        {global.phase === "Choosing" ? (
-          <StyledLink
-            href="#"
-            className="motion-preset-bounce mb-2 px-8 py-4 text-3xl motion-delay-300"
-            spanClassName="bg-brown-gradient border-black"
-          >
-            Choose Character
-          </StyledLink>
-        ) : (
-          <StyledLink
-            href={`/players/${players?.[currentIdx].id}`}
-            className="motion-preset-bounce mb-2 px-8 py-4 text-3xl motion-delay-300"
-            spanClassName="bg-brown-gradient border-black"
-          >
-            Character Insight
-          </StyledLink>
-        )}
+        <StyledLink
+          href={`/players/${players?.[currentIdx].id}`}
+          className="motion-preset-bounce mb-2 px-8 py-4 text-3xl motion-delay-300"
+          spanClassName="bg-brown-gradient border-black"
+        >
+          Character Insight
+        </StyledLink>
 
-        {!!currentPlayerTurn && global.phase === "Playing" && (
+        {!!currentPlayerTurn && (
           <StyledLink
             href={
               isCurrentPlayer
