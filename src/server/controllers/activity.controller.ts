@@ -2,6 +2,7 @@
 
 import type {
   ICreateActivitySessionUseCase,
+  IEndTurnUseCase,
   IGetActiveTurnsUseCase,
   IGetActivitySessionsUseCase,
   IGetActivitySessionUseCase,
@@ -24,6 +25,7 @@ import {
   GetAllActivitiesUseCase,
   UpsertSessionTurnUseCase,
 } from "@/server/applications/usecases/activity";
+import { EndTurnUseCase } from "@/server/applications/usecases/activity/end-turn.usecase";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
@@ -41,6 +43,7 @@ const createActivitySessionUseCase = new CreateActivitySessionUseCase(
   activityRepo,
 );
 const upsertSessionTurnUseCase = new UpsertSessionTurnUseCase(activityRepo);
+const endTurnUseCase = new EndTurnUseCase(activityRepo);
 
 export async function getAllActivities(): Promise<UseCaseReturn<IGetAllActivitiesUseCase> | null> {
   return getAllActivitiesUseCase.invoke().catch((error) => {
@@ -96,4 +99,26 @@ export async function upsertSessionTurn(
       console.error(error);
       return null;
     });
+}
+
+export async function endTurn(
+  params: UseCaseParams<IEndTurnUseCase>,
+): Promise<UseCaseReturn<IEndTurnUseCase> | null> {
+  await authService.authSessionPlayer({ playerId: params.playerId });
+
+  return endTurnUseCase.invoke({ ...params, isBoss: false }).catch((error) => {
+    console.error(error);
+    return null;
+  });
+}
+
+export async function bossEndTurn(
+  params: UseCaseParams<IEndTurnUseCase>,
+): Promise<UseCaseReturn<IEndTurnUseCase> | null> {
+  await authService.authStaff();
+
+  return endTurnUseCase.invoke({ ...params, isBoss: true }).catch((error) => {
+    console.error(error);
+    return null;
+  });
 }

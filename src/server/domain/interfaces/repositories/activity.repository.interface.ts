@@ -35,4 +35,10 @@ export interface IActivityRepository {
   }: {
     data: Omit<SessionTurn, "id">;
   }): Promise<SessionTurn>;
+
+  updateNextTurn({
+    sessionId,
+  }: {
+    sessionId: ActivitySession["id"];
+  }): Promise<void>;
 }

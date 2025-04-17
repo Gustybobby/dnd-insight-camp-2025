@@ -88,7 +88,7 @@ export class ActivityRepository implements IActivityRepository {
   }): Promise<ActivitySession> {
     return db
       .insert(activitySessionsTable)
-      .values({ activityId })
+      .values({ activityId, bossTurnOrder: 1 })
       .returning()
       .then(takeOneOrThrow);
   }
@@ -107,5 +107,35 @@ export class ActivityRepository implements IActivityRepository {
       })
       .returning()
       .then(takeOneOrThrow);
+  }
+
+  async updateNextTurn({
+    sessionId,
+  }: {
+    sessionId: ActivitySession["id"];
+  }): Promise<void> {
+    const session = await this.getSession({ sessionId });
+
+    let nextTurnOrder =
+      session.turns.find((turn) => turn.id === session.currentTurnId)?.order ??
+      null;
+    if (nextTurnOrder === null) {
+      nextTurnOrder = session.bossTurnOrder + 1;
+    } else {
+      nextTurnOrder += 1;
+    }
+    const totalTurns = session.turns.length + 1;
+    nextTurnOrder =
+      nextTurnOrder === totalTurns ? totalTurns : nextTurnOrder % totalTurns;
+
+    await db
+      .update(activitySessionsTable)
+      .set({
+        currentTurnId:
+          nextTurnOrder === session.bossTurnOrder
+            ? null
+            : session.turns.find((turn) => turn.order === nextTurnOrder)?.id,
+      })
+      .where(eq(activitySessionsTable.id, sessionId));
   }
 }

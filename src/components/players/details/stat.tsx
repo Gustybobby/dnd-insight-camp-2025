@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export function HealthBar({ health, max }: { health: number; max: number }) {
   return (
-    <div className="flex items-center gap-2 p-4">
+    <div className="flex w-full items-center gap-2 p-4">
       <Image
         src={"/asset/props/heart.png"}
         alt="heart"
@@ -45,7 +45,7 @@ export function PlayerStats({
           label={STAT_STYLE_MAP[stat.type].label}
           iconSrc={`/asset/props/${stat.type.toLowerCase()}.png`}
           value={stat.value}
-          max={100}
+          max={25}
           onClickIcon={onClickIcon}
         />
       ))}

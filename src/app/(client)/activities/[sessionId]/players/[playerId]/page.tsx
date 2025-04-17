@@ -4,7 +4,7 @@ import { pageAuth } from "@/server/controllers/utils";
 
 import { redirect } from "next/navigation";
 
-import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
+import { ActivityPlayer } from "@/components/activities/ActivityPlayer";
 
 export default async function ActivitySessionPlayerCharacterPage({
   params,
@@ -26,5 +26,11 @@ export default async function ActivitySessionPlayerCharacterPage({
     redirect(`/activities/${sessionId}`);
   }
 
-  return <PlayerCharacter playerId={+playerId} isPlayer={isSessionPlayer} />;
+  return (
+    <ActivityPlayer
+      sessionId={+sessionId}
+      playerId={+playerId}
+      isPlayer={isSessionPlayer}
+    />
+  );
 }

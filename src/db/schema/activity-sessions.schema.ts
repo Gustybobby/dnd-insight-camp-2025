@@ -13,6 +13,7 @@ export const activitySessionsTable = pgTable("activity_sessions", {
   currentTurnId: integer("current_turn_id").references(
     () => sessionTurnsTable.id,
   ),
+  bossTurnOrder: integer("boss_turn_order").notNull(),
   battleLogs: text()
     .array()
     .notNull()
