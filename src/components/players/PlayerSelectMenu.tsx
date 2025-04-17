@@ -1,5 +1,6 @@
 "use client";
 
+import { getActiveTurns } from "@/server/controllers/activity.controller";
 import { getGlobal } from "@/server/controllers/global.controller";
 import { getAllPlayers } from "@/server/controllers/player.controller";
 
@@ -35,6 +36,12 @@ export function PlayerSelectMenu({
     refetchInterval: 5000,
   });
 
+  const { data: activeTurns } = useQuery({
+    queryKey: ["getActiveTurns"],
+    queryFn: async () => await getActiveTurns(),
+    refetchInterval: 5000,
+  });
+
   function slideInFromRight(): boolean {
     if (!players) {
       return false;
@@ -50,11 +57,15 @@ export function PlayerSelectMenu({
 
   const character = players?.[currentIdx].character;
 
-  if (!global || !character) {
+  if (!global || !character || !activeTurns) {
     return null;
   }
 
   const isCurrentPlayer = isPlayer && players?.[currentIdx].id === playerId;
+
+  const currentPlayerTurn = activeTurns.find(
+    (turn) => turn.playerId === players?.[currentIdx].id,
+  );
 
   return (
     <>
@@ -111,26 +122,32 @@ export function PlayerSelectMenu({
           </StyledLink>
         )}
 
-        <StyledLink
-          href={`/players/${players?.[currentIdx].id}/battle`}
-          className="motion-delay-400 motion-preset-bounce px-4 py-2 text-lg"
-          spanClassName={
-            isCurrentPlayer
-              ? "bg-lightorange border-black"
-              : "bg-radial-gradient border-black"
-          }
-        >
-          <p
-            className={cn(
-              "",
+        {!!currentPlayerTurn && global.phase === "Playing" && (
+          <StyledLink
+            href={
               isCurrentPlayer
-                ? "font-bold text-black"
-                : "font-normal text-white",
-            )}
+                ? `/activities/${currentPlayerTurn.sessionId}/players/${currentPlayerTurn.playerId}`
+                : `/activities/${currentPlayerTurn.sessionId}`
+            }
+            className="motion-delay-400 motion-preset-bounce px-4 py-2 text-lg"
+            spanClassName={
+              isCurrentPlayer
+                ? "bg-lightorange border-black"
+                : "bg-radial-gradient border-black"
+            }
           >
-            {isCurrentPlayer ? "Enter Battle" : "View Battle"}
-          </p>
-        </StyledLink>
+            <p
+              className={cn(
+                "",
+                isCurrentPlayer
+                  ? "font-bold text-black"
+                  : "font-normal text-white",
+              )}
+            >
+              {isCurrentPlayer ? "Enter Battle" : "View Battle"}
+            </p>
+          </StyledLink>
+        )}
       </div>
     </>
   );

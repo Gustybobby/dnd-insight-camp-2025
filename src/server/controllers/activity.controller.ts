@@ -2,6 +2,7 @@
 
 import type {
   ICreateActivitySessionUseCase,
+  IGetActiveTurnsUseCase,
   IGetActivitySessionsUseCase,
   IGetActivitySessionUseCase,
   IGetAllActivitiesUseCase,
@@ -17,6 +18,7 @@ import { StaffRepository } from "@/server/infrastructure/repositories/staff.repo
 import { SessionService } from "@/server/infrastructure/services/session.service";
 import {
   CreateActivitySessionUseCase,
+  GetActiveTurnsUseCase,
   GetActivitySessionsUseCase,
   GetActivitySessionUseCase,
   GetAllActivitiesUseCase,
@@ -33,44 +35,65 @@ const authService = new AuthService(playerRepo, staffRepo, sessionService);
 
 const getAllActivitiesUseCase = new GetAllActivitiesUseCase(activityRepo);
 const getActivitySessionsUseCase = new GetActivitySessionsUseCase(activityRepo);
+const getActiveTurnsUseCase = new GetActiveTurnsUseCase(activityRepo);
 const getActivitySessionUseCase = new GetActivitySessionUseCase(activityRepo);
 const createActivitySessionUseCase = new CreateActivitySessionUseCase(
   activityRepo,
 );
 const upsertSessionTurnUseCase = new UpsertSessionTurnUseCase(activityRepo);
 
-export async function getAllActivities(): Promise<
-  UseCaseReturn<IGetAllActivitiesUseCase>
-> {
-  return getAllActivitiesUseCase.invoke();
+export async function getAllActivities(): Promise<UseCaseReturn<IGetAllActivitiesUseCase> | null> {
+  return getAllActivitiesUseCase.invoke().catch((error) => {
+    console.error(error);
+    return null;
+  });
 }
 
 export async function getActivitySessions(
   params: UseCaseParams<IGetActivitySessionsUseCase>,
-): Promise<UseCaseReturn<IGetActivitySessionsUseCase>> {
-  return getActivitySessionsUseCase.invoke(params);
+): Promise<UseCaseReturn<IGetActivitySessionsUseCase> | null> {
+  return getActivitySessionsUseCase.invoke(params).catch((error) => {
+    console.error(error);
+    return null;
+  });
+}
+
+export async function getActiveTurns(): Promise<UseCaseReturn<IGetActiveTurnsUseCase> | null> {
+  return getActiveTurnsUseCase.invoke().catch((error) => {
+    console.error(error);
+    return null;
+  });
 }
 
 export async function getActivitySession(
   params: UseCaseParams<IGetActivitySessionUseCase>,
-): Promise<UseCaseReturn<IGetActivitySessionUseCase>> {
-  return getActivitySessionUseCase.invoke(params);
+): Promise<UseCaseReturn<IGetActivitySessionUseCase> | null> {
+  return getActivitySessionUseCase.invoke(params).catch((error) => {
+    console.error(error);
+    return null;
+  });
 }
 
 export async function createActivitySession(
   params: UseCaseParams<ICreateActivitySessionUseCase>,
-): Promise<UseCaseReturn<ICreateActivitySessionUseCase>> {
+): Promise<UseCaseReturn<ICreateActivitySessionUseCase> | null> {
   await authService.authStaff();
 
-  return createActivitySessionUseCase.invoke(params);
+  return createActivitySessionUseCase.invoke(params).catch((error) => {
+    console.error(error);
+    return null;
+  });
 }
 
 export async function upsertSessionTurn(
   params: UseCaseParams<IUpsertSessionTurnUseCase>,
-): Promise<UseCaseReturn<IUpsertSessionTurnUseCase>> {
+): Promise<UseCaseReturn<IUpsertSessionTurnUseCase> | null> {
   await authService.authStaff();
 
-  return upsertSessionTurnUseCase.invoke({
-    data: SessionTurn.omit({ id: true }).parse(params.data),
-  });
+  return upsertSessionTurnUseCase
+    .invoke({ data: SessionTurn.omit({ id: true }).parse(params.data) })
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
 }

@@ -2,7 +2,7 @@ import { activitiesTable } from "@/db/schema/activities.schema";
 import { sessionTurnsTable } from "@/db/schema/session-turns.schema";
 import { timestamptz } from "@/db/util";
 import { sql } from "drizzle-orm";
-import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const activitySessionsTable = pgTable("activity_sessions", {
   id: serial("id").primaryKey(),
@@ -17,4 +17,5 @@ export const activitySessionsTable = pgTable("activity_sessions", {
     .array()
     .notNull()
     .default(sql`ARRAY[]::text[]`),
+  isActive: boolean("is_active").notNull().default(true),
 });

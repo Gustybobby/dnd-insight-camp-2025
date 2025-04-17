@@ -13,7 +13,7 @@ import {
   sessionTurnsTable,
 } from "@/db/schema";
 import { takeOneOrThrow } from "@/db/util";
-import { eq } from "drizzle-orm";
+import { and, eq, getTableColumns, inArray } from "drizzle-orm";
 
 export class ActivityRepository implements IActivityRepository {
   async getAll(): Promise<Activity[]> {
@@ -22,13 +22,44 @@ export class ActivityRepository implements IActivityRepository {
 
   async getSessions({
     activityId,
+    filterActive,
   }: {
     activityId: ActivitySession["activityId"];
-  }): Promise<ActivitySession[]> {
-    return db
+    filterActive?: boolean;
+  }): Promise<ActivitySessionAllInfo[]> {
+    const sessions = await db
       .select()
       .from(activitySessionsTable)
-      .where(eq(activitySessionsTable.activityId, activityId));
+      .where(
+        and(
+          eq(activitySessionsTable.activityId, activityId),
+          filterActive ? eq(activitySessionsTable.isActive, true) : undefined,
+        ),
+      );
+    const turns = await db
+      .select()
+      .from(sessionTurnsTable)
+      .where(
+        inArray(
+          sessionTurnsTable.sessionId,
+          sessions.map((session) => session.id),
+        ),
+      );
+    return sessions.map((session) => ({
+      ...session,
+      turns: turns.filter((turn) => turn.sessionId === session.id),
+    }));
+  }
+
+  async getActiveTurns(): Promise<SessionTurn[]> {
+    return db
+      .select({ ...getTableColumns(sessionTurnsTable) })
+      .from(sessionTurnsTable)
+      .innerJoin(
+        activitySessionsTable,
+        eq(activitySessionsTable.id, sessionTurnsTable.sessionId),
+      )
+      .where(eq(activitySessionsTable.isActive, true));
   }
 
   async getSession({
