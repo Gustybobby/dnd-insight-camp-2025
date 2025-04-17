@@ -9,8 +9,9 @@ import {
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import StaffBattleRow from "./StaffBattlePlayerRow";
+import StaffBattleRow from "../createbattle/StaffBattlePlayerRow";
 import StaffBattleSessionRow from "./StaffBattleSessionRow";
+import StyledButton from "../StyledButton";
 
 interface UpsertPlayerMutationType {
   sessionId: number;
@@ -62,44 +63,11 @@ function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
 
   const activityBattleId = activitySessions?.[0].activityId;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const selectedPlayers = players?.filter(
-      (player) => formData.get(`player-${player.id}-check`) === "on",
-    );
-
-    const formattedPlayers = selectedPlayers
-      ?.map((player, index) => {
-        const rawTurn = formData.get(`player-${player.id}-turn`);
-        const parsedTurn = parseInt(rawTurn as string);
-        const isValidTurn = !isNaN(parsedTurn);
-
-        return {
-          ...player,
-          turn: isValidTurn ? parsedTurn : Infinity, // fallback pushes invalid turns to bottom
-          originalIndex: index,
-        };
-      })
-      .sort((a, b) => {
-        if (a.turn === b.turn) {
-          return a.originalIndex - b.originalIndex;
-        }
-        return a.turn - b.turn;
-      });
-
-    console.log(formattedPlayers);
-    battleSessionMutation.mutate({
-      activityId: activityBattleId ?? 1,
-      players: formattedPlayers ?? [],
-    });
-  };
   return (
     <div className="flex w-full flex-col gap-y-1 p-2">
       <div className="flex w-full flex-col gap-y-1 text-center">
         <div className="text-center text-2xl font-bold">Battle Sessions</div>
-        <div className="flex w-full flex-col justify-between">
+        <div className="flex w-full flex-col justify-between gap-y-1">
           {activitySessions?.map((session) => (
             <StaffBattleSessionRow
               key={`battle-session-${session.id}`}
@@ -113,30 +81,6 @@ function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
           )) ?? <div>No Battle Sessions...</div>}
         </div>
       </div>
-      <div className="flex w-full flex-col gap-y-1 text-center">
-        <div className="flex w-full flex-row justify-between">
-          <p className="w-[250px] text-center text-2xl font-bold">Name</p>
-          <p className="text-center text-2xl font-bold">Status</p>
-          <p className="text-center text-2xl font-bold">Select</p>
-          <p className="text-center text-2xl font-bold">Turn</p>
-        </div>
-        <form onSubmit={handleSubmit}>
-          {players?.map((player) => (
-            <StaffBattleRow
-              key={`player-${player.id}-battle`}
-              id={player.id}
-              name={player.name}
-              character={player.character}
-              inBattle={false}
-              maxTurn={20}
-            />
-          ))}
-          {/* {activitySessions?.find((session) => session. === null) ? (} */}
-          <button type="submit">Create Battle Session</button>
-        </form>
-      </div>
     </div>
   );
 }
-
-export default StaffBattleTab;

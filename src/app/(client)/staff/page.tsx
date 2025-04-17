@@ -13,22 +13,13 @@ import StaffBattleTab from "@/components/staff/battle/StaffBattleTab";
 import StaffPlayerRow from "@/components/staff/players/StaffPlayerRow";
 import StaffDashboard from "@/components/staff/StaffDashboard";
 import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import StaffCreateBattleTab from "@/components/staff/createbattle/StaffCreateBattleTab";
 
 export default function Home() {
-  const {} = useQuery({
-    queryKey: ["getSession"],
-    queryFn: async () =>
-      await getSession().then((session) => {
-        if (!session) {
-          redirect("/");
-        }
-        if (session?.user?.staffId == null) {
-          redirect("/");
-        }
-      }),
-  });
+  const router = useRouter();
 
-  const { data: players } = useQuery({
+  const { data: players, isFetching: playersIsFetching } = useQuery({
     queryKey: ["getAllPlayers"],
     queryFn: async () => await getAllPlayersInfo(),
     refetchInterval: 5000,
@@ -46,7 +37,7 @@ export default function Home() {
             (activity) => activity.name.toLowerCase() === "battle",
           )?.id ?? 1,
       }),
-    refetchInterval: 2000,
+    refetchInterval: 5000,
   });
 
   return (
@@ -75,6 +66,15 @@ export default function Home() {
             <StaffBattleTab
               players={players}
               activitySessions={battleSessions ?? null}
+            />
+          ),
+        },
+        {
+          label: "Create Battle",
+          node: (
+            <StaffCreateBattleTab
+              activitySessions={battleSessions ?? null}
+              players={players}
             />
           ),
         },

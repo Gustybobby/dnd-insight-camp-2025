@@ -25,6 +25,7 @@ import StaffBattlePlayersInfo from "./StaffBattlePlayersInfo";
 // import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
 // import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
 import Link from "next/link";
+import TopNav from "../TopNav";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -121,14 +122,7 @@ export default function StaffBattleSession({
   // useEffect(() => {}), [selectedPlayerId];
   return (
     <div className="flex w-full flex-col">
-      <div className="px-4">
-        <div className="flex w-full flex-row justify-between rounded-md border-2 border-oldcream bg-cream px-4 py-2 text-xl">
-          <Link href={"/staff"} className="">
-            Back
-          </Link>
-          <h1 className="text-center">{`Battle Session ${sessionId}`}</h1>
-        </div>
-      </div>
+      <TopNav backLink="/staff" title={`Battle Session ${sessionId}`} />
       <div className="grid max-h-[100%] w-full grid-cols-2 gap-x-4 overflow-y-auto">
         {/* <PlayerCharacter playerId={playerId} isPlayer={true} className="mt-0" /> */}
         <StaffBattlePlayersInfo
@@ -199,7 +193,6 @@ export default function StaffBattleSession({
           setIsModalOpen={setModalIsOpen}
         /> */}
       </div>
-      <div className="grid w-full grid-cols-2 gap-x-4 overflow-y-auto bg-radial-gradient from-darkred to-dark"></div>
     </div>
   );
 }
