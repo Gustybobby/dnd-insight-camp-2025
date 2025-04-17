@@ -1,4 +1,5 @@
 import type { IActivityRepository } from "@/server/domain/interfaces/repositories";
+import type { ActivitySessionAllInfo } from "@/server/domain/aggregates";
 import type {
   Activity,
   ActivitySession,
@@ -28,6 +29,25 @@ export class ActivityRepository implements IActivityRepository {
       .select()
       .from(activitySessionsTable)
       .where(eq(activitySessionsTable.activityId, activityId));
+  }
+
+  async getSession({
+    sessionId,
+  }: {
+    sessionId: ActivitySession["id"];
+  }): Promise<ActivitySessionAllInfo> {
+    const [session, turns] = await Promise.all([
+      db
+        .select()
+        .from(activitySessionsTable)
+        .where(eq(activitySessionsTable.id, sessionId))
+        .then(takeOneOrThrow),
+      db
+        .select()
+        .from(sessionTurnsTable)
+        .where(eq(sessionTurnsTable.sessionId, sessionId)),
+    ]);
+    return { ...session, turns };
   }
 
   async createSession({
