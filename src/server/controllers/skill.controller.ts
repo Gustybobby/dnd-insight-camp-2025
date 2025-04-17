@@ -97,6 +97,8 @@ export async function playerUseSkill({
   playerId,
   skillId,
 }: UseCaseParams<IPlayerUseSkillUseCase>): Promise<UseCaseReturn<IPlayerUseSkillUseCase> | null> {
+  await authService.authSessionPlayer({ playerId });
+
   const playerUseSkillUseCase = new PlayerUseSkillUseCase(playerSkillRepo);
   return playerUseSkillUseCase.invoke({ playerId, skillId }).catch((error) => {
     console.error(error);

@@ -13,6 +13,10 @@ import {
   getPlayerItems,
   getPlayerStats,
 } from "@/server/controllers/player.controller";
+import {
+  getAllPlayerSkills,
+  playerUseSkill,
+} from "@/server/controllers/skill.controller";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -73,19 +77,30 @@ export function useCharacter({
     refetchInterval,
   });
 
+  const { data: playerSkills, refetch: refetchSkills } = useQuery({
+    queryKey: ["getPlayerSkills", playerId],
+    queryFn: async () => await getAllPlayerSkills({ playerId }),
+    refetchInterval,
+  });
+
   const equipMutation = useMutation({ mutationFn: playerEquipEquipment });
   const removeMutation = useMutation({ mutationFn: playerRemoveEquipment });
+
+  const useSkillMutation = useMutation({ mutationFn: playerUseSkill });
 
   return {
     character,
     playerStats,
     playerItems,
     playerEquipments,
+    playerSkills,
     refetchStats,
     refetchItems,
     refetchEquipments,
+    refetchSkills,
     equipMutation,
     removeMutation,
+    useSkillMutation,
   };
 }
 

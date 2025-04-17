@@ -1,8 +1,14 @@
 import type { IEndTurnUseCase } from "@/server/applications/interfaces/usecases/activity";
-import type { IActivityRepository } from "@/server/domain/interfaces/repositories";
+import type {
+  IActivityRepository,
+  IPlayerSkillRepository,
+} from "@/server/domain/interfaces/repositories";
 
 export class EndTurnUseCase implements IEndTurnUseCase {
-  constructor(private readonly activityRepo: IActivityRepository) {}
+  constructor(
+    private readonly activityRepo: IActivityRepository,
+    private readonly playerSkillRepo: IPlayerSkillRepository,
+  ) {}
 
   async invoke({
     playerId,
@@ -14,10 +20,15 @@ export class EndTurnUseCase implements IEndTurnUseCase {
     isBoss?: boolean;
   }): Promise<void> {
     const session = await this.activityRepo.getSession({ sessionId });
+    if (isBoss) {
+      await this.activityRepo.updateNextTurn({ sessionId });
+      return;
+    }
     const playerTurn = session.turns.find((turn) => turn.playerId === playerId);
-    if (!isBoss && session.currentTurnId !== playerTurn?.id) {
+    if (session.currentTurnId !== playerTurn?.id) {
       throw new Error(`not player ${playerId} turn`);
     }
-    return this.activityRepo.updateNextTurn({ sessionId });
+    await this.activityRepo.updateNextTurn({ sessionId });
+    await this.playerSkillRepo.decrementCooldown({ playerId });
   }
 }

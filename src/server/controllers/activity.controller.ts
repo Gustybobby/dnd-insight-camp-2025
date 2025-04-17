@@ -15,6 +15,7 @@ import { SessionTurn } from "@/server/domain/models";
 import { AuthService } from "@/server/domain/services/auth.service";
 import { ActivityRepository } from "@/server/infrastructure/repositories/activity.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
+import { PlayerSkillRepository } from "@/server/infrastructure/repositories/player-skill.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
 import {
@@ -30,6 +31,7 @@ import { EndTurnUseCase } from "@/server/applications/usecases/activity/end-turn
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
 const activityRepo = new ActivityRepository();
+const playerSkillRepo = new PlayerSkillRepository();
 
 const sessionService = new SessionService();
 
@@ -43,7 +45,7 @@ const createActivitySessionUseCase = new CreateActivitySessionUseCase(
   activityRepo,
 );
 const upsertSessionTurnUseCase = new UpsertSessionTurnUseCase(activityRepo);
-const endTurnUseCase = new EndTurnUseCase(activityRepo);
+const endTurnUseCase = new EndTurnUseCase(activityRepo, playerSkillRepo);
 
 export async function getAllActivities(): Promise<UseCaseReturn<IGetAllActivitiesUseCase> | null> {
   return getAllActivitiesUseCase.invoke().catch((error) => {

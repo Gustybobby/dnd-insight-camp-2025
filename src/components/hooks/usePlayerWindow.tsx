@@ -7,7 +7,8 @@ import { useState } from "react";
 export type PlayerWindowOptions =
   | { type: "character" }
   | { type: "statInfo"; statType: StatTypeEnum }
-  | { type: "itemInfo"; itemId: number };
+  | { type: "itemInfo"; itemId: number }
+  | { type: "skillInfo"; skillId: number };
 
 export function usePlayerWindow() {
   const [window, setWindow] = useState<PlayerWindowOptions>({

@@ -62,7 +62,7 @@ export class PlayerSkillRepository implements IPlayerSkillRepository {
     playerId,
     skillId,
   }: Pick<PlayerSkill, "playerId" | "skillId">): Promise<PlayerSkill | null> {
-    return db
+    const playerSkill = await db
       .update(playerSkillsTable)
       .set({
         cooldown: skillsTable.cooldown,
@@ -79,6 +79,10 @@ export class PlayerSkillRepository implements IPlayerSkillRepository {
       )
       .returning()
       .then(takeOne);
+    if (playerSkill?.remainingUses === 0) {
+      return this.delete({ playerId, skillId });
+    }
+    return playerSkill;
   }
 
   async decrementCooldown({

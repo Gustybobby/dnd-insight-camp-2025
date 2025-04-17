@@ -14,4 +14,4 @@ export const ALL_STAT_TYPES = [
   "Int",
   "HP",
 ] as const satisfies StatTypeEnum[];
-export const DEFAULT_STAT_VALUES = [0, 0, 0, 0, 100];
+export const DEFAULT_STAT_VALUES = [0, 0, 0, 0, 200];

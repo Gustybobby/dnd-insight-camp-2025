@@ -9,6 +9,7 @@ export class PlayerUseSkillUseCase implements IPlayerUseSkillUseCase {
     playerId,
     skillId,
   }: Pick<PlayerSkill, "playerId" | "skillId">): Promise<PlayerSkill | null> {
+    console.log("player", playerId, "using skill", skillId);
     return this.playerSkillRepo.playerUseSkill({ playerId, skillId });
   }
 }

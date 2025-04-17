@@ -18,6 +18,10 @@ import { CharacterInfo } from "@/components/players/details/character";
 import { Inventory, ItemInfo } from "@/components/players/details/inventory";
 import { PlayerTabs } from "@/components/players/details/PlayerTabs";
 import {
+  PlayerSkillInfo,
+  PlayerSkillsTab,
+} from "@/components/players/details/skill";
+import {
   HealthBar,
   PlayerStats,
   StatInfo,
@@ -45,11 +49,14 @@ export function ActivityPlayer({
     playerStats,
     playerItems,
     playerEquipments,
+    playerSkills,
     refetchStats,
     refetchItems,
     refetchEquipments,
+    refetchSkills,
     equipMutation,
     removeMutation,
+    useSkillMutation,
   } = useCharacter({ playerId, refetchInterval: 5000, popper });
 
   const { data: session, refetch: refetchSession } = useQuery({
@@ -78,7 +85,7 @@ export function ActivityPlayer({
         className,
       )}
     >
-      <CharacterBox className="relative z-10 min-h-[38vh] bg-cream/40 p-2">
+      <CharacterBox className="relative z-10 min-h-[38vh] bg-cream/50 p-2">
         {window.type === "character" ? (
           <>
             <CharacterInfo
@@ -153,6 +160,23 @@ export function ActivityPlayer({
               setWindow({ type: "character" });
             }}
           />
+        ) : window.type === "skillInfo" ? (
+          <PlayerSkillInfo
+            playerSkill={
+              playerSkills?.find(
+                (playerSkill) => playerSkill.skillId === window.skillId,
+              ) ?? null
+            }
+            showPlayerOptions={isPlayer}
+            onClickBack={() => setWindow({ type: "character" })}
+            onUse={(skillId) => {
+              void useSkillMutation
+                .mutateAsync({ playerId, skillId })
+                .then(() => {
+                  void refetchSkills();
+                });
+            }}
+          />
         ) : null}
       </CharacterBox>
       <PlayerTabs
@@ -191,7 +215,15 @@ export function ActivityPlayer({
               </>
             ),
           },
-          { label: "Skills", node: <div></div> },
+          {
+            label: "Skills",
+            node: playerSkills && (
+              <PlayerSkillsTab
+                playerSkills={playerSkills}
+                onClick={(skillId) => setWindow({ type: "skillInfo", skillId })}
+              />
+            ),
+          },
         ]}
         defaultTab="Stats"
       />
