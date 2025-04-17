@@ -1,5 +1,6 @@
 "use client";
 
+import { getGlobal } from "@/server/controllers/global.controller";
 import { getAllPlayers } from "@/server/controllers/player.controller";
 
 import { useRef, useState } from "react";
@@ -28,6 +29,12 @@ export function PlayerSelectMenu({
     queryFn: async () => await getAllPlayers(),
   });
 
+  const { data: global } = useQuery({
+    queryKey: ["getGlobal"],
+    queryFn: async () => await getGlobal(),
+    refetchInterval: 5000,
+  });
+
   function slideInFromRight(): boolean {
     if (!players) {
       return false;
@@ -43,7 +50,7 @@ export function PlayerSelectMenu({
 
   const character = players?.[currentIdx].character;
 
-  if (!character) {
+  if (!global || !character) {
     return null;
   }
 
@@ -86,13 +93,23 @@ export function PlayerSelectMenu({
       />
 
       <div className="absolute bottom-[8%] w-full">
-        <StyledLink
-          href={`/players/${players?.[currentIdx].id}`}
-          className="motion-preset-bounce mb-2 px-8 py-4 text-3xl motion-delay-300"
-          spanClassName="bg-brown-gradient border-black"
-        >
-          Character Insight
-        </StyledLink>
+        {global.phase === "Choosing" ? (
+          <StyledLink
+            href="#"
+            className="motion-preset-bounce mb-2 px-8 py-4 text-3xl motion-delay-300"
+            spanClassName="bg-brown-gradient border-black"
+          >
+            Choose Character
+          </StyledLink>
+        ) : (
+          <StyledLink
+            href={`/players/${players?.[currentIdx].id}`}
+            className="motion-preset-bounce mb-2 px-8 py-4 text-3xl motion-delay-300"
+            spanClassName="bg-brown-gradient border-black"
+          >
+            Character Insight
+          </StyledLink>
+        )}
 
         <StyledLink
           href={`/players/${players?.[currentIdx].id}/battle`}
