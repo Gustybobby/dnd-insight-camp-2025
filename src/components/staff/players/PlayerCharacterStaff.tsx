@@ -23,6 +23,7 @@ import {
 import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+import { DEFAULT_ITEM_AMOUNT, DEFAULT_SKILL_USES } from "../constants";
 import ItemModal from "./ItemModal";
 import SkillModal from "./SkillModal";
 import StaffPlayerItem from "./StaffPlayerItems";
@@ -210,7 +211,10 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
                   modalOpen={modalIsOpen}
                   closeModal={() => setModalIsOpen(false)}
                   onSubmit={() =>
-                    onItemSubmit({ itemId: item?.id ?? 0, amount: 0 })
+                    onItemSubmit({
+                      itemId: item?.id ?? 0,
+                      amount: DEFAULT_ITEM_AMOUNT,
+                    })
                   }
                 />
               ),
@@ -229,9 +233,12 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
                   modalOpen={modalIsOpen}
                   closeModal={() => setModalIsOpen(false)}
                   onSubmit={() =>
-                    onSkillSubmit({ skillId: skill?.id ?? 0, remainingUses: 2 })
+                    onSkillSubmit({
+                      skillId: skill?.id ?? 0,
+                      remainingUses: DEFAULT_SKILL_USES,
+                    })
                   }
-                ></SkillModal>
+                />
               ),
             },
           ]}

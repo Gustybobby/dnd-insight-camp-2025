@@ -1,6 +1,7 @@
 import type { PlayerItemWithInfo } from "@/server/domain/aggregates/player-item.aggregate";
 import type { Skill } from "@/server/domain/models";
 import type { StatTypeEnum } from "@/server/domain/models/player-stat.model";
+import type { StatusType } from "../constants";
 
 import React, { useEffect, useRef } from "react";
 
@@ -149,25 +150,40 @@ export function SkillCard({
       </div>
       <div className="flex flex-col">
         <h1 className="font-notosansthai">{skill.name}</h1>
-        <div className="flex items-center gap-2">
-          {/* {item.stats
-            .map((statText) => statText.split(":"))
-            .map(([statType, value], idx) => (
-              <InfoBadge
-                key={idx}
-                className={
-                  STAT_STYLE_MAP[statType as StatTypeEnum].bgColor +
-                  " px-2 text-xs font-semibold"
-                }
-              >
-                {statType} {value}
-              </InfoBadge>
-            ))} */}
-        </div>
       </div>
     </div>
   );
 }
+
+
+export function StatusCard({
+  status,
+  onClick,
+}: {
+  status: StatusType;
+  onClick: (status: StatusType) => void;
+}) {
+  return (
+    <div
+      className="flex flex-row items-center gap-4 rounded-md border-2 border-black bg-white p-2 shadow"
+      onClick={() => onClick(status)}
+    >
+      <div className="flex h-8 w-8 items-center justify-center">
+        <Image
+          src={status.image}
+          width={50}
+          height={50}
+          className="h-auto w-auto"
+          alt={status.name}
+        />
+      </div>
+      <div className="flex flex-col">
+        <h1 className="font-notosansthai">{status.name}</h1>
+      </div>
+    </div>
+  );
+}
+
 
 export function Modal({
   children,
@@ -211,46 +227,3 @@ export function Modal({
     </div>
   );
 }
-
-// export function SkillCard({
-//   skill,
-//   onClick,
-// }: {
-//   skill: PlayerItemWithInfo["item"];
-//   onClick: (item: PlayerItemWithInfo["item"]) => void;
-// }) {
-//   return (
-//     <div
-//       className="flex flex-row items-center gap-4 rounded-md border-2 border-black bg-white p-2 shadow"
-//       onClick={() => onClick(item)}
-//     >
-//       <div className="flex h-8 w-8 items-center justify-center">
-//         <Image
-//           src={item.image}
-//           width={50}
-//           height={50}
-//           className="h-auto w-auto"
-//           alt={item.name}
-//         />
-//       </div>
-//       <div className="flex flex-col">
-//         <h1>{item.name}</h1>
-//         <div className="flex items-center gap-2">
-//           {item.stats
-//             .map((statText) => statText.split(":"))
-//             .map(([statType, value], idx) => (
-//               <InfoBadge
-//                 key={idx}
-//                 className={
-//                   STAT_STYLE_MAP[statType as StatTypeEnum].bgColor +
-//                   " text-xs font-semibold"
-//                 }
-//               >
-//                 {statType} {value}
-//               </InfoBadge>
-//             ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
