@@ -39,7 +39,7 @@ export default function StaffCreateBattlePlayerRow({
           alt={character.name}
         />
       </div>
-      {inBattle ? "" : ""}
+      {inBattle ? "In Battle" : "Not In Battle"}
       <input className="size-6" type="checkbox" name={`player-${id}-check`} />
       <input
         className="size-6 text-center"

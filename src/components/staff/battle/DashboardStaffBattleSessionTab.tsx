@@ -1,32 +1,15 @@
-import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
-import type { ActivitySession } from "@/server/domain/models";
-
-import {
-  createActivitySession,
-  upsertSessionTurn,
-} from "@/server/controllers/activity.controller";
+import type {
+  ActivitySessionAllInfo,
+  PlayerWithAllInfo,
+} from "@/server/domain/aggregates";
 
 import React from "react";
-import { useMutation } from "@tanstack/react-query";
 
-import StaffBattleRow from "../createbattle/StaffCreateBattlePlayerRow";
 import StaffBattleSessionRow from "./StaffBattleSessionRow";
-import StyledButton from "../StyledButton";
-
-interface UpsertPlayerMutationType {
-  sessionId: number;
-  playerId: number;
-  order: number;
-}
-
-interface CreateActivitySessionMutationType {
-  activityId: number;
-  players: (PlayerWithAllInfo & { turn: number })[];
-}
 
 interface StaffBattleTabProps {
   players?: PlayerWithAllInfo[] | null;
-  activitySessions: ActivitySession[] | null;
+  activitySessions: ActivitySessionAllInfo[] | null;
 }
 function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
   const upsertPlayerMutation = useMutation({

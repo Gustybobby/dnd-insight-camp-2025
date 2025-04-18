@@ -1,5 +1,7 @@
-import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
-import type { ActivitySession } from "@/server/domain/models";
+import type {
+  ActivitySessionAllInfo,
+  PlayerWithAllInfo,
+} from "@/server/domain/aggregates";
 
 import {
   createActivitySession,
@@ -25,8 +27,9 @@ interface CreateActivitySessionMutationType {
 
 interface StaffBattleTabProps {
   players?: PlayerWithAllInfo[] | null;
-  activitySessions: ActivitySession[] | null;
+  activitySessions: ActivitySessionAllInfo[] | null;
 }
+
 export default function StaffCreateBattleTab({
   players,
   activitySessions,
@@ -98,29 +101,40 @@ export default function StaffCreateBattleTab({
       players: formattedPlayers ?? [],
     });
   };
+
+  const playersWithInBattle = players?.map((player) => {
+    const playerIdsInBattle = activitySessions
+      ?.filter((activitySession) => activitySession.isActive)
+      .flatMap((activitySession) =>
+        activitySession.turns.flatMap((turn) => turn.playerId),
+      );
+    return {
+      ...player,
+      inBattle: playerIdsInBattle?.includes(player.id) ?? false,
+    };
+  });
   return (
     <div className="flex w-full flex-col gap-y-1 p-2">
       <div className="flex w-full flex-col gap-y-1 text-center">
-        <div className="grid w-full grid-cols-4 flex-row place-items-center justify-between px-4">
-          <p className="w-[250px] text-center text-2xl font-bold">Name</p>
-          <p className="text-center text-2xl font-bold">Status</p>
-          <p className="text-center text-2xl font-bold">Select</p>
-          <p className="text-center text-2xl font-bold">Turn</p>
+        <div className="grid w-full grid-cols-4 flex-row place-items-center justify-between px-4 text-center text-2xl font-bold">
+          <h2 className="w-[250px]">Name</h2>
+          <h2 className="">Status</h2>
+          <h2 className="">Select</h2>
+          <h2 className="">Order</h2>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          className="flex h-[90%] w-full flex-col items-center gap-y-1 overflow-y-scroll"
-        >
-          {players?.map((player) => (
-            <StaffCreateBattleRow
-              key={`player-${player.id}-battle`}
-              id={player.id}
-              name={player.name}
-              character={player.character}
-              inBattle={false}
-              maxTurn={players.length + 1}
-            />
-          ))}
+        <form onSubmit={handleSubmit} className="flex w-full flex-col">
+          <div className="flex h-[90%] w-full flex-col items-center gap-y-1 overflow-y-scroll">
+            {playersWithInBattle?.map((player) => (
+              <StaffCreateBattleRow
+                key={`player-${player.id}-battle`}
+                id={player.id}
+                name={player.name}
+                character={player.character}
+                inBattle={player.inBattle}
+                maxTurn={players ? players.length + 1 : 0}
+              />
+            ))}
+          </div>
           {/* {activitySessions?.find((session) => session. === null) ? (} */}
           <StyledButton type="submit" className="mt-8 w-fit self-center">
             Create a Battle Session
