@@ -1,3 +1,4 @@
+import type { EffectWithPlayerId } from "@/server/domain/aggregates";
 import type {
   Effect,
   EffectCreate,
@@ -10,6 +11,8 @@ export interface IEffectRepository {
   createModEffect({ data }: { data: ModEffectCreate }): Promise<ModEffect>;
 
   createEffect({ data }: { data: EffectCreate }): Promise<Effect>;
+
+  getAllVisualEffects(): Promise<EffectWithPlayerId[]>;
 
   getPlayerVisualEffects({
     playerId,

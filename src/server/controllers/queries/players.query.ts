@@ -5,6 +5,7 @@ import type {
 import type { UseCaseReturn } from "@/server/controllers/utils";
 
 import { AuthService } from "@/server/domain/services/auth.service";
+import { EffectRepository } from "@/server/infrastructure/repositories/effect.repository";
 import { EquipmentRepository } from "@/server/infrastructure/repositories/equipment.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { PlayerItemRepository } from "@/server/infrastructure/repositories/player-item.repository";
@@ -23,6 +24,7 @@ const playerStatRepo = new PlayerStatRepository();
 const equipmentRepo = new EquipmentRepository();
 const playerItemRepo = new PlayerItemRepository();
 const playerSkillRepo = new PlayerSkillRepository();
+const effectRepo = new EffectRepository();
 
 const sessionService = new SessionService();
 
@@ -45,6 +47,7 @@ export async function getAllPlayersInfo(): Promise<UseCaseReturn<IGetAllPlayersI
     equipmentRepo,
     playerItemRepo,
     playerSkillRepo,
+    effectRepo,
   );
   return getAllPlayersInfoUseCase.invoke().catch((error) => {
     console.error(error);

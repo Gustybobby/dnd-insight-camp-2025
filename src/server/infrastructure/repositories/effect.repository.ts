@@ -1,4 +1,5 @@
 import type { IEffectRepository } from "@/server/domain/interfaces/repositories";
+import type { EffectWithPlayerId } from "@/server/domain/aggregates";
 import type {
   Effect,
   EffectCreate,
@@ -10,7 +11,7 @@ import type {
 import { db } from "@/db";
 import { effectsTable, playerStatLogsTable } from "@/db/schema";
 import { takeOneOrThrow } from "@/db/util";
-import { and, eq, exists, gt, ne, sql } from "drizzle-orm";
+import { and, eq, exists, getTableColumns, gt, ne, sql } from "drizzle-orm";
 
 export class EffectRepository implements IEffectRepository {
   async createModEffect({
@@ -32,6 +33,20 @@ export class EffectRepository implements IEffectRepository {
       .values(data)
       .returning()
       .then(takeOneOrThrow);
+  }
+
+  async getAllVisualEffects(): Promise<EffectWithPlayerId[]> {
+    return db
+      .select({
+        ...getTableColumns(effectsTable),
+        playerId: playerStatLogsTable.playerId,
+      })
+      .from(effectsTable)
+      .innerJoin(
+        playerStatLogsTable,
+        eq(playerStatLogsTable.effectId, effectsTable.id),
+      )
+      .where(and(ne(effectsTable.type, "Mod"), gt(effectsTable.countdown, 0)));
   }
 
   async getPlayerVisualEffects({

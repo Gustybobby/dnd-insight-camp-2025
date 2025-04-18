@@ -1,5 +1,6 @@
 import type { IGetAllPlayersInfoUseCase } from "../../interfaces/usecases/player";
 import type {
+  IEffectRepository,
   IEquipmentRepository,
   IPlayerRepository,
   IPlayerSkillRepository,
@@ -15,18 +16,21 @@ export class GetAllPlayersInfoUseCase implements IGetAllPlayersInfoUseCase {
     private readonly equipmentRepo: IEquipmentRepository,
     private readonly playerItemRepo: IPlayerItemRepository,
     private readonly playerSkillRepo: IPlayerSkillRepository,
+    private readonly effectRepo: IEffectRepository,
   ) {}
 
   async invoke(): Promise<PlayerWithAllInfo[]> {
     const [
       playersWithCharacter,
       playerStats,
+      effects,
       playerEquipments,
       playerItems,
       playerSkills,
     ] = await Promise.all([
       this.playerRepo.getAllWithCharacter(),
       this.playerStatRepo.getAll(),
+      this.effectRepo.getAllVisualEffects(),
       this.equipmentRepo.getAll(),
       this.playerItemRepo.getAll(),
       this.playerSkillRepo.getAllPlayers(),
@@ -34,6 +38,7 @@ export class GetAllPlayersInfoUseCase implements IGetAllPlayersInfoUseCase {
 
     return playersWithCharacter.map((player) => {
       const stats = playerStats.filter((e) => e.playerId === player.id);
+      const playerEffects = effects.filter((e) => e.playerId === player.id);
       const equipments = playerEquipments.filter(
         (e) => e.playerId === player.id,
       );
@@ -43,7 +48,7 @@ export class GetAllPlayersInfoUseCase implements IGetAllPlayersInfoUseCase {
       return {
         ...player,
         stats: stats,
-        effects: [],
+        effects: playerEffects,
         equipments: equipments,
         playerItems: items,
         playerSkills: skills,
