@@ -1,4 +1,3 @@
-export * from "./choose-character.usecase";
 export * from "./create.usecase";
 export * from "./get-all.usecase";
 export * from "./get-character.usecase";
@@ -7,3 +6,4 @@ export * from "./get-stats.usecase";
 export * from "./get.usecase";
 export * from "./reset.usecase";
 export * from "./get-all-info.usecase";
+export * from "./update.usecase";

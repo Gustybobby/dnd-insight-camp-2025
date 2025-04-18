@@ -1,7 +1,6 @@
 "use server";
 
 import type {
-  IChooseCharacterUseCase,
   ICreatePlayerUseCase,
   IGetAllPlayersInfoUseCase,
   IGetAllPlayersUseCase,
@@ -10,6 +9,7 @@ import type {
   IGetPlayerStatsUseCase,
   IGetPlayerUseCase,
   IResetPlayerDataUseCase,
+  IUpdatePlayerUseCase,
 } from "@/server/applications/interfaces/usecases/player";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
@@ -19,13 +19,13 @@ import { PlayerRepository } from "@/server/infrastructure/repositories/player.re
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
 import {
-  ChooseCharacterUseCase,
   CreatePlayerUseCase,
   GetAllPlayersUseCase,
   GetPlayerCharacterUseCase,
   GetPlayerItemsUseCase,
   GetPlayerStatsUseCase,
   GetPlayerUseCase,
+  UpdatePlayerUseCase,
 } from "@/server/applications/usecases/player";
 
 import { GetAllPlayersInfoUseCase } from "../applications/usecases/player";
@@ -49,7 +49,7 @@ const getPlayerUseCase = new GetPlayerUseCase(playerRepo);
 const getPlayerCharacterUseCase = new GetPlayerCharacterUseCase(playerRepo);
 const getPlayerStatsUseCase = new GetPlayerStatsUseCase(playerRepo);
 const getPlayerItemsUseCase = new GetPlayerItemsUseCase(playerRepo);
-const chooseCharacterUseCase = new ChooseCharacterUseCase(playerRepo);
+const updatePlayerUseCase = new UpdatePlayerUseCase(playerRepo);
 const createPlayerUseCase = new CreatePlayerUseCase(playerRepo);
 const getAllPlayersInfoUseCase = new GetAllPlayersInfoUseCase(
   playerRepo,
@@ -106,12 +106,12 @@ export async function getPlayerItems({
   });
 }
 
-export async function chooseCharacter(
-  params: UseCaseParams<IChooseCharacterUseCase>,
-): Promise<UseCaseReturn<IChooseCharacterUseCase>> {
+export async function updatePlayer(
+  params: UseCaseParams<IUpdatePlayerUseCase>,
+): Promise<UseCaseReturn<IUpdatePlayerUseCase>> {
   await authService.authSessionPlayer({ playerId: params.playerId });
 
-  return chooseCharacterUseCase.invoke(params);
+  return updatePlayerUseCase.invoke(params);
 }
 
 export async function createPlayer({
