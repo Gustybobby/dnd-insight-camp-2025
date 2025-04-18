@@ -35,7 +35,7 @@ export default function StaffPlayerRow({
   });
   return (
     <Link
-      className="flex w-full flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.02]"
+      className="flex w-full flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.01]"
       href={`staff/players/${id}`}
     >
       <div className="flex flex-row items-center gap-x-4 text-sm font-light">

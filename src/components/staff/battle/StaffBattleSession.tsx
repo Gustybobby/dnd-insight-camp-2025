@@ -8,8 +8,7 @@ import type {
   Skill,
   StatTypeEnum,
 } from "@/server/domain/models";
-import type {
-  StatusType} from "../constants";
+import type { StatusType } from "../constants";
 import type { OnSubmitSkillInput } from "../players/PlayerCharacterStaff";
 import type { statLowerCaseType } from "./type";
 
@@ -39,10 +38,7 @@ import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 
-import {
-  DEFAULT_ITEM_AMOUNT,
-  DEFAULT_SKILL_USES
-} from "../constants";
+import { DEFAULT_ITEM_AMOUNT, DEFAULT_SKILL_USES } from "../constants";
 import ItemModal from "../players/ItemModal";
 import SkillModal from "../players/SkillModal";
 import StaffPlayerItems from "../players/StaffPlayerItems";
@@ -363,7 +359,9 @@ export default function StaffBattleSession({
                 label: "Status",
                 node: (
                   <StaffBattleSessionPlayerStatusTab
-                    player={players?.[0]}
+                    player={players?.find(
+                      (player) => player.id === selectedPlayerId,
+                    )}
                   />
                 ),
                 modal: <></>,
@@ -379,7 +377,7 @@ export default function StaffBattleSession({
                 modal: <></>,
               },
             ]}
-            defaultTab={""}
+            defaultTab={"Status"}
             className={"h-full"}
           />
         </div>
@@ -400,7 +398,7 @@ export default function StaffBattleSession({
               modal: <></>,
             },
             {
-              label: "PlayerStats",
+              label: "Player",
               node: (
                 <StaffPlayerStats
                   playerStats={ALL_STAT_TYPES.map(
