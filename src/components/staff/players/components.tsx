@@ -24,7 +24,7 @@ export function StatChanger({
   textColorClassName: string;
   type: string;
 }) {
-  const [statChangeValue, setStatChangeValue] = React.useState(0);
+  const [statChangeValue, setStatChangeValue] = React.useState("0");
   return (
     <div className="flex flex-col gap-2">
       <p className={cn("font-bold", textColorClassName)}>{label}</p>
@@ -57,24 +57,15 @@ export function StatChanger({
           <p className={cn("text-4xl font-bold", textColorClassName)}>+</p>
         </div>
         <input
+          id={`${type}_input`}
           className={cn(
             "border-1 w-full rounded-3xl border-2 border-oldcream bg-lightcream text-center text-2xl",
             textColorClassName,
           )}
           name={type}
-          type="number"
           value={statChangeValue}
           onChange={(e) => {
-            const value = parseInt(e.target.value);
-            if (isNaN(value)) {
-              setStatChangeValue(0);
-              return;
-            }
-            if (statChangeValue === 0) {
-              setStatChangeValue(value);
-              return;
-            }
-            setStatChangeValue(value);
+            setStatChangeValue(e.target.value);
           }}
           required
         />
@@ -83,7 +74,8 @@ export function StatChanger({
         </div>
         <div className="flex w-full flex-col items-center justify-center">
           <p className={cn("text-4xl font-bold", textColorClassName)}>
-            {value + statChangeValue}
+            {value +
+              (isNaN(Number(statChangeValue)) ? 0 : Number(statChangeValue))}
           </p>
         </div>
       </div>

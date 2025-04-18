@@ -65,18 +65,11 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
     },
   });
 
-  const onStatSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const statChange = Object.fromEntries(
-      formData.entries().filter(([, value]) => +value !== 0),
-    );
-    const mutationPromises = Object.entries(statChange).map(([key, value]) => {
-      return statMutation.mutateAsync({
-        stat: key as StatTypeEnum,
-        value: +value,
-        itemId: null,
-      });
+  const onStatSubmit = async (
+    stats: { stat: StatTypeEnum; value: number }[],
+  ) => {
+    const mutationPromises = stats.map(({ stat, value }) => {
+      return statMutation.mutateAsync({ stat, value, itemId: null });
     });
     Promise.all(mutationPromises)
       .then(() => {
@@ -85,7 +78,6 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
       .catch((e) => {
         alert(`Error changing stat: ${e}`);
       });
-    e.currentTarget.reset();
   };
 
   //Items

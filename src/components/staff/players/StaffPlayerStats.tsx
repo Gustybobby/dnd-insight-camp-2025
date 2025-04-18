@@ -1,4 +1,4 @@
-import type { PlayerStat } from "@/server/domain/models";
+import type { PlayerStat, StatTypeEnum } from "@/server/domain/models";
 
 import { STAT_TEXT_STYLE_MAP } from "../style";
 import StyledButton from "../StyledButton";
@@ -10,11 +10,11 @@ export function StaffPlayerStats({
   onSubmit,
 }: {
   playerStats: PlayerStat[];
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (stats: { stat: StatTypeEnum; value: number }[]) => void;
 }) {
   return (
     <div className="p-2">
-      <form onSubmit={onSubmit} className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
         {playerStats.map((stat) => (
           <StatChanger
             key={stat.type}
@@ -30,8 +30,39 @@ export function StaffPlayerStats({
             type={stat.type}
           />
         ))}
-        <StyledButton type="submit">{"Submit"}</StyledButton>
-      </form>
+        <StyledButton
+          onClick={() => {
+            try {
+              onSubmit(
+                playerStats
+                  .map((stat) => {
+                    const value = Number(
+                      (
+                        document.getElementById(
+                          `${stat.type}_input`,
+                        ) as HTMLInputElement
+                      )?.value,
+                    );
+                    if (isNaN(value)) {
+                      throw new Error(`invalid value for ${stat.type}`);
+                    }
+                    return {
+                      stat: stat.type,
+                      value,
+                    };
+                  })
+                  .filter((stat) => stat.value > 0),
+              );
+            } catch (error) {
+              if (error instanceof Error) {
+                alert(error.message);
+              }
+            }
+          }}
+        >
+          {"Submit"}
+        </StyledButton>
+      </div>
     </div>
   );
 }
