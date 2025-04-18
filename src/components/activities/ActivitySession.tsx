@@ -45,7 +45,9 @@ export function ActivitySession({ sessionId }: { sessionId: number }) {
       <div className="absolute left-0 right-0 top-[15%] mx-auto flex w-full flex-col items-center justify-center">
         <div className="w-80">
           <TitleBanner>
-            {currentPlayerId ? `Player ${mapNumToAlphabet(currentPlayerId)} Turn` : "Boss Turn"}
+            {currentPlayerId
+              ? `Player ${mapNumToAlphabet(currentPlayerId)} Turn`
+              : "Boss Turn"}
           </TitleBanner>
         </div>
       </div>

@@ -24,7 +24,7 @@ export default function StatusModal({
 }) {
   console.log(modalOpen);
   return (
-    <div className="font-notosansthai flex flex-col items-center gap-y-2">
+    <div className="flex flex-col items-center gap-y-2 font-notosansthai">
       <h2 className="text-xl font-semibold">{status?.name}</h2>
       <p className="">{`Give ${status?.name}`}</p>
       <p className="text-sm italic">{status?.description}</p>

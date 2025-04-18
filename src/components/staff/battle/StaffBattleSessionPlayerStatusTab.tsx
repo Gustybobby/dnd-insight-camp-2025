@@ -20,10 +20,10 @@ export default function StaffBattleSessionPlayerStatusTab({
             <div
               key={`status-${status.id}`}
               className="flex w-full flex-row justify-between text-2xl"
-              onClick={()=>{}}
+              onClick={() => {}}
             >
-              <div className="flex flex-row gap-x-4 items-center">
-                <div className="rounded-full border-2 h-[70px] w-[70px] border-black flex justify-center items-center">
+              <div className="flex flex-row items-center gap-x-4">
+                <div className="flex h-[70px] w-[70px] items-center justify-center rounded-full border-2 border-black">
                   <Image
                     src={
                       VISUAL_EFFECT_LISTS.find(
@@ -33,7 +33,7 @@ export default function StaffBattleSessionPlayerStatusTab({
                     alt={status.type}
                     width={50}
                     height={50}
-                    className="w-[50px] h-[50px]"
+                    className="h-[50px] w-[50px]"
                   />
                 </div>
                 <div className="flex-col">
