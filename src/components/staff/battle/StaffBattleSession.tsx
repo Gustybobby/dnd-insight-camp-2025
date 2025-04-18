@@ -253,7 +253,7 @@ export default function StaffBattleSession({
   const handleEndPlayerTurn = () => {
     setCurrentPlayerId(getCurrentTurnPlayerId(activitySession ?? null));
     endPlayerTurnMutation.mutate({
-      playerId: currentPlayerId ?? players?.[0].id ?? 0,
+      playerId: currentPlayerId ?? 0,
     });
   };
 
