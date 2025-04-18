@@ -78,7 +78,14 @@ export function ActivityPlayer({
         className,
       )}
     >
-      <CharacterBox className="relative z-10 min-h-[38vh] bg-cream/50 p-2">
+      <CharacterBox
+        className={cn(
+          "relative z-10 min-h-[38vh] p-2",
+          window.type === "character"
+            ? "bg-cream/50"
+            : "bg-[url(/asset/cover/paper_texture.jpg)]",
+        )}
+      >
         {window.type === "character" ? (
           <>
             <CharacterInfo
