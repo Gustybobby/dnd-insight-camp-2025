@@ -11,41 +11,10 @@ interface StaffBattleTabProps {
   players?: PlayerWithAllInfo[] | null;
   activitySessions: ActivitySessionAllInfo[] | null;
 }
-function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
-  const upsertPlayerMutation = useMutation({
-    mutationFn: ({ sessionId, playerId, order }: UpsertPlayerMutationType) =>
-      upsertSessionTurn({
-        data: {
-          sessionId: sessionId,
-          playerId: playerId,
-          order: order,
-        },
-      }),
-    onSuccess: async (data) => {
-      console.log("Player turn updated successfully", data);
-    },
-  });
-
-  const battleSessionMutation = useMutation({
-    mutationFn: async ({ activityId }: CreateActivitySessionMutationType) => {
-      return await createActivitySession({ activityId });
-    },
-    onSuccess: async (session, variables) => {
-      console.log("Battle session created successfully", session);
-      console.log("Adding players to session");
-
-      variables?.players.forEach((player, index) => {
-        upsertPlayerMutation.mutate({
-          sessionId: session?.id ?? 1,
-          playerId: player.id,
-          order: index,
-        });
-      });
-    },
-  });
-
-  const activityBattleId = activitySessions?.[0].activityId;
-
+export default function StaffBattleTab({
+  players,
+  activitySessions,
+}: StaffBattleTabProps) {
   return (
     <div className="flex w-full flex-col gap-y-1 p-2">
       <div className="flex w-full flex-col gap-y-1 text-center">
