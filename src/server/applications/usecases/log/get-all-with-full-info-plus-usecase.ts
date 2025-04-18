@@ -8,6 +8,15 @@ export class GetAllPlayerStatLogsFullInfoUseCase
   constructor(private readonly playerStatLogRepo: IPlayerStatLogRepository) {}
 
   async invoke(): Promise<PlayerStatLogFullInfoPlusPlayerCharacter[]> {
-    return this.playerStatLogRepo.getAllWithFullInfoPlus();
+    return this.playerStatLogRepo.getAllWithFullInfoPlus().then((logs) =>
+      logs.map((log) => ({
+        ...log,
+        message: log.staffId
+          ? "Mod by staff"
+          : log.item
+            ? "Mod by item"
+            : undefined,
+      })),
+    );
   }
 }

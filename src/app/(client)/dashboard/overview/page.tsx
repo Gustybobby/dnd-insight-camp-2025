@@ -21,7 +21,7 @@ export default function OverviewDashboard() {
       ]);
       return { players, logs, items, global };
     },
-    refetchInterval: 10000000,
+    refetchInterval: 10 * 1000,
   });
 
   return (

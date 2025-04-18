@@ -11,6 +11,7 @@ import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
 import { ItemCreate, PlayerItem } from "@/server/domain/models";
 import { AuthService } from "@/server/domain/services/auth.service";
+import { EquipmentRepository } from "@/server/infrastructure/repositories/equipment.repository";
 import { ItemRepository } from "@/server/infrastructure/repositories/item.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
@@ -26,6 +27,7 @@ import {
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
 const itemRepo = new ItemRepository();
+const equipmentRepo = new EquipmentRepository();
 
 const sessionService = new SessionService();
 
@@ -46,7 +48,10 @@ export async function addPlayerItem(
 ): Promise<UseCaseReturn<IAddPlayerItemUseCase> | null> {
   await authService.authStaff();
 
-  const addPlayerItemUseCase = new AddPlayerItemUseCase(itemRepo);
+  const addPlayerItemUseCase = new AddPlayerItemUseCase(
+    itemRepo,
+    equipmentRepo,
+  );
   return addPlayerItemUseCase
     .invoke({ data: PlayerItem.parse(params.data) })
     .catch((error) => {
