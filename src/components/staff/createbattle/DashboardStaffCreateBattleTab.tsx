@@ -5,6 +5,7 @@ import type {
 
 import {
   createActivitySession,
+  updateActivitySession,
   upsertSessionTurn,
 } from "@/server/controllers/activity.controller";
 
@@ -21,9 +22,15 @@ interface UpsertPlayerMutationType {
   order: number;
 }
 
+interface UpdateActivitySessionMutation {
+  sessionId: number;
+  bossTurnOrder: number;
+}
+
 interface CreateActivitySessionMutationType {
   activityId: number;
   players: (PlayerWithAllInfo & { turn: number })[];
+  bossTurnOrder: number | null | undefined;
 }
 
 interface StaffBattleTabProps {
@@ -35,6 +42,19 @@ export default function StaffCreateBattleTab({
   players,
   activitySessions,
 }: StaffBattleTabProps) {
+  const updateActivitySessionMutation = useMutation({
+    mutationFn: ({ sessionId, bossTurnOrder }: UpdateActivitySessionMutation) =>
+      updateActivitySession({
+        sessionId: sessionId,
+        data: {
+          bossTurnOrder: bossTurnOrder,
+        },
+      }),
+    onSuccess: async (data) => {
+      console.log("Player turn updated successfully", data);
+    },
+  });
+
   const upsertPlayerMutation = useMutation({
     mutationFn: ({ sessionId, playerId, order }: UpsertPlayerMutationType) =>
       upsertSessionTurn({
@@ -64,6 +84,21 @@ export default function StaffCreateBattleTab({
           order: index + 1,
         });
       });
+      if (
+        variables.bossTurnOrder !== null &&
+        variables.bossTurnOrder &&
+        !isNaN(variables.bossTurnOrder)
+      ) {
+        updateActivitySessionMutation.mutate({
+          sessionId: session?.id ?? 1,
+          bossTurnOrder: variables.bossTurnOrder,
+        });
+      } else {
+        updateActivitySessionMutation.mutate({
+          sessionId: session?.id ?? 1,
+          bossTurnOrder: variables.players.length + 1,
+        });
+      }
     },
   });
 
@@ -95,11 +130,13 @@ export default function StaffCreateBattleTab({
         }
         return a.turn - b.turn;
       });
+    const bossTurnOrder = parseInt(formData.get(`boss-turn`) as string);
 
     console.log("Formatted Players:", formattedPlayers);
     battleSessionMutation.mutate({
       activityId: activityBattleId ?? 1,
       players: formattedPlayers ?? [],
+      bossTurnOrder: bossTurnOrder,
     });
   };
 
