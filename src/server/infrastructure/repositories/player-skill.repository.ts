@@ -71,11 +71,18 @@ export class PlayerSkillRepository implements IPlayerSkillRepository {
   async playerUseSkill({
     playerId,
     skillId,
-  }: Pick<PlayerSkill, "playerId" | "skillId">): Promise<PlayerSkill | null> {
+  }: Pick<
+    PlayerSkill,
+    "playerId" | "skillId"
+  >): Promise<PlayerSkillWithInfo | null> {
+    const skill = await db
+      .select()
+      .from(skillsTable)
+      .where(eq(skillsTable.id, skillId))
+      .then(takeOneOrThrow);
     const playerSkill = await db
       .update(playerSkillsTable)
-      .set({ cooldown: skillsTable.cooldown })
-      .from(skillsTable)
+      .set({ cooldown: skill.cooldown })
       .where(
         and(
           eq(playerSkillsTable.playerId, playerId),
@@ -85,7 +92,7 @@ export class PlayerSkillRepository implements IPlayerSkillRepository {
       )
       .returning()
       .then(takeOne);
-    return playerSkill;
+    return playerSkill ? { ...playerSkill, skill } : null;
   }
 
   async decrementCooldown({
