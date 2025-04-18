@@ -22,12 +22,7 @@ export default function StaffBattlePlayersInfo({
   onSessionPlayerRowClick,
   currentPlayerId,
 }: StaffBattlePlayersInfoProps) {
-  {
-    activitySession?.turns.map((turn) => {
-      console.log(turn);
-    });
-    console.log(activitySession?.currentTurnId);
-  }
+
   return (
     <div className="w-ful flex flex-col">
       <div className="mt-2 flex w-full justify-center rounded-xl border-2 border-oldcream bg-cream py-2 text-black">
