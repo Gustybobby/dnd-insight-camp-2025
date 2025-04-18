@@ -184,7 +184,7 @@ export function ActivityPlayer({
                 (playerSkill) => playerSkill.skillId === window.skillId,
               ) ?? null
             }
-            showPlayerOptions={isPlayer}
+            showPlayerOptions={isPlayer && isCurrentTurn}
             onClickBack={() => setWindow({ type: "character" })}
             onUse={(skillId) => {
               void useSkillMutation

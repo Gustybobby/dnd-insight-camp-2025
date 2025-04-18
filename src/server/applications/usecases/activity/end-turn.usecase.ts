@@ -20,15 +20,26 @@ export class EndTurnUseCase implements IEndTurnUseCase {
     isBoss?: boolean;
   }): Promise<void> {
     const session = await this.activityRepo.getSession({ sessionId });
-    if (isBoss) {
-      await this.activityRepo.updateNextTurn({ sessionId });
-      return;
+
+    if (!isBoss) {
+      const playerTurn = session.turns.find(
+        (turn) => turn.playerId === playerId,
+      );
+      if (session.currentTurnId !== playerTurn?.id) {
+        throw new Error(`not player ${playerId} turn`);
+      }
     }
-    const playerTurn = session.turns.find((turn) => turn.playerId === playerId);
-    if (session.currentTurnId !== playerTurn?.id) {
-      throw new Error(`not player ${playerId} turn`);
-    }
+
     await this.activityRepo.updateNextTurn({ sessionId });
-    await this.playerSkillRepo.decrementCooldown({ playerId });
+
+    const updatedSession = await this.activityRepo.getSession({ sessionId });
+
+    const nextPlayerId = updatedSession.turns.find(
+      (turn) => turn.id === updatedSession.currentTurnId,
+    )?.playerId;
+
+    if (nextPlayerId) {
+      await this.playerSkillRepo.decrementCooldown({ playerId: nextPlayerId });
+    }
   }
 }
