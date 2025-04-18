@@ -37,17 +37,8 @@ const sessionService = new SessionService();
 
 const authService = new AuthService(playerRepo, staffRepo, sessionService);
 
-const getAllActivitiesUseCase = new GetAllActivitiesUseCase(activityRepo);
-const getActivitySessionsUseCase = new GetActivitySessionsUseCase(activityRepo);
-const getActiveTurnsUseCase = new GetActiveTurnsUseCase(activityRepo);
-const getActivitySessionUseCase = new GetActivitySessionUseCase(activityRepo);
-const createActivitySessionUseCase = new CreateActivitySessionUseCase(
-  activityRepo,
-);
-const upsertSessionTurnUseCase = new UpsertSessionTurnUseCase(activityRepo);
-const endTurnUseCase = new EndTurnUseCase(activityRepo, playerSkillRepo);
-
 export async function getAllActivities(): Promise<UseCaseReturn<IGetAllActivitiesUseCase> | null> {
+  const getAllActivitiesUseCase = new GetAllActivitiesUseCase(activityRepo);
   return getAllActivitiesUseCase.invoke().catch((error) => {
     console.error(error);
     return null;
@@ -57,6 +48,9 @@ export async function getAllActivities(): Promise<UseCaseReturn<IGetAllActivitie
 export async function getActivitySessions(
   params: UseCaseParams<IGetActivitySessionsUseCase>,
 ): Promise<UseCaseReturn<IGetActivitySessionsUseCase> | null> {
+  const getActivitySessionsUseCase = new GetActivitySessionsUseCase(
+    activityRepo,
+  );
   return getActivitySessionsUseCase.invoke(params).catch((error) => {
     console.error(error);
     return null;
@@ -64,6 +58,7 @@ export async function getActivitySessions(
 }
 
 export async function getActiveTurns(): Promise<UseCaseReturn<IGetActiveTurnsUseCase> | null> {
+  const getActiveTurnsUseCase = new GetActiveTurnsUseCase(activityRepo);
   return getActiveTurnsUseCase.invoke().catch((error) => {
     console.error(error);
     return null;
@@ -73,6 +68,7 @@ export async function getActiveTurns(): Promise<UseCaseReturn<IGetActiveTurnsUse
 export async function getActivitySession(
   params: UseCaseParams<IGetActivitySessionUseCase>,
 ): Promise<UseCaseReturn<IGetActivitySessionUseCase> | null> {
+  const getActivitySessionUseCase = new GetActivitySessionUseCase(activityRepo);
   return getActivitySessionUseCase.invoke(params).catch((error) => {
     console.error(error);
     return null;
@@ -84,6 +80,9 @@ export async function createActivitySession(
 ): Promise<UseCaseReturn<ICreateActivitySessionUseCase> | null> {
   await authService.authStaff();
 
+  const createActivitySessionUseCase = new CreateActivitySessionUseCase(
+    activityRepo,
+  );
   return createActivitySessionUseCase.invoke(params).catch((error) => {
     console.error(error);
     return null;
@@ -95,6 +94,7 @@ export async function upsertSessionTurn(
 ): Promise<UseCaseReturn<IUpsertSessionTurnUseCase> | null> {
   await authService.authStaff();
 
+  const upsertSessionTurnUseCase = new UpsertSessionTurnUseCase(activityRepo);
   return upsertSessionTurnUseCase
     .invoke({ data: SessionTurn.omit({ id: true }).parse(params.data) })
     .catch((error) => {
@@ -108,6 +108,7 @@ export async function endTurn(
 ): Promise<UseCaseReturn<IEndTurnUseCase> | null> {
   await authService.authSessionPlayer({ playerId: params.playerId });
 
+  const endTurnUseCase = new EndTurnUseCase(activityRepo, playerSkillRepo);
   return endTurnUseCase.invoke({ ...params, isBoss: false }).catch((error) => {
     console.error(error);
     return null;
@@ -119,6 +120,7 @@ export async function bossEndTurn(
 ): Promise<UseCaseReturn<IEndTurnUseCase> | null> {
   await authService.authStaff();
 
+  const endTurnUseCase = new EndTurnUseCase(activityRepo, playerSkillRepo);
   return endTurnUseCase.invoke({ ...params, isBoss: true }).catch((error) => {
     console.error(error);
     return null;

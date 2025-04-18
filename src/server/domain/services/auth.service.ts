@@ -34,23 +34,28 @@ export class AuthService implements IAuthService {
   }: {
     playerId: number;
   }): Promise<AuthSession> {
-    const session = await this.sessionService.getSession();
-    if (!session) {
-      throw new AuthError("user is unauthenticated", session);
+    try {
+      const session = await this.authStaff();
+      return session;
+    } catch (error) {
+      if (!(error instanceof AuthError) || error.session === null) {
+        throw error;
+      }
+      const session = error.session;
+      const player = await this.playerRepo.getByUserId({
+        userId: session.user.id,
+      });
+      if (!player) {
+        throw new AuthError("user is not a player", session);
+      }
+      if (player.id !== playerId) {
+        throw new AuthError(
+          "user player id does not match param player id",
+          session,
+        );
+      }
+      return { ...session, user: { ...session.user, playerId: player.id } };
     }
-    const player = await this.playerRepo.getByUserId({
-      userId: session.user.id,
-    });
-    if (!player) {
-      throw new AuthError("user is not a player", session);
-    }
-    if (player.id !== playerId) {
-      throw new AuthError(
-        "user player id does not match param player id",
-        session,
-      );
-    }
-    return { ...session, user: { ...session.user, playerId: player.id } };
   }
 
   async authStaff(): Promise<AuthSession> {
