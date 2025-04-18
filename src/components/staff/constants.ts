@@ -15,7 +15,7 @@ export const VISUAL_EFFECT_NAME_LIST = [
 export const VISUAL_EFFECT_LISTS = [
   {
     name: "Provoked",
-    description: "",
+    description: "ยั่วยุให้บอสมาตี และ กัน Damage = STR x 3 ",
     image: `${pathname}provoked.png`,
   },
   {
@@ -25,17 +25,17 @@ export const VISUAL_EFFECT_LISTS = [
   },
   {
     name: "Charmed",
-    description: "",
+    description: "เป้าหมายหลงไหลตีผู้ใช้ไม่ได้",
     image: `${pathname}charmed.png`,
   },
   {
     name: "Advantage",
-    description: "",
+    description: "ทอยลูกเต๋าได้สองครั้ง โดยที่จะเอาค่าที่มากที่สุด",
     image: `${pathname}advantage.png`,
   },
   {
     name: "Disadvantage",
-    description: "",
+    description: "ทอยลูกเต๋าได้ 1 ครั้ง โดยที่จะเอาค่าที่ต่ำที่สุด",
     image: `${pathname}disadvantage.png`,
   },
 ] as StatusType[];

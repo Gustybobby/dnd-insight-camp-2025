@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 import { TitleBanner } from "@/components/players/components";
 import { StyledLink } from "@/components/ui/link";
-import { cn } from "@/components/utils";
+import { cn, mapNumToAlphabet } from "@/components/utils";
 import Image from "next/image";
 
 export function ActivitySession({ sessionId }: { sessionId: number }) {
@@ -45,7 +45,7 @@ export function ActivitySession({ sessionId }: { sessionId: number }) {
       <div className="absolute left-0 right-0 top-[15%] mx-auto flex w-full flex-col items-center justify-center">
         <div className="w-80">
           <TitleBanner>
-            {currentPlayerId ? `Player ${currentPlayerId} Turn` : "Boss Turn"}
+            {currentPlayerId ? `Player ${mapNumToAlphabet(currentPlayerId)} Turn` : "Boss Turn"}
           </TitleBanner>
         </div>
       </div>

@@ -33,7 +33,8 @@ export default function StaffBattleSessionBoss({
 }) {
   return (
     <div className="w-full p-2">
-      <div className="">
+      <div className="flex w-full flex-col">
+        <h1 className="w-full text-center text-xl font-bold">Boss Stats</h1>
         <div className="grid grid-cols-2">
           {ALL_STAT_TYPES.map((stat) => (
             <StaffBattleSessionBossStatInput
@@ -52,11 +53,11 @@ export default function StaffBattleSessionBoss({
             />
           ))}
         </div>
-        <div className="col-span-2">
-          <h1>Damage Give</h1>
+        <div className="col-span-2 mt-4">
+          <h1 className="w-full text-center text-xl font-bold">
+            Damage Boss Do To Player
+          </h1>
           <StaffBattleSessionBossDamageCalculator
-            label={""}
-            textColorClassName={""}
             bossStats={bossStats}
             damageCalculator={bossDamageToPlayerCalculator}
             setDamageCalculator={setBossDamageToPlayerCalculator}

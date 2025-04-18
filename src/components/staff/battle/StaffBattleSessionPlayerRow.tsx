@@ -2,7 +2,7 @@ import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
 
 import React from "react";
 
-import { cn } from "@/components/utils";
+import { cn, mapNumToAlphabet } from "@/components/utils";
 
 export interface StaffBattleSessionPlayerRowProps {
   player: PlayerWithAllInfo & { order: number };
@@ -31,7 +31,7 @@ export default function StaffBattleSessionPlayerRow({
     >
       <div className="flex w-[200px] flex-row items-center gap-x-4">
         <p>Turn {player.order}</p>
-        <p>Group {player.id}</p>
+        <p>Group {mapNumToAlphabet(player.id)}</p>
         <p className="font-notosansthai">{player.name}</p>
       </div>
       <div>{isCurrentTurn ? "Current Turn" : ""}</div>

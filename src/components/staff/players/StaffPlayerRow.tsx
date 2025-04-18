@@ -5,6 +5,7 @@ import { ALL_STAT_TYPES } from "@/shared/stat";
 import React from "react";
 
 import { STAT_STYLE_MAP } from "@/components/players/style";
+import { mapNumToAlphabet } from "@/components/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -35,11 +36,11 @@ export default function StaffPlayerRow({
   });
   return (
     <Link
-      className="flex w-full flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.02]"
+      className="flex w-full flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.01]"
       href={`staff/players/${id}`}
     >
       <div className="flex flex-row items-center gap-x-4 text-sm font-light">
-        <p className="w-[50px]">Group {id}</p>
+        <p className="w-[50px]">Group {mapNumToAlphabet(id)}</p>
         <p className="w-[100px] truncate overflow-ellipsis font-notosansthai text-sm">
           {name}
         </p>

@@ -54,6 +54,7 @@ import StaffBattlePlayersInfo from "./StaffBattleSessionPlayersInfo";
 import StaffBattleSessionPlayerStatusTab from "./StaffBattleSessionPlayerStatusTab";
 import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
 import { fetchAllPlayersInfo } from "@/bff/api/players.api";
+import { mapNumToAlphabet } from "@/components/utils";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -93,7 +94,13 @@ export default function StaffBattleSession({
   const endBossMutation = useMutation({
     mutationFn: () => bossEndTurn({ playerId: 1, sessionId: sessionId }),
     onSuccess: async () => {
-      await refetchActivitySession();
+      Promise.all([refetchActivitySession(), refetchAllPlayerInfos])
+        .then(() => {
+          console.log("success!");
+        })
+        .catch((e) => {
+          alert(`An error has occurred refetching data: ${e}`);
+        });
     },
   });
 
@@ -101,7 +108,13 @@ export default function StaffBattleSession({
     mutationFn: ({ playerId }: { playerId: number }) =>
       endTurn({ playerId: playerId, sessionId: sessionId }),
     onSuccess: async () => {
-      await refetchActivitySession();
+      Promise.all([refetchActivitySession(), refetchAllPlayerInfos])
+        .then(() => {
+          console.log("success!");
+        })
+        .catch((e) => {
+          alert(`An error has occurred refetching data: ${e}`);
+        });
     },
   });
 
@@ -336,7 +349,7 @@ export default function StaffBattleSession({
               onClick={() => handleEndPlayerTurn()}
             >
               {currentPlayerId
-                ? `End Group ${currentPlayerId} Turn`
+                ? `End Group ${mapNumToAlphabet(currentPlayerId)} Turn`
                 : `End Group Turn`}
             </StyledButton>
             <StyledButton
@@ -358,7 +371,11 @@ export default function StaffBattleSession({
               {
                 label: "Status",
                 node: (
-                  <StaffBattleSessionPlayerStatusTab player={players?.[0]} />
+                  <StaffBattleSessionPlayerStatusTab
+                    player={players?.find(
+                      (player) => player.id === selectedPlayerId,
+                    )}
+                  />
                 ),
                 modal: <></>,
               },
@@ -373,7 +390,7 @@ export default function StaffBattleSession({
                 modal: <></>,
               },
             ]}
-            defaultTab={""}
+            defaultTab={"Status"}
             className={"h-full"}
           />
         </div>
@@ -394,7 +411,7 @@ export default function StaffBattleSession({
               modal: <></>,
             },
             {
-              label: "PlayerStats",
+              label: "Player",
               node: (
                 <StaffPlayerStats
                   playerStats={ALL_STAT_TYPES.map(
