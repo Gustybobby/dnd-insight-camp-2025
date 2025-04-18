@@ -5,8 +5,8 @@ import { cn } from "@/components/utils";
 export default function StaffBattleSessionPlayerTabs({
   tabs,
   defaultTab,
-  isModalOpen,
-  setIsModalOpen,
+  // isModalOpen,
+  // setIsModalOpen,
   className,
 }: {
   tabs: {

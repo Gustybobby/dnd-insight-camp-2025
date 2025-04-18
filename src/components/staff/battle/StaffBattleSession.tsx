@@ -1,64 +1,45 @@
 "use client";
 
-// import type { StatTypeEnum } from "@/server/domain/models";
-// import type { ModEffectCreate } from "@/server/domain/models/effect.model";
+import type { ActivitySessionAllInfo } from "@/server/domain/aggregates";
+import type {
+  Item,
+  ModEffectCreate,
+  Skill,
+  StatTypeEnum,
+} from "@/server/domain/models";
+import type { OnSubmitSkillInput } from "../players/PlayerCharacterStaff";
 
-// import { ALL_STAT_TYPES } from "@/shared/stat";
+import { ALL_STAT_TYPES } from "@/shared/stat";
 
-// import { createModEffect } from "@/server/controllers/effect.controller";
-// import {
-//   addPlayerItem,
-//   getAllItems,
-// } from "@/server/controllers/items.controller";
 import {
   bossEndTurn,
   endTurn,
   getActivitySession,
 } from "@/server/controllers/activity.controller";
-import { getAllPlayersInfo } from "@/server/controllers/player.controller";
-
-// import ItemModal from "../players/ItemModal";
-// import SkillModal from "../players/SkillModal";
-// import StaffPlayerSkills from "../players/StaffPlayerSkills";
-// import { StaffPlayerStats } from "../players/StaffPlayerStats";
-import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-
-// import { PlayerWithAllInfo } from "@/server/domain/aggregates";
-import StaffBattlePlayersInfo from "./StaffBattleSessionPlayersInfo";
-// import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
-// import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
-import Link from "next/link";
-import TopNav from "../TopNav";
-import StyledButton from "../StyledButton";
-import { StaffPlayerUtils } from "../players/StaffPlayerUtils";
-import { ALL_STAT_TYPES } from "@/shared/stat";
-import ItemModal from "../players/ItemModal";
-import SkillModal from "../players/SkillModal";
-import StaffPlayerSkills from "../players/StaffPlayerSkills";
-import { StaffPlayerStats } from "../players/StaffPlayerStats";
-import {
-  ActivitySessionAllInfo,
-  PlayerWithAllInfo,
-} from "@/server/domain/aggregates";
 import { createModEffect } from "@/server/controllers/effect.controller";
 import {
   addPlayerItem,
   getAllItems,
 } from "@/server/controllers/items.controller";
+import { getAllPlayersInfo } from "@/server/controllers/player.controller";
 import {
-  getAllSkills,
   addPlayerSkill,
+  getAllSkills,
 } from "@/server/controllers/skill.controller";
-import {
-  ModEffectCreate,
-  StatTypeEnum,
-  Item,
-  Skill,
-} from "@/server/domain/models";
+
+import { useState } from "react";
 import React from "react";
-import { OnSubmitSkillInput } from "../players/PlayerCharacterStaff";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
+import ItemModal from "../players/ItemModal";
+import SkillModal from "../players/SkillModal";
 import StaffPlayerItems from "../players/StaffPlayerItems";
+import StaffPlayerSkills from "../players/StaffPlayerSkills";
+import { StaffPlayerStats } from "../players/StaffPlayerStats";
+import { StaffPlayerUtils } from "../players/StaffPlayerUtils";
+import StyledButton from "../StyledButton";
+import TopNav from "../TopNav";
+import StaffBattlePlayersInfo from "./StaffBattleSessionPlayersInfo";
 import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
 
 export interface OnSubmitItemInput {
@@ -68,26 +49,19 @@ export interface OnSubmitItemInput {
 
 export default function StaffBattleSession({
   sessionId,
-  // players
 }: {
   sessionId: number;
-  // players: PlayerWithAllInfo[];
 }) {
   //Stats
-  //Items
   const endBossMutation = useMutation({
     mutationFn: () => bossEndTurn({ playerId: 1, sessionId: sessionId }),
-    onSuccess: () => {
-      // Refetch the items or update the state to reflect the new item
-    },
+    onSuccess: () => {},
   });
 
   const endPlayerTurnMutation = useMutation({
     mutationFn: ({ playerId }: { playerId: number }) =>
       endTurn({ playerId: playerId, sessionId: sessionId }),
-    onSuccess: () => {
-      // Refetch the items or update the state to reflect the new item
-    },
+    onSuccess: () => {},
   });
 
   const { data: activitySession } = useQuery({
@@ -250,12 +224,11 @@ export default function StaffBattleSession({
   };
 
   const handleSessionPlayerRowClick = (playerId: number) => {
-    console.log("Clicking");
     console.log(playerId);
     setSelectedPlayerId(playerId);
   };
 
-  console.log("current player id", currentPlayerId);
+  console.log("Current player id", currentPlayerId);
 
   return (
     <div className="flex w-full flex-col">
@@ -266,17 +239,15 @@ export default function StaffBattleSession({
             <StaffBattlePlayersInfo
               players={players}
               selectedPlayerId={selectedPlayerId}
-              setSelectedPlayerId={setSelectedPlayerId}
               activitySession={activitySession}
               onSessionPlayerRowClick={handleSessionPlayerRowClick}
               currentPlayerId={currentPlayerId ?? -1}
             />
             <StyledButton
-              className=" "
               disabled={activitySession?.currentTurnId === null}
               onClick={() => handleEndPlayerTurn()}
             >
-              End Player's Turn
+              End Player Turn
             </StyledButton>
             <StyledButton
               className={`${activitySession?.currentTurnId === 1}`}
@@ -292,8 +263,14 @@ export default function StaffBattleSession({
               End Battle
             </StyledButton>
           </div>
+          {/* Not necessary but is good to have */}
           <StaffBattleSessionPlayerTabs
             tabs={[
+              {
+                label: "Status",
+                node: <></>,
+                modal: <></>,
+              },
               {
                 label: "Equipment",
                 node: <></>,
@@ -301,11 +278,6 @@ export default function StaffBattleSession({
               },
               {
                 label: "Inventory",
-                node: <></>,
-                modal: <></>,
-              },
-              {
-                label: "Stat",
                 node: <></>,
                 modal: <></>,
               },

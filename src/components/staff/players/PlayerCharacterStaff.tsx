@@ -27,8 +27,8 @@ import StaffPlayerSkills from "./StaffPlayerSkills";
 import { StaffPlayerStats } from "./StaffPlayerStats";
 import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
 import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
 export interface OnSubmitItemInput {
   itemId: number;

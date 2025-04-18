@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { BUTTON_CLASSNAME_STYLE } from "./style";
 import { cn } from "@/components/utils";
 import Link from "next/link";
 
@@ -40,7 +41,9 @@ export default function StaffDashboard({
       <div className="relative flex h-full w-full overflow-scroll bg-center">
         {tabs.find((tab) => tab.label === active)?.node}
       </div>
-      <Link href={"/"}>Go Back to Home</Link>
+      <Link className={BUTTON_CLASSNAME_STYLE} href={"/"}>
+        Go Back to Home
+      </Link>
     </div>
   );
 }

@@ -1,8 +1,4 @@
-import type { PlayerStat } from "@/server/domain/models";
-
 import React from "react";
-
-import Image from "next/image";
 
 interface StaffCreateBattleBossRowProps {
   maxTurn: number;

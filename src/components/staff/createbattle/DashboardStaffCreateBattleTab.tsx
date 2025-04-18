@@ -11,9 +11,9 @@ import {
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import StaffCreateBattleRow from "./StaffCreateBattlePlayerRow";
 import StyledButton from "../StyledButton";
 import StaffCreateBattleBossRow from "./StaffCreateBattleBossRow";
+import StaffCreateBattleRow from "./StaffCreateBattlePlayerRow";
 
 interface UpsertPlayerMutationType {
   sessionId: number;

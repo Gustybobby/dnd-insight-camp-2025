@@ -12,9 +12,6 @@ export interface StaffBattlePlayersInfoProps {
   activitySession: ActivitySessionAllInfo | undefined | null;
   onSessionPlayerRowClick: (playerId: number) => void;
   selectedPlayerId: number | null;
-  setSelectedPlayerId:
-    | React.Dispatch<React.SetStateAction<number | null>>
-    | React.Dispatch<React.SetStateAction<number>>;
     currentPlayerId: number;
 }
 
@@ -22,7 +19,6 @@ export default function StaffBattlePlayersInfo({
   players,
   selectedPlayerId,
   activitySession,
-  setSelectedPlayerId,
   onSessionPlayerRowClick,
   currentPlayerId
 }: StaffBattlePlayersInfoProps) {
@@ -36,11 +32,11 @@ export default function StaffBattlePlayersInfo({
     <div className="w-ful flex flex-col">
       <div className="flex w-full justify-center text-black bg-cream py-2 mt-2 border-2 border-oldcream rounded-xl">
         {activitySession?.currentTurnId === null
-          ? "Boss's Turn"
-          : `Group ${currentPlayerId}'s Turn`}
+          ? "Boss Turn"
+          : `Group ${currentPlayerId} Turn`}
       </div>
       <div className="flex w-full flex-col gap-y-2 pt-2">
-        {players?.map((player, idx) => {
+        {players?.map((player) => {
           const isCurrentTurn =
             activitySession?.currentTurnId ===
             activitySession?.turns.find((turn) => turn.playerId === player.id)

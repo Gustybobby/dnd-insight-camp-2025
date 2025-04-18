@@ -1,8 +1,9 @@
-import { InfoBadge } from "@/components/players/details/inventory";
-import { STAT_STYLE_MAP } from "@/components/players/style";
 import type { Item, StatTypeEnum } from "@/server/domain/models";
 
 import React from "react";
+
+import { InfoBadge } from "@/components/players/details/inventory";
+import { STAT_STYLE_MAP } from "@/components/players/style";
 
 function ItemModal({
   item,

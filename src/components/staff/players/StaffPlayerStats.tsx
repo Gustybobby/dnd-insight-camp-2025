@@ -1,9 +1,9 @@
 import type { PlayerStat } from "@/server/domain/models";
 
-import { StatChanger } from "./components";
-import { STAT_TEXT_STYLE_MAP } from "./style";
-import { STAT_STYLE_MAP } from "@/components/players/style";
+import { STAT_TEXT_STYLE_MAP } from "../style";
 import StyledButton from "../StyledButton";
+import { StatChanger } from "./components";
+import { STAT_STYLE_MAP } from "@/components/players/style";
 
 export function StaffPlayerStats({
   playerStats,
