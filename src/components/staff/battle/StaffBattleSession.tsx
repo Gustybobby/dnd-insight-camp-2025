@@ -2,12 +2,16 @@
 
 import type { ActivitySessionAllInfo } from "@/server/domain/aggregates";
 import type {
+  EffectTypeEnum,
   Item,
   ModEffectCreate,
   Skill,
   StatTypeEnum,
 } from "@/server/domain/models";
+import type {
+  StatusType} from "../constants";
 import type { OnSubmitSkillInput } from "../players/PlayerCharacterStaff";
+import type { statLowerCaseType } from "./type";
 
 import { ALL_STAT_TYPES } from "@/shared/stat";
 
@@ -17,7 +21,10 @@ import {
   getActivitySession,
   updateActivitySession,
 } from "@/server/controllers/activity.controller";
-import { createModEffect } from "@/server/controllers/effect.controller";
+import {
+  createModEffect,
+  createVisualEffect,
+} from "@/server/controllers/effect.controller";
 import {
   addPlayerItem,
   getAllItems,
@@ -32,26 +39,35 @@ import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 
+import {
+  DEFAULT_ITEM_AMOUNT,
+  DEFAULT_SKILL_USES
+} from "../constants";
 import ItemModal from "../players/ItemModal";
 import SkillModal from "../players/SkillModal";
 import StaffPlayerItems from "../players/StaffPlayerItems";
 import StaffPlayerSkills from "../players/StaffPlayerSkills";
 import { StaffPlayerStats } from "../players/StaffPlayerStats";
+import StaffPlayerStatuses from "../players/StaffPlayerStatuses";
 import { StaffPlayerUtils } from "../players/StaffPlayerUtils";
+import StatusModal from "../players/StatusModal";
 import StyledButton from "../StyledButton";
 import TopNav from "../TopNav";
+import StaffBattleSessionBoss from "./StaffBattleSessionBoss";
 import StaffBattlePlayersInfo from "./StaffBattleSessionPlayersInfo";
+import StaffBattleSessionPlayerStatusTab from "./StaffBattleSessionPlayerStatusTab";
 import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
 import { fetchAllPlayersInfo } from "@/bff/api/players.api";
-import { DEFAULT_ITEM_AMOUNT, DEFAULT_SKILL_USES } from "../constants";
-import StaffBattleSessionBoss from "./StaffBattleSessionBoss";
-import StaffBattleSessionPlayerStatusTab from "./StaffBattleSessionPlayerStatusTab";
-import StaffPlayerStatuses from "../players/StaffPlayerStatuses";
-import { statLowerCaseType } from "./type";
 
 export interface OnSubmitItemInput {
   itemId: number;
   amount: number;
+}
+
+export interface onSubmitStatusInput {
+  effectType: EffectTypeEnum;
+  playerIds: number[];
+  countdown: number;
 }
 
 export interface EndBattleMutationType {
@@ -153,6 +169,11 @@ export default function StaffBattleSession({
     onSuccess: () => {},
   });
 
+  const createVFXMutation = useMutation({
+    mutationFn: createVisualEffect,
+    onSuccess: () => {},
+  });
+
   const onStatSubmit = async (
     stats: { stat: StatTypeEnum; value: number }[],
   ) => {
@@ -228,6 +249,15 @@ export default function StaffBattleSession({
     skillMutation.mutate({ skillId, remainingUses });
   };
 
+  const onStatusSubmit = async ({
+    effectType,
+    playerIds,
+    countdown,
+  }: onSubmitStatusInput) => {
+    console.log(effectType, playerIds, countdown);
+    createVFXMutation.mutate({ effectType, playerIds, countdown });
+  };
+
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
 
   const openModal = ({
@@ -235,7 +265,7 @@ export default function StaffBattleSession({
     data,
   }: {
     label: string;
-    data: Item | Skill;
+    data: Item | Skill | StatusType;
   }) => {
     if (label === "Item") {
       setItem(data as Item);
@@ -243,11 +273,15 @@ export default function StaffBattleSession({
     if (label === "Skill") {
       setSkill(data as Skill);
     }
+    if (label === "Status") {
+      setStatusType(data as StatusType);
+    }
     setModalIsOpen(true);
   };
 
   const [item, setItem] = React.useState<Item | null>(null);
   const [skill, setSkill] = React.useState<Skill | null>(null);
+  const [statusType, setStatusType] = React.useState<StatusType | null>(null);
 
   const handleEndBossTurn = () => {
     endBossMutation.mutate();
@@ -270,7 +304,7 @@ export default function StaffBattleSession({
   };
 
   console.log("Current player id", currentPlayerId);
-
+  console.log("Selected player id", selectedPlayerId);
   console.log(activitySession);
 
   const [bossStats, setBossStats] = useState<BossStatsStateType>({
@@ -282,11 +316,12 @@ export default function StaffBattleSession({
   });
   const [bossDamageToPlayerCalculator, setBossDamageToPlayerCalculator] =
     useState<DamageCalculator>({
-      stat:"str",
+      stat: "str",
       roll: "1",
-      multiply: "1.5"
+      multiply: "1.5",
     });
-  const [playerDamageToBoss, setPlayerDamageToBoss] = useState<number>(0);
+
+  // const [playerDamageToBoss, setPlayerDamageToBoss] = useState<number>(0);
   return (
     <div className="flex w-full flex-col">
       <TopNav backLink="/staff" title={`Battle Session ${sessionId}`} />
@@ -326,7 +361,11 @@ export default function StaffBattleSession({
             tabs={[
               {
                 label: "Status",
-                node: <StaffBattleSessionPlayerStatusTab />,
+                node: (
+                  <StaffBattleSessionPlayerStatusTab
+                    player={players?.[0]}
+                  />
+                ),
                 modal: <></>,
               },
               {
@@ -429,21 +468,17 @@ export default function StaffBattleSession({
             },
             {
               label: "Status",
-              node: (
-                <StaffPlayerStatuses
-                  skills={null}
-                  onClickSkill={function ({
-                    label,
-                    data,
-                  }: {
-                    label: string;
-                    data: Skill;
-                  }): void {
-                    throw new Error("Function not implemented.");
-                  }}
+              node: <StaffPlayerStatuses onClickStatus={openModal} />,
+              modal: (
+                <StatusModal
+                  selectedPlayerId={selectedPlayerId}
+                  status={statusType}
+                  modalOpen={modalIsOpen}
+                  closeModal={() => setModalIsOpen(false)}
+                  onSubmit={onStatusSubmit}
+                  submitButtonText={"Give Status"}
                 />
               ),
-              modal: <></>,
             },
           ]}
           defaultTab="Boss"

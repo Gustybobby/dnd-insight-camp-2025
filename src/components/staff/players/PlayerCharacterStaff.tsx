@@ -23,6 +23,7 @@ import {
 import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+import { DEFAULT_ITEM_AMOUNT, DEFAULT_SKILL_USES } from "../constants";
 import ItemModal from "./ItemModal";
 import SkillModal from "./SkillModal";
 import StaffPlayerItem from "./StaffPlayerItems";
@@ -32,7 +33,6 @@ import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
 import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
 import Image from "next/image";
 import Link from "next/link";
-import { DEFAULT_ITEM_AMOUNT, DEFAULT_SKILL_USES } from "../constants";
 
 export interface OnSubmitItemInput {
   itemId: number;

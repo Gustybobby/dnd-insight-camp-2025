@@ -1,22 +1,21 @@
-import type { Skill } from "@/server/domain/models";
+import type { StatusType} from "../constants";
 
-import { SkillCard } from "./components";
+import { VISUAL_EFFECT_LISTS } from "../constants";
+import { StatusCard } from "./components";
 
-export default function StaffPlayerSkills({
-  onClickSkill,
-  skills,
+export default function StaffPlayerStatuses({
+  onClickStatus,
 }: {
-  skills: Skill[] | null;
-  onClickSkill: ({ label, data }: { label: string; data: Skill }) => void;
+  onClickStatus: ({ label, data }: { label: string; data: StatusType }) => void;
 }) {
   return (
     <div className="flex flex-col gap-y-1 p-2">
-      {skills?.map((skill) => {
+      {VISUAL_EFFECT_LISTS?.map((status) => {
         return (
-          <SkillCard
-            key={`skillcard-${skill.id}`}
-            skill={skill}
-            onClick={() => onClickSkill({ label: "Skill", data: skill })}
+          <StatusCard
+            key={`status-${status.name.toLowerCase()}`}
+            status={status}
+            onClick={() => onClickStatus({ label: "Status", data: status })}
           />
         );
       })}

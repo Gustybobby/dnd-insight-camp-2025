@@ -14,6 +14,7 @@ export function StaffPlayerStats({
 }) {
   return (
     <div className="p-2">
+      
       <div className="flex flex-col gap-4">
         {playerStats.map((stat) => (
           <StatChanger

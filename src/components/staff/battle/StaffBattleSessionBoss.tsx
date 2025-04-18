@@ -1,20 +1,24 @@
-import { STAT_STYLE_MAP } from "@/components/players/style";
+import type {
+  BossStatsStateType,
+  DamageCalculator,
+} from "./StaffBattleSession";
+import type { statLowerCaseType } from "./type";
+
 import { ALL_STAT_TYPES } from "@/shared/stat";
+
 import { STAT_TEXT_STYLE_MAP } from "../style";
 import StaffBattleSessionBossStatInput, {
   StaffBattleSessionBossDamageCalculator,
 } from "./components";
-import { BossStatsStateType, DamageCalculator } from "./StaffBattleSession";
-import { statLowerCaseType } from "./type";
-import { SetStateAction } from "react";
+import { STAT_STYLE_MAP } from "@/components/players/style";
 
 export default function StaffBattleSessionBoss({
   bossStats,
   setBossStats,
   bossDamageToPlayerCalculator,
   setBossDamageToPlayerCalculator,
-  playerDamageToBossCalculator,
-  setPlayerDamageToBossCalculator,
+  // playerDamageToBossCalculator,
+  // setPlayerDamageToBossCalculator,
 }: {
   bossStats: BossStatsStateType;
   setBossStats: React.Dispatch<React.SetStateAction<BossStatsStateType>>;
@@ -22,10 +26,10 @@ export default function StaffBattleSessionBoss({
   setBossDamageToPlayerCalculator: React.Dispatch<
     React.SetStateAction<DamageCalculator>
   >;
-  playerDamageToBossCalculator?: DamageCalculator;
-  setPlayerDamageToBossCalculator?: React.Dispatch<
-    React.SetStateAction<DamageCalculator>
-  >;
+  // playerDamageToBossCalculator?: DamageCalculator;
+  // setPlayerDamageToBossCalculator?: React.Dispatch<
+  //   React.SetStateAction<DamageCalculator>
+  // >;
 }) {
   return (
     <div className="w-full p-2">
@@ -52,10 +56,7 @@ export default function StaffBattleSessionBoss({
           <h1>Damage Give</h1>
           <StaffBattleSessionBossDamageCalculator
             label={""}
-            iconSrc={""}
-            colorClassName={""}
             textColorClassName={""}
-            type={"hp"}
             bossStats={bossStats}
             damageCalculator={bossDamageToPlayerCalculator}
             setDamageCalculator={setBossDamageToPlayerCalculator}

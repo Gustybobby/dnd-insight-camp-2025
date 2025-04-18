@@ -1,11 +1,14 @@
-import { cn } from "@/components/utils";
+import type {
+  BossStatsStateType,
+  DamageCalculator,
+} from "./StaffBattleSession";
+import type { statLowerCaseType } from "./type";
+
 import React from "react";
-import Image from "next/image";
-import { BossStatsStateType, DamageCalculator } from "./StaffBattleSession";
-import { statLowerCaseType } from "./type";
-import { STAT_STYLE_MAP } from "@/components/players/style";
-import { STAT_TEXT_STYLE_MAP } from "../style";
+
 import { STATS_ARRAY_LOWERCASE } from "../constants";
+import { cn } from "@/components/utils";
+import Image from "next/image";
 
 export default function StaffBattleSessionBossStatInput({
   label,
@@ -54,9 +57,11 @@ export default function StaffBattleSessionBossStatInput({
           name={type}
           value={bossStats[type]}
           onChange={(e) => {
+            let numValue = parseInt(e.target.value);
+            if (isNaN(numValue)) numValue = 0;
             setBossStats({
               ...bossStats,
-              [type]: e.target.value,
+              [type]: numValue,
             });
           }}
           required
@@ -69,20 +74,14 @@ export default function StaffBattleSessionBossStatInput({
 export function StaffBattleSessionBossDamageCalculator({
   name,
   label,
-  iconSrc,
-  colorClassName,
   textColorClassName,
-  type,
   damageCalculator,
   setDamageCalculator,
   bossStats,
 }: {
   name?: string;
   label: string;
-  iconSrc: string;
-  colorClassName: string;
   textColorClassName: string;
-  type: statLowerCaseType;
   damageCalculator: DamageCalculator;
   setDamageCalculator: React.Dispatch<React.SetStateAction<DamageCalculator>>;
   bossStats: BossStatsStateType;
@@ -92,8 +91,13 @@ export function StaffBattleSessionBossDamageCalculator({
     multiply: string,
     statValue?: number,
   ) => {
+    console.log("Calculate Damage : ", roll, multiply, statValue);
+    console.log("Boss Stat", bossStats);
     const numRoll = parseInt(roll);
     const numMultiply = parseFloat(multiply);
+    if (isNaN(numRoll) || isNaN(numMultiply)) {
+      return 0;
+    }
     if (!statValue) return numRoll * numMultiply;
 
     return numRoll * numMultiply + statValue;
@@ -114,10 +118,18 @@ export function StaffBattleSessionBossDamageCalculator({
               name={`${name}_roll_input`}
               value={damageCalculator.roll}
               onChange={(e) => {
-                setDamageCalculator({
-                  ...damageCalculator,
-                  roll: e.target.value,
-                });
+                const numRoll = parseInt(e.target.value);
+                if (!isNaN(numRoll)) {
+                  setDamageCalculator({
+                    ...damageCalculator,
+                    roll: e.target.value,
+                  });
+                } else {
+                  setDamageCalculator({
+                    ...damageCalculator,
+                    roll: "",
+                  });
+                }
               }}
               required
             />
@@ -160,13 +172,15 @@ export function StaffBattleSessionBossDamageCalculator({
               required
             >
               {STATS_ARRAY_LOWERCASE.map((stat) => (
-                <option value={stat}>{stat}</option>
+                <option key={`option-${stat}`} value={stat}>
+                  {stat}
+                </option>
               ))}
             </select>
           </div>
           <p className="flex items-center justify-center">=</p>
           <p className="flex items-center justify-center">
-            {damageCalculator.stat
+            {damageCalculator.stat === null
               ? calculateDamage(
                   damageCalculator.roll,
                   damageCalculator.multiply,

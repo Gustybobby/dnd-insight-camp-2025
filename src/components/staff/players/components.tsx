@@ -1,6 +1,7 @@
 import type { PlayerItemWithInfo } from "@/server/domain/aggregates/player-item.aggregate";
 import type { Skill } from "@/server/domain/models";
 import type { StatTypeEnum } from "@/server/domain/models/player-stat.model";
+import type { StatusType } from "../constants";
 
 import React, { useEffect, useRef } from "react";
 
@@ -159,8 +160,8 @@ export function StatusCard({
   status,
   onClick,
 }: {
-  status: Skill;
-  onClick: (status: Skill) => void;
+  status: StatusType;
+  onClick: (status: StatusType) => void;
 }) {
   return (
     <div
