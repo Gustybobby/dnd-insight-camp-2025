@@ -7,6 +7,7 @@ import type {
   IGetActivitySessionsUseCase,
   IGetActivitySessionUseCase,
   IGetAllActivitiesUseCase,
+  IUpdateActivitySessionUseCase,
   IUpsertSessionTurnUseCase,
 } from "@/server/applications/interfaces/usecases/activity";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
@@ -24,6 +25,7 @@ import {
   GetActivitySessionsUseCase,
   GetActivitySessionUseCase,
   GetAllActivitiesUseCase,
+  UpdateActivitySessionUseCase,
   UpsertSessionTurnUseCase,
 } from "@/server/applications/usecases/activity";
 import { EndTurnUseCase } from "@/server/applications/usecases/activity/end-turn.usecase";
@@ -84,6 +86,20 @@ export async function createActivitySession(
     activityRepo,
   );
   return createActivitySessionUseCase.invoke(params).catch((error) => {
+    console.error(error);
+    return null;
+  });
+}
+
+export async function updateActivitySession(
+  params: UseCaseParams<IUpdateActivitySessionUseCase>,
+): Promise<UseCaseReturn<IUpdateActivitySessionUseCase> | null> {
+  await authService.authStaff();
+
+  const updateActivitySessionUseCase = new UpdateActivitySessionUseCase(
+    activityRepo,
+  );
+  return updateActivitySessionUseCase.invoke(params).catch((error) => {
     console.error(error);
     return null;
   });
