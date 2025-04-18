@@ -3,6 +3,7 @@ import type { ActivitySessionAllInfo } from "@/server/domain/aggregates";
 import type {
   Activity,
   ActivitySession,
+  ActivitySessionUpdate,
   SessionTurn,
 } from "@/server/domain/models";
 
@@ -89,6 +90,21 @@ export class ActivityRepository implements IActivityRepository {
     return db
       .insert(activitySessionsTable)
       .values({ activityId, bossTurnOrder: 1 })
+      .returning()
+      .then(takeOneOrThrow);
+  }
+
+  async updateSession({
+    sessionId,
+    data,
+  }: {
+    sessionId: ActivitySession["id"];
+    data: ActivitySessionUpdate;
+  }): Promise<ActivitySession> {
+    return db
+      .update(activitySessionsTable)
+      .set(data)
+      .where(eq(activitySessionsTable.id, sessionId))
       .returning()
       .then(takeOneOrThrow);
   }

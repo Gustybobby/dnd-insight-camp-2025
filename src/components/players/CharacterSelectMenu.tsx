@@ -2,8 +2,9 @@
 
 import { getAllCharacters } from "@/server/controllers/character.controller";
 import {
-  chooseCharacter,
+  getPlayer,
   getPlayerCharacter,
+  updatePlayer,
 } from "@/server/controllers/player.controller";
 
 import { useRef, useState } from "react";
@@ -32,10 +33,11 @@ export function CharacterSelectMenu({
     queryFn: async () => await getAllCharacters(),
   });
 
-  const { data: playerCharacter, refetch: refetchPlayer } = useQuery({
+  const { data, refetch: refetchPlayer } = useQuery({
     refetchOnMount: false,
     queryKey: ["getPlayerCharacter", playerId, characters],
     queryFn: async () => {
+      const player = await getPlayer({ playerId });
       const playerCharacter = await getPlayerCharacter({ playerId });
       if (characters && playerCharacter && currentIdx === null) {
         const initialIdx = characters.findIndex(
@@ -44,12 +46,18 @@ export function CharacterSelectMenu({
         prevIdxRef.current = initialIdx;
         setCurrentIdx(initialIdx);
       }
-      return playerCharacter;
+      return { player, playerCharacter };
     },
     refetchInterval: 5000,
   });
 
-  const chooseCharacterMutation = useMutation({ mutationFn: chooseCharacter });
+  const updatePlayerMutation = useMutation({ mutationFn: updatePlayer });
+
+  if (!data) {
+    return null;
+  }
+
+  const { player, playerCharacter } = data;
 
   if (currentIdx === null) {
     return null;
@@ -70,7 +78,7 @@ export function CharacterSelectMenu({
 
   const character = characters?.[currentIdx];
 
-  if (!character) {
+  if (!character || !player) {
     return null;
   }
 
@@ -81,10 +89,32 @@ export function CharacterSelectMenu({
       <div className="absolute left-0 right-0 top-[15%] mx-auto flex w-full flex-col items-center justify-center">
         <div className="w-80">
           <TitleBanner>
-            <p className="font-[family-name:var(--noto-sans-thai)]">
-              {character.name}
-            </p>
+            <input
+              id={"player_name"}
+              className="w-40 rounded-md border border-black bg-transparent text-center font-[family-name:var(--noto-sans-thai)]"
+              defaultValue={player.name}
+            />
           </TitleBanner>
+          <div className="-mt-6 flex w-full justify-center">
+            <StyledLink
+              href="#"
+              onClick={async () => {
+                await updatePlayerMutation.mutateAsync({
+                  playerId,
+                  data: {
+                    name: (
+                      document.getElementById(
+                        "player_name",
+                      ) as HTMLInputElement | null
+                    )?.value,
+                  },
+                });
+                await refetchPlayer();
+              }}
+            >
+              Save Name
+            </StyledLink>
+          </div>
         </div>
       </div>
 
@@ -126,9 +156,9 @@ export function CharacterSelectMenu({
               if (isCharacterChosen) {
                 return;
               }
-              await chooseCharacterMutation.mutateAsync({
+              await updatePlayerMutation.mutateAsync({
                 playerId,
-                characterId: character.id,
+                data: { characterId: character.id },
               });
               await refetchPlayer();
             }}

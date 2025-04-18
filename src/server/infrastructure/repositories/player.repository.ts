@@ -10,6 +10,7 @@ import type {
   PlayerCreate,
   PlayerStat,
   PlayerStatLogCreate,
+  PlayerUpdate,
   User,
 } from "@/server/domain/models";
 
@@ -122,16 +123,16 @@ export class PlayerRepository implements IPlayerRepository {
       .then(takeOneOrThrow);
   }
 
-  async updateCharacter({
+  async update({
     playerId,
-    characterId,
+    data,
   }: {
     playerId: Player["id"];
-    characterId: Character["id"];
+    data: PlayerUpdate;
   }): Promise<void> {
     await db
       .update(playersTable)
-      .set({ characterId })
+      .set(data)
       .where(eq(playersTable.id, playerId));
   }
 

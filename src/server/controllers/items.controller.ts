@@ -31,15 +31,10 @@ const sessionService = new SessionService();
 
 const authService = new AuthService(playerRepo, staffRepo, sessionService);
 
-const getAllItemsUseCase = new GetAllItemsUseCase(itemRepo);
-const addPlayerItemUseCase = new AddPlayerItemUseCase(itemRepo);
-const deletePlayerItemUseCase = new DeletePlayerItemUseCase(itemRepo);
-const addItemUseCase = new AddItemUseCase(itemRepo);
-const deleteItemUseCase = new DeleteItemUseCase(itemRepo);
-
 export async function getAllItems(): Promise<UseCaseReturn<IGetAllItemsUseCase> | null> {
   await authService.authStaff();
 
+  const getAllItemsUseCase = new GetAllItemsUseCase(itemRepo);
   return getAllItemsUseCase.invoke().catch((error) => {
     console.error(error);
     return null;
@@ -51,6 +46,7 @@ export async function addPlayerItem(
 ): Promise<UseCaseReturn<IAddPlayerItemUseCase> | null> {
   await authService.authStaff();
 
+  const addPlayerItemUseCase = new AddPlayerItemUseCase(itemRepo);
   return addPlayerItemUseCase
     .invoke({ data: PlayerItem.parse(params.data) })
     .catch((error) => {
@@ -65,6 +61,7 @@ export async function deletePlayerItem({
 }: UseCaseParams<IDeletePlayerItemUseCase>): Promise<UseCaseReturn<IDeletePlayerItemUseCase> | null> {
   await authService.authStaff();
 
+  const deletePlayerItemUseCase = new DeletePlayerItemUseCase(itemRepo);
   return deletePlayerItemUseCase.invoke({ playerId, itemId }).catch((error) => {
     console.error(error);
     return null;
@@ -76,6 +73,7 @@ export async function addItem(
 ): Promise<UseCaseReturn<IAddItemUseCase> | null> {
   await authService.authStaff();
 
+  const addItemUseCase = new AddItemUseCase(itemRepo);
   return addItemUseCase
     .invoke({ data: ItemCreate.parse(params.data) })
     .catch((error) => {
@@ -89,6 +87,7 @@ export async function deleteItem({
 }: UseCaseParams<IDeleteItemUseCase>): Promise<UseCaseReturn<IDeleteItemUseCase> | null> {
   await authService.authStaff();
 
+  const deleteItemUseCase = new DeleteItemUseCase(itemRepo);
   return deleteItemUseCase.invoke({ itemId }).catch((error) => {
     console.error(error);
     return null;

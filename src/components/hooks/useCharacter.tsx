@@ -4,19 +4,11 @@ import type { Player, PlayerStat } from "@/server/domain/models";
 import type { Popper, PopupData } from "@/components/hooks/usePopupEffect";
 
 import {
-  getPlayerEquipments,
   playerEquipEquipment,
   playerRemoveEquipment,
 } from "@/server/controllers/equipment.controller";
-import {
-  getPlayerCharacter,
-  getPlayerItems,
-  getPlayerStats,
-} from "@/server/controllers/player.controller";
-import {
-  getAllPlayerSkills,
-  playerUseSkill,
-} from "@/server/controllers/skill.controller";
+import { getPlayerAllInfo } from "@/server/controllers/player.controller";
+import { playerUseSkill } from "@/server/controllers/skill.controller";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -37,22 +29,18 @@ export function useCharacter({
       ?.getBoundingClientRect();
   }
 
-  const { data: character } = useQuery({
-    queryKey: ["getPlayerCharacter", playerId],
-    queryFn: async () => await getPlayerCharacter({ playerId }),
-  });
-
-  const { data: playerStats, refetch: refetchStats } = useQuery({
-    queryKey: ["getPlayerStats", playerId],
+  const { data: playerAllInfo, refetch } = useQuery({
+    queryKey: ["getPlayerAllInfo", playerId],
     queryFn: async () => {
-      const newPlayerStats = await getPlayerStats({ playerId });
+      const allInfo = await getPlayerAllInfo({ playerId });
+      const newPlayerStats = allInfo?.stats;
       const rect = getBoundingRect();
-      if (rect && playerStats) {
+      if (rect && playerAllInfo?.stats) {
         newPlayerStats?.forEach((_, idx) => {
           const data = statChangePopup({
             idx,
             currStats: newPlayerStats,
-            prevStats: playerStats,
+            prevStats: playerAllInfo?.stats,
             rect,
           });
           if (data) {
@@ -60,26 +48,8 @@ export function useCharacter({
           }
         });
       }
-      return newPlayerStats;
+      return allInfo;
     },
-    refetchInterval,
-  });
-
-  const { data: playerItems, refetch: refetchItems } = useQuery({
-    queryKey: ["getPlayerItems", playerId],
-    queryFn: async () => await getPlayerItems({ playerId }),
-    refetchInterval,
-  });
-
-  const { data: playerEquipments, refetch: refetchEquipments } = useQuery({
-    queryKey: ["getPlayerEquipments", playerId],
-    queryFn: async () => await getPlayerEquipments({ playerId }),
-    refetchInterval,
-  });
-
-  const { data: playerSkills, refetch: refetchSkills } = useQuery({
-    queryKey: ["getPlayerSkills", playerId],
-    queryFn: async () => await getAllPlayerSkills({ playerId }),
     refetchInterval,
   });
 
@@ -89,15 +59,8 @@ export function useCharacter({
   const useSkillMutation = useMutation({ mutationFn: playerUseSkill });
 
   return {
-    character,
-    playerStats,
-    playerItems,
-    playerEquipments,
-    playerSkills,
-    refetchStats,
-    refetchItems,
-    refetchEquipments,
-    refetchSkills,
+    playerAllInfo,
+    refetch,
     equipMutation,
     removeMutation,
     useSkillMutation,

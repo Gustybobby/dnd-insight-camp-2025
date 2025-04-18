@@ -44,13 +44,12 @@ const equipmentService = new EquipmentService(
   effectService,
 );
 
-const getAllPlayerEquipmentsUseCase = new GetAllPlayerEquipmentsUseCase(
-  equipmentRepo,
-);
-
 export async function getPlayerEquipments(
   params: UseCaseParams<IGetAllPlayerEquipmentsUseCase>,
 ): Promise<UseCaseReturn<IGetAllPlayerEquipmentsUseCase> | null> {
+  const getAllPlayerEquipmentsUseCase = new GetAllPlayerEquipmentsUseCase(
+    equipmentRepo,
+  );
   return getAllPlayerEquipmentsUseCase.invoke(params).catch((error) => {
     console.error(error);
     return null;

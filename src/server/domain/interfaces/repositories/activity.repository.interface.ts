@@ -2,6 +2,7 @@ import type { ActivitySessionAllInfo } from "@/server/domain/aggregates";
 import type {
   Activity,
   ActivitySession,
+  ActivitySessionUpdate,
   SessionTurn,
 } from "@/server/domain/models";
 
@@ -28,6 +29,14 @@ export interface IActivityRepository {
     activityId,
   }: {
     activityId: ActivitySession["activityId"];
+  }): Promise<ActivitySession>;
+
+  updateSession({
+    sessionId,
+    data,
+  }: {
+    sessionId: ActivitySession["id"];
+    data: ActivitySessionUpdate;
   }): Promise<ActivitySession>;
 
   upsertSessionTurn({
