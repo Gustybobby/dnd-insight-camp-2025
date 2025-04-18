@@ -8,6 +8,16 @@ import { takeOne, takeOneOrThrow } from "@/db/util";
 import { and, eq, getTableColumns, gt, lt, sql } from "drizzle-orm";
 
 export class PlayerSkillRepository implements IPlayerSkillRepository {
+  async getAllPlayers(): Promise<PlayerSkillWithInfo[]> {
+    return db
+      .select({
+        ...getTableColumns(playerSkillsTable),
+        skill: getTableColumns(skillsTable),
+      })
+      .from(playerSkillsTable)
+      .innerJoin(skillsTable, eq(playerSkillsTable.skillId, skillsTable.id));
+  }
+
   async getAll({
     playerId,
   }: {

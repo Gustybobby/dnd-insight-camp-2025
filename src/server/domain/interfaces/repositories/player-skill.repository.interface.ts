@@ -2,6 +2,8 @@ import type { PlayerSkillWithInfo } from "@/server/domain/aggregates/player-skil
 import type { PlayerSkill, PlayerSkillCreate } from "@/server/domain/models";
 
 export interface IPlayerSkillRepository {
+  getAllPlayers(): Promise<PlayerSkillWithInfo[]>;
+
   getAll({
     playerId,
   }: {
