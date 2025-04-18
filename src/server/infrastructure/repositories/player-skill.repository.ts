@@ -106,4 +106,15 @@ export class PlayerSkillRepository implements IPlayerSkillRepository {
       )
       .returning();
   }
+
+  async setZeroCooldown({
+    playerId,
+  }: {
+    playerId: PlayerSkill["playerId"];
+  }): Promise<void> {
+    await db
+      .update(playerSkillsTable)
+      .set({ cooldown: 0 })
+      .where(eq(playerSkillsTable.playerId, playerId));
+  }
 }

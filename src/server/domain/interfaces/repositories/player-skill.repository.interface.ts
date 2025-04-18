@@ -33,4 +33,10 @@ export interface IPlayerSkillRepository {
   }: {
     playerId: PlayerSkill["playerId"];
   }): Promise<PlayerSkill[]>;
+
+  setZeroCooldown({
+    playerId,
+  }: {
+    playerId: PlayerSkill["playerId"];
+  }): Promise<void>;
 }

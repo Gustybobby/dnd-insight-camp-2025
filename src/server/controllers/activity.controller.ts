@@ -12,7 +12,7 @@ import type {
 } from "@/server/applications/interfaces/usecases/activity";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
-import { SessionTurn } from "@/server/domain/models";
+import { ActivitySessionUpdate, SessionTurn } from "@/server/domain/models";
 import { AuthService } from "@/server/domain/services/auth.service";
 import { ActivityRepository } from "@/server/infrastructure/repositories/activity.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
@@ -97,12 +97,18 @@ export async function updateActivitySession(
   await authService.authStaff();
 
   const updateActivitySessionUseCase = new UpdateActivitySessionUseCase(
+    playerSkillRepo,
     activityRepo,
   );
-  return updateActivitySessionUseCase.invoke(params).catch((error) => {
-    console.error(error);
-    return null;
-  });
+  return updateActivitySessionUseCase
+    .invoke({
+      sessionId: params.sessionId,
+      data: ActivitySessionUpdate.parse(params.data),
+    })
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
 }
 
 export async function upsertSessionTurn(
