@@ -32,6 +32,7 @@ import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
 import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_ITEM_AMOUNT, DEFAULT_SKILL_USES } from "../constants";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -211,7 +212,10 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
                   modalOpen={modalIsOpen}
                   closeModal={() => setModalIsOpen(false)}
                   onSubmit={() =>
-                    onItemSubmit({ itemId: item?.id ?? 0, amount: 0 })
+                    onItemSubmit({
+                      itemId: item?.id ?? 0,
+                      amount: DEFAULT_ITEM_AMOUNT,
+                    })
                   }
                 />
               ),
@@ -230,9 +234,12 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
                   modalOpen={modalIsOpen}
                   closeModal={() => setModalIsOpen(false)}
                   onSubmit={() =>
-                    onSkillSubmit({ skillId: skill?.id ?? 0, remainingUses: 2 })
+                    onSkillSubmit({
+                      skillId: skill?.id ?? 0,
+                      remainingUses: DEFAULT_SKILL_USES,
+                    })
                   }
-                ></SkillModal>
+                />
               ),
             },
           ]}

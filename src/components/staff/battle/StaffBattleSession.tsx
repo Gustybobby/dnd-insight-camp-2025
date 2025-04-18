@@ -43,6 +43,11 @@ import TopNav from "../TopNav";
 import StaffBattlePlayersInfo from "./StaffBattleSessionPlayersInfo";
 import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
 import { fetchAllPlayersInfo } from "@/bff/api/players.api";
+import { DEFAULT_ITEM_AMOUNT, DEFAULT_SKILL_USES } from "../constants";
+import StaffBattleSessionBoss from "./StaffBattleSessionBoss";
+import StaffBattleSessionPlayerStatusTab from "./StaffBattleSessionPlayerStatusTab";
+import StaffPlayerStatuses from "../players/StaffPlayerStatuses";
+import { statLowerCaseType } from "./type";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -51,6 +56,20 @@ export interface OnSubmitItemInput {
 
 export interface EndBattleMutationType {
   sessionId: number;
+}
+
+export interface BossStatsStateType {
+  hp: number;
+  str: number;
+  dex: number;
+  chr: number;
+  int: number;
+}
+
+export interface DamageCalculator {
+  roll: string;
+  multiply: string;
+  stat: statLowerCaseType;
 }
 
 export default function StaffBattleSession({
@@ -255,6 +274,20 @@ export default function StaffBattleSession({
 
   console.log(activitySession);
 
+  const [bossStats, setBossStats] = useState<BossStatsStateType>({
+    hp: 200,
+    dex: 10,
+    int: 10,
+    chr: 10,
+    str: 10,
+  });
+  const [bossDamageToPlayerCalculator, setBossDamageToPlayerCalculator] =
+    useState<DamageCalculator>({
+      stat:"str",
+      roll: "1",
+      multiply: "1.5"
+    });
+  const [playerDamageToBoss, setPlayerDamageToBoss] = useState<number>(0);
   return (
     <div className="flex w-full flex-col">
       <TopNav backLink="/staff" title={`Battle Session ${sessionId}`} />
@@ -294,7 +327,7 @@ export default function StaffBattleSession({
             tabs={[
               {
                 label: "Status",
-                node: <></>,
+                node: <StaffBattleSessionPlayerStatusTab />,
                 modal: <></>,
               },
               {
@@ -310,12 +343,26 @@ export default function StaffBattleSession({
             ]}
             defaultTab={""}
             className={"h-full"}
-          ></StaffBattleSessionPlayerTabs>
+          />
         </div>
         <StaffPlayerUtils
           tabs={[
             {
-              label: "Stats",
+              label: "Boss",
+              node: (
+                <StaffBattleSessionBoss
+                  bossStats={bossStats}
+                  setBossStats={setBossStats}
+                  bossDamageToPlayerCalculator={bossDamageToPlayerCalculator}
+                  setBossDamageToPlayerCalculator={
+                    setBossDamageToPlayerCalculator
+                  }
+                />
+              ),
+              modal: <></>,
+            },
+            {
+              label: "PlayerStats",
               node: (
                 <StaffPlayerStats
                   playerStats={ALL_STAT_TYPES.map(
@@ -351,7 +398,10 @@ export default function StaffBattleSession({
                       ?.name
                   }
                   onSubmit={() =>
-                    onItemSubmit({ itemId: item?.id ?? 0, amount: 0 })
+                    onItemSubmit({
+                      itemId: item?.id ?? 0,
+                      amount: DEFAULT_ITEM_AMOUNT,
+                    })
                   }
                 />
               ),
@@ -370,13 +420,34 @@ export default function StaffBattleSession({
                   modalOpen={modalIsOpen}
                   closeModal={() => setModalIsOpen(false)}
                   onSubmit={() =>
-                    onSkillSubmit({ skillId: skill?.id ?? 0, remainingUses: 0 })
+                    onSkillSubmit({
+                      skillId: skill?.id ?? 0,
+                      remainingUses: DEFAULT_SKILL_USES,
+                    })
                   }
-                ></SkillModal>
+                />
               ),
             },
+            {
+              label: "Status",
+              node: (
+                <StaffPlayerStatuses
+                  skills={null}
+                  onClickSkill={function ({
+                    label,
+                    data,
+                  }: {
+                    label: string;
+                    data: Skill;
+                  }): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                />
+              ),
+              modal: <></>,
+            },
           ]}
-          defaultTab="Stats"
+          defaultTab="Boss"
           isModalOpen={modalIsOpen}
           setIsModalOpen={setModalIsOpen}
         />
