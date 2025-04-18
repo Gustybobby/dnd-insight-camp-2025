@@ -1,11 +1,11 @@
 "use client";
 
 import { getActiveTurns } from "@/server/controllers/activity.controller";
-import { getAllPlayers } from "@/server/controllers/player.controller";
 
 import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
+import { fetchAllPlayers } from "@/bff/api/players.api";
 import {
   CarouselPreview,
   CharacterCarousel,
@@ -26,7 +26,7 @@ export function PlayerSelectMenu({
 
   const { data: players } = useQuery({
     queryKey: ["getAllPlayers"],
-    queryFn: async () => await getAllPlayers(),
+    queryFn: async () => await fetchAllPlayers(),
   });
 
   const { data: activeTurns } = useQuery({

@@ -4,10 +4,10 @@ import {
   getActivitySessions,
   getAllActivities,
 } from "@/server/controllers/activity.controller";
-import { getAllPlayersInfo } from "@/server/controllers/player.controller";
 
 import { useQuery } from "@tanstack/react-query";
 
+import { fetchAllPlayersInfo } from "@/bff/api/players.api";
 import StaffBattleTab from "@/components/staff/battle/DashboardStaffBattleSessionTab";
 import StaffCreateBattleTab from "@/components/staff/createbattle/DashboardStaffCreateBattleTab";
 import StaffPlayerRow from "@/components/staff/players/StaffPlayerRow";
@@ -16,7 +16,7 @@ import StaffDashboard from "@/components/staff/StaffDashboard";
 export default function StaffDashboardPageWrapper() {
   const { data: players } = useQuery({
     queryKey: ["getAllPlayers"],
-    queryFn: async () => await getAllPlayersInfo(),
+    queryFn: async () => await fetchAllPlayersInfo(),
     refetchInterval: 5000,
   });
   const { data: activities } = useQuery({

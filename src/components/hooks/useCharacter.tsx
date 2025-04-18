@@ -7,11 +7,11 @@ import {
   playerEquipEquipment,
   playerRemoveEquipment,
 } from "@/server/controllers/equipment.controller";
-import { getPlayerAllInfo } from "@/server/controllers/player.controller";
 import { playerUseSkill } from "@/server/controllers/skill.controller";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+import { fetchPlayerAllInfo } from "@/bff/api/player.api";
 import { STAT_STYLE_MAP } from "@/components/players/style";
 
 export function useCharacter({
@@ -32,7 +32,7 @@ export function useCharacter({
   const { data: playerAllInfo, refetch } = useQuery({
     queryKey: ["getPlayerAllInfo", playerId],
     queryFn: async () => {
-      const allInfo = await getPlayerAllInfo({ playerId });
+      const allInfo = await fetchPlayerAllInfo({ playerId });
       const newPlayerStats = allInfo?.stats;
       const rect = getBoundingRect();
       if (rect && playerAllInfo?.stats) {
