@@ -23,7 +23,7 @@ interface PlayerFormData {
 export default function CreatePlayerForm() {
   const mutation = useMutation({
     mutationFn: (newPlayer: PlayerFormData) =>
-      createPlayer({ data: { ...newPlayer, userId: null } }),
+      createPlayer({ data: { ...newPlayer } }),
     onSuccess: () => {
       alert(`Player created successfully!`);
     },

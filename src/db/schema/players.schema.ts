@@ -1,6 +1,5 @@
 import { charactersTable } from "@/db/schema/characters.schema";
-import { usersTable } from "@/db/schema/users.schema";
-import { integer, pgTable, serial, text, uuid } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const playersTable = pgTable("players", {
   id: serial("id").primaryKey(),
@@ -8,7 +7,4 @@ export const playersTable = pgTable("players", {
   characterId: integer("character_id")
     .notNull()
     .references(() => charactersTable.id),
-  userId: uuid("user_id")
-    .references(() => usersTable.id)
-    .unique(),
 });

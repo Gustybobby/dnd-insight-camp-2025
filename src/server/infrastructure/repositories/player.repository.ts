@@ -23,6 +23,7 @@ import {
   playersTable,
   playerStatLogsTable,
   playerStatsTable,
+  usersTable,
 } from "@/db/schema";
 import { takeOne, takeOneOrThrow } from "@/db/util";
 import type { SQL } from "drizzle-orm";
@@ -61,9 +62,10 @@ export class PlayerRepository implements IPlayerRepository {
     userId: User["id"];
   }): Promise<Player | null> {
     return db
-      .select()
+      .select({ ...getTableColumns(playersTable) })
       .from(playersTable)
-      .where(eq(playersTable.userId, userId))
+      .innerJoin(usersTable, eq(usersTable.playerId, playersTable.id))
+      .where(eq(usersTable.id, userId))
       .then(takeOne);
   }
 
