@@ -24,7 +24,7 @@ export default function StaffBattleSessionPlayerRow({
     <div
       onClick={() => onClick()}
       className={cn(
-        "flex w-[90%] flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-all hover:ml-[10%]",
+        "flex w-[90%] flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-all",
         selected ? "border-red border-4" : "",
         className ?? "",
       )}

@@ -8,6 +8,7 @@ export type ActivitySession = z.infer<typeof ActivitySession>;
 
 export const ActivitySessionUpdate = ActivitySession.pick({
   battleLogs: true,
+  currentTurnId: true,
   bossTurnOrder: true,
   isActive: true,
 }).partial();

@@ -2,8 +2,8 @@ import type { PlayerStat } from "@/server/domain/models";
 
 import React from "react";
 
-import Image from "next/image";
 import { cn } from "@/components/utils";
+import Image from "next/image";
 
 export interface StaffPlayerRow {
   id: number;
@@ -51,8 +51,7 @@ export default function StaffCreateBattlePlayerRow({
         disabled={inBattle}
       />
       <input
-        className="size-6 text-center"
-        type="number"
+        className="h-6 w-8 text-center"
         max={maxTurn}
         name={`player-${id}-turn`}
         disabled={inBattle}

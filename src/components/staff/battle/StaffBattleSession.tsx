@@ -152,7 +152,7 @@ export default function StaffBattleSession({
     Promise.all(mutationPromises)
       .then(() => {
         void refetchAllPlayerInfos();
-        alert("Stats has been changed successfully!")
+        alert("Stats has been changed successfully!");
       })
       .catch((e) => {
         alert(`Error changing stat: ${e}`);
@@ -263,6 +263,8 @@ export default function StaffBattleSession({
 
   console.log("Current player id", currentPlayerId);
 
+  console.log(activitySession);
+
   return (
     <div className="flex w-full flex-col">
       <TopNav backLink="/staff" title={`Battle Session ${sessionId}`} />
@@ -285,7 +287,6 @@ export default function StaffBattleSession({
                 : `End Group Turn`}
             </StyledButton>
             <StyledButton
-              className={`${activitySession?.currentTurnId === 1}`}
               onClick={() => handleEndBossTurn()}
               disabled={activitySession?.currentTurnId !== null}
             >
