@@ -74,24 +74,17 @@ export class PlayerSkillRepository implements IPlayerSkillRepository {
   }: Pick<PlayerSkill, "playerId" | "skillId">): Promise<PlayerSkill | null> {
     const playerSkill = await db
       .update(playerSkillsTable)
-      .set({
-        cooldown: skillsTable.cooldown,
-        remainingUses: sql`${playerSkillsTable.remainingUses}-1`,
-      })
+      .set({ cooldown: skillsTable.cooldown })
       .from(skillsTable)
       .where(
         and(
           eq(playerSkillsTable.playerId, playerId),
           eq(playerSkillsTable.skillId, skillId),
           lt(playerSkillsTable.cooldown, 1),
-          gt(playerSkillsTable.remainingUses, 0),
         ),
       )
       .returning()
       .then(takeOne);
-    if (playerSkill?.remainingUses === 0) {
-      return this.delete({ playerId, skillId });
-    }
     return playerSkill;
   }
 

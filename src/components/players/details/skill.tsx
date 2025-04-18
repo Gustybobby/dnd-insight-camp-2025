@@ -41,10 +41,6 @@ export function PlayerSkillDisplay({
           {playerSkill.skill.name}
         </h1>
         <div className="flex w-full items-center justify-between">
-          <p>Remaining Uses:</p>
-          <p className="text-xl font-bold">{playerSkill.remainingUses}</p>
-        </div>
-        <div className="flex w-full items-center justify-between">
           <p>Cooldown (Turn):</p>
           <p className="text-xl font-bold">{playerSkill.cooldown}</p>
         </div>
@@ -88,9 +84,6 @@ export function PlayerSkillInfo({
         </h1>
         <p className="col-span-full text-left font-notosansthai">
           {playerSkill.skill.description}
-        </p>
-        <p className="col-span-full text-left text-lg font-bold">
-          Remaining Uses: {playerSkill.remainingUses}
         </p>
         <p className="col-span-full text-left text-lg font-bold">
           Cooldown (Turn): {playerSkill.cooldown}

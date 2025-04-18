@@ -12,7 +12,6 @@ export const playerSkillsTable = pgTable(
       .notNull()
       .references(() => skillsTable.id, { onDelete: "cascade" }),
     cooldown: integer("cooldown").notNull().default(0),
-    remainingUses: integer("remaining_uses").notNull(),
   },
   (table) => [primaryKey({ columns: [table.playerId, table.skillId] })],
 );
