@@ -15,7 +15,10 @@ export default function StaffBattleSessionRow({
 }) {
   //placeholder
   return (
-    <Link href = {`/staff/battlesessions/${activitySession.id}`} className="flex w-full flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.02]">
+    <Link
+      href={`/staff/battlesessions/${activitySession.id}`}
+      className="flex w-full flex-row items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.02]"
+    >
       <div>
         <div>Session {activitySession.id}</div>
         <div>{activitySession.battleLogs.at(-1)}</div>
@@ -24,7 +27,7 @@ export default function StaffBattleSessionRow({
         <div className="flex w-[260px] flex-row items-center gap-x-4">
           <p>Current Turn</p>
           <p>Group {currentPlayer?.characterId}</p>
-          <p className="font-[family-name:var(--noto-sans-thai)] truncate overflow-elipsis">
+          <p className="overflow-elipsis truncate font-[family-name:var(--noto-sans-thai)]">
             {currentPlayer?.name}
           </p>
           <Image

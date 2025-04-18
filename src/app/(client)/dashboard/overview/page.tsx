@@ -1,5 +1,6 @@
 "use client";
 
+import { getGlobal } from "@/server/controllers/global.controller";
 import { getAllItems } from "@/server/controllers/items.controller";
 import { getAllPlayerStatLogsFullInfo } from "@/server/controllers/log.controller";
 import { getAllPlayersInfo } from "@/server/controllers/player.controller";
@@ -12,14 +13,15 @@ export default function OverviewDashboard() {
   const { data, refetch } = useQuery({
     queryKey: ["getPlayerAllStats"],
     queryFn: async () => {
-      const [players, logs, items] = await Promise.all([
+      const [players, logs, items, global] = await Promise.all([
         getAllPlayersInfo(),
         getAllPlayerStatLogsFullInfo(),
         getAllItems(),
+        getGlobal(),
       ]);
-      return { players, logs, items };
+      return { players, logs, items, global };
     },
-    refetchInterval: 10000,
+    refetchInterval: 10000000,
   });
 
   return (
@@ -27,6 +29,7 @@ export default function OverviewDashboard() {
       players={data?.players ?? []}
       logs={data?.logs ?? []}
       items={data?.items ?? []}
+      global={data?.global ?? null}
       refetch={refetch}
     />
   );

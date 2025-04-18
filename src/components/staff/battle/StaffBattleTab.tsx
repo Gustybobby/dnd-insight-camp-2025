@@ -42,7 +42,6 @@ function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
     },
   });
 
-  
   const battleSessionMutation = useMutation({
     mutationFn: async ({ activityId }: CreateActivitySessionMutationType) => {
       return await createActivitySession({ activityId });
