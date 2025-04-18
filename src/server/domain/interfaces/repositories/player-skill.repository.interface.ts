@@ -26,7 +26,10 @@ export interface IPlayerSkillRepository {
   playerUseSkill({
     playerId,
     skillId,
-  }: Pick<PlayerSkill, "playerId" | "skillId">): Promise<PlayerSkill | null>;
+  }: Pick<
+    PlayerSkill,
+    "playerId" | "skillId"
+  >): Promise<PlayerSkillWithInfo | null>;
 
   decrementCooldown({
     playerId,

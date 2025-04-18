@@ -25,6 +25,17 @@ export class PlayerUseSkillUseCase implements IPlayerUseSkillUseCase {
       throw new Error("player cannot use skill outside of their turn");
     }
     console.log("player", playerId, "using skill", skillId);
-    return this.playerSkillRepo.playerUseSkill({ playerId, skillId });
+    const playerSkill = await this.playerSkillRepo.playerUseSkill({
+      playerId,
+      skillId,
+    });
+    session.battleLogs.push(
+      `player ${playerId} used ${playerSkill?.skill.name}`,
+    );
+    await this.activityRepo.updateSession({
+      sessionId: session.id,
+      data: { battleLogs: session.battleLogs },
+    });
+    return playerSkill;
   }
 }
