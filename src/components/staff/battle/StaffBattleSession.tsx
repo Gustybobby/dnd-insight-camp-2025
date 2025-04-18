@@ -21,7 +21,6 @@ import {
   addPlayerItem,
   getAllItems,
 } from "@/server/controllers/items.controller";
-import { getAllPlayersInfo } from "@/server/controllers/player.controller";
 import {
   addPlayerSkill,
   getAllSkills,
@@ -41,6 +40,7 @@ import StyledButton from "../StyledButton";
 import TopNav from "../TopNav";
 import StaffBattlePlayersInfo from "./StaffBattleSessionPlayersInfo";
 import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
+import { fetchAllPlayersInfo } from "@/bff/api/players.api";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -72,7 +72,7 @@ export default function StaffBattleSession({
 
   const { data: allPlayers, refetch: refetchAllPlayerInfos } = useQuery({
     queryKey: ["getAllPlayers", sessionId],
-    queryFn: async () => await getAllPlayersInfo(),
+    queryFn: async () => await fetchAllPlayersInfo(),
     refetchInterval: 10000,
   });
 

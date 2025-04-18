@@ -2,8 +2,6 @@
 
 import type {
   ICreatePlayerUseCase,
-  IGetAllPlayersInfoUseCase,
-  IGetAllPlayersUseCase,
   IGetPlayerCharacterUseCase,
   IGetPlayerItemsUseCase,
   IGetPlayerStatsUseCase,
@@ -16,12 +14,10 @@ import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 import { Player, PlayerCreate, PlayerUpdate } from "@/server/domain/models";
 import { AuthService } from "@/server/domain/services/auth.service";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
-import { PlayerSkillRepository } from "@/server/infrastructure/repositories/player-skill.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
 import {
   CreatePlayerUseCase,
-  GetAllPlayersUseCase,
   GetPlayerCharacterUseCase,
   GetPlayerItemsUseCase,
   GetPlayerStatsUseCase,
@@ -29,30 +25,14 @@ import {
   UpdatePlayerUseCase,
 } from "@/server/applications/usecases/player";
 
-import { GetAllPlayersInfoUseCase } from "../applications/usecases/player";
 import { ResetPlayerDataUseCase } from "../applications/usecases/player";
-import { EquipmentRepository } from "../infrastructure/repositories/equipment.repository";
-import { PlayerItemRepository } from "../infrastructure/repositories/player-item.repository";
-import { PlayerStatRepository } from "../infrastructure/repositories/player-stat.repository";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
-const playerStatRepo = new PlayerStatRepository();
-const equipmentRepo = new EquipmentRepository();
-const playerItemRepo = new PlayerItemRepository();
-const playerSkillRepo = new PlayerSkillRepository();
 
 const sessionService = new SessionService();
 
 const authService = new AuthService(playerRepo, staffRepo, sessionService);
-
-export async function getAllPlayers(): Promise<UseCaseReturn<IGetAllPlayersUseCase> | null> {
-  const getAllPlayersUseCase = new GetAllPlayersUseCase(playerRepo);
-  return getAllPlayersUseCase.invoke().catch((error) => {
-    console.error(error);
-    return null;
-  });
-}
 
 export async function getPlayer({
   playerId,
@@ -122,22 +102,6 @@ export async function createPlayer({
       console.error(error);
       return null;
     });
-}
-
-export async function getAllPlayersInfo(): Promise<UseCaseReturn<IGetAllPlayersInfoUseCase> | null> {
-  await authService.authStaff();
-
-  const getAllPlayersInfoUseCase = new GetAllPlayersInfoUseCase(
-    playerRepo,
-    playerStatRepo,
-    equipmentRepo,
-    playerItemRepo,
-    playerSkillRepo,
-  );
-  return getAllPlayersInfoUseCase.invoke().catch((error) => {
-    console.error(error);
-    return null;
-  });
 }
 
 export async function resetPlayerData({
