@@ -1,6 +1,9 @@
 import type { IUpdateActivitySessionUseCase } from "@/server/applications/interfaces/usecases/activity";
 import type { IActivityRepository } from "@/server/domain/interfaces/repositories";
-import type { ActivitySession, ActivitySessionUpdate } from "@/server/domain/models";
+import type {
+  ActivitySession,
+  ActivitySessionUpdate,
+} from "@/server/domain/models";
 
 export class UpdateActivitySessionUseCase
   implements IUpdateActivitySessionUseCase

@@ -1,4 +1,7 @@
-import type { ActivitySession, ActivitySessionUpdate } from "@/server/domain/models";
+import type {
+  ActivitySession,
+  ActivitySessionUpdate,
+} from "@/server/domain/models";
 
 export interface IUpdateActivitySessionUseCase {
   invoke({
