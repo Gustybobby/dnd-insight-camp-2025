@@ -9,12 +9,12 @@ import { getAllPlayersInfo } from "@/server/controllers/player.controller";
 import { useQuery } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 
-import StaffBattleTab from "@/components/staff/battle/StaffBattleTab";
+import StaffBattleTab from "@/components/staff/battle/DashboardStaffBattleSessionTab";
 import StaffPlayerRow from "@/components/staff/players/StaffPlayerRow";
 import StaffDashboard from "@/components/staff/StaffDashboard";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import StaffCreateBattleTab from "@/components/staff/createbattle/StaffCreateBattleTab";
+import StaffCreateBattleTab from "@/components/staff/createbattle/DashboardStaffCreateBattleTab";
 
 export default function Home() {
   const router = useRouter();

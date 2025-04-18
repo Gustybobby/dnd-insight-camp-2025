@@ -10,7 +10,7 @@ export default function StaffPlayerItems({
   onClickItem: ({ label, data }: { label: string; data: Item }) => void;
 }) {
   return (
-    <div className="w-full flex flex-col gap-y-1 p-2">
+    <div className="flex w-full flex-col gap-y-1 p-2">
       {items?.map((item) => (
         <ItemCard
           key={item.id}

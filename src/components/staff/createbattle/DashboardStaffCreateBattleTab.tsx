@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import StaffBattleRow from "./StaffBattlePlayerRow";
+import StaffCreateBattleRow from "./StaffCreateBattlePlayerRow";
 import StyledButton from "../StyledButton";
 
 interface UpsertPlayerMutationType {
@@ -57,7 +57,7 @@ export default function StaffCreateBattleTab({
         upsertPlayerMutation.mutate({
           sessionId: session?.id ?? 1,
           playerId: player.id,
-          order: index,
+          order: index + 1,
         });
       });
     },
@@ -92,7 +92,7 @@ export default function StaffCreateBattleTab({
         return a.turn - b.turn;
       });
 
-    console.log(formattedPlayers);
+    console.log("Formatted Players:", formattedPlayers);
     battleSessionMutation.mutate({
       activityId: activityBattleId ?? 1,
       players: formattedPlayers ?? [],
@@ -101,7 +101,7 @@ export default function StaffCreateBattleTab({
   return (
     <div className="flex w-full flex-col gap-y-1 p-2">
       <div className="flex w-full flex-col gap-y-1 text-center">
-        <div className="grid grid-cols-4 place-items-center w-full flex-row justify-between px-4">
+        <div className="grid w-full grid-cols-4 flex-row place-items-center justify-between px-4">
           <p className="w-[250px] text-center text-2xl font-bold">Name</p>
           <p className="text-center text-2xl font-bold">Status</p>
           <p className="text-center text-2xl font-bold">Select</p>
@@ -109,23 +109,23 @@ export default function StaffCreateBattleTab({
         </div>
         <form
           onSubmit={handleSubmit}
-          className="flex w-full flex-col items-center gap-y-1 h-[90%] overflow-y-scroll"
+          className="flex h-[90%] w-full flex-col items-center gap-y-1 overflow-y-scroll"
         >
           {players?.map((player) => (
-            <StaffBattleRow
+            <StaffCreateBattleRow
               key={`player-${player.id}-battle`}
               id={player.id}
               name={player.name}
               character={player.character}
               inBattle={false}
-              maxTurn={20}
+              maxTurn={players.length + 1}
             />
           ))}
           {/* {activitySessions?.find((session) => session. === null) ? (} */}
+          <StyledButton type="submit" className="mt-8 w-fit self-center">
+            Create a Battle Session
+          </StyledButton>
         </form>
-        <StyledButton type="submit" className="mt-8 w-fit self-center">
-          Create a Battle Session
-        </StyledButton>
       </div>
     </div>
   );

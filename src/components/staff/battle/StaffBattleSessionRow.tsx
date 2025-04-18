@@ -27,7 +27,7 @@ export default function StaffBattleSessionRow({
         <div className="flex w-[260px] flex-row items-center gap-x-4">
           <p>Current Turn</p>
           <p>Group {currentPlayer?.characterId}</p>
-          <p className="overflow-elipsis truncate font-[family-name:var(--noto-sans-thai)]">
+          <p className="truncate overflow-elipsis">
             {currentPlayer?.name}
           </p>
           <Image

@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import StaffBattleRow from "../createbattle/StaffBattlePlayerRow";
+import StaffBattleRow from "../createbattle/StaffCreateBattlePlayerRow";
 import StaffBattleSessionRow from "./StaffBattleSessionRow";
 import StyledButton from "../StyledButton";
 
