@@ -5,6 +5,7 @@ import React from "react";
 
 import Image from "next/image";
 import Link from "next/link";
+import { mapNumToAlphabet } from "@/components/utils";
 
 export default function StaffBattleSessionRow({
   activitySession,
@@ -26,7 +27,12 @@ export default function StaffBattleSessionRow({
       {currentPlayer && (
         <div className="flex w-[260px] flex-row items-center gap-x-4">
           <p>Current Turn</p>
-          <p>Group {currentPlayer?.characterId}</p>
+          <p>
+            Group{" "}
+            {currentPlayer?.characterId
+              ? mapNumToAlphabet(currentPlayer?.characterId)
+              : ""}
+          </p>
           <p className="overflow-elipsis truncate">{currentPlayer?.name}</p>
           <Image
             src={currentPlayer?.character.image}

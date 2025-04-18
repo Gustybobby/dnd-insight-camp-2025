@@ -6,6 +6,7 @@ import type {
 import React from "react";
 
 import StaffBattleSessionPlayerRow from "./StaffBattleSessionPlayerRow";
+import { mapNumToAlphabet } from "@/components/utils";
 
 export interface StaffBattlePlayersInfoProps {
   players: (PlayerWithAllInfo & { order: number })[] | undefined | null;
@@ -27,7 +28,7 @@ export default function StaffBattlePlayersInfo({
       <div className="mt-2 flex w-full justify-center rounded-xl border-2 border-oldcream bg-cream py-2 text-black">
         {activitySession?.currentTurnId === null
           ? "Boss Turn"
-          : `Group ${currentPlayerId} Turn`}
+          : `Group ${mapNumToAlphabet(currentPlayerId)} Turn`}
       </div>
       <div className="flex w-full flex-col gap-y-2 pt-2">
         {players?.map((player) => {

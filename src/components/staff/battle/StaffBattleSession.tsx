@@ -54,6 +54,7 @@ import StaffBattlePlayersInfo from "./StaffBattleSessionPlayersInfo";
 import StaffBattleSessionPlayerStatusTab from "./StaffBattleSessionPlayerStatusTab";
 import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
 import { fetchAllPlayersInfo } from "@/bff/api/players.api";
+import { mapNumToAlphabet } from "@/components/utils";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -336,7 +337,7 @@ export default function StaffBattleSession({
               onClick={() => handleEndPlayerTurn()}
             >
               {currentPlayerId
-                ? `End Group ${currentPlayerId} Turn`
+                ? `End Group ${mapNumToAlphabet(currentPlayerId)} Turn`
                 : `End Group Turn`}
             </StyledButton>
             <StyledButton

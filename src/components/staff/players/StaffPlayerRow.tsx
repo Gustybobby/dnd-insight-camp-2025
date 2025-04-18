@@ -7,6 +7,7 @@ import React from "react";
 import { STAT_STYLE_MAP } from "@/components/players/style";
 import Image from "next/image";
 import Link from "next/link";
+import { mapNumToAlphabet } from "@/components/utils";
 
 export interface StaffPlayerRow {
   id: number;
@@ -39,7 +40,7 @@ export default function StaffPlayerRow({
       href={`staff/players/${id}`}
     >
       <div className="flex flex-row items-center gap-x-4 text-sm font-light">
-        <p className="w-[50px]">Group {id}</p>
+        <p className="w-[50px]">Group {mapNumToAlphabet(id)}</p>
         <p className="w-[100px] truncate overflow-ellipsis font-notosansthai text-sm">
           {name}
         </p>

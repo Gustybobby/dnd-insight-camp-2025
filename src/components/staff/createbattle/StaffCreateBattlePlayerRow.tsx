@@ -2,7 +2,7 @@ import type { PlayerStat } from "@/server/domain/models";
 
 import React from "react";
 
-import { cn } from "@/components/utils";
+import { cn, mapNumToAlphabet } from "@/components/utils";
 import Image from "next/image";
 
 export interface StaffPlayerRow {
@@ -33,7 +33,7 @@ export default function StaffCreateBattlePlayerRow({
       )}
     >
       <div className="flex w-full flex-row items-center gap-x-4">
-        <p>Group {id}</p>
+        <p>Group {mapNumToAlphabet(id)}</p>
         <p className="font-notosansthai">{name}</p>
         <Image
           src={character.image}
