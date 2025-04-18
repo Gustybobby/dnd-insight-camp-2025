@@ -73,15 +73,11 @@ export default function StaffBattleSessionBossStatInput({
 
 export function StaffBattleSessionBossDamageCalculator({
   name,
-  label,
-  textColorClassName,
   damageCalculator,
   setDamageCalculator,
   bossStats,
 }: {
   name?: string;
-  label: string;
-  textColorClassName: string;
   damageCalculator: DamageCalculator;
   setDamageCalculator: React.Dispatch<React.SetStateAction<DamageCalculator>>;
   bossStats: BossStatsStateType;
@@ -104,16 +100,14 @@ export function StaffBattleSessionBossDamageCalculator({
   };
   return (
     <div className="flex flex-col gap-2">
-      <p className={cn("font-bold", textColorClassName)}>{label}</p>
       <div className="flex items-center justify-center">
-        <div className="grid grid-cols-5 text-2xl">
+        <div className="grid grid-cols-5 gap-x-2 text-xl">
           <div className="flex flex-col text-center">
-            <label className="">Roll</label>
+            <label className="text-center">Roll</label>
             <input
               id={`${name}_roll_input`}
               className={cn(
                 "border-1 w-full rounded-3xl border-2 border-oldcream bg-lightcream text-center text-2xl",
-                textColorClassName,
               )}
               name={`${name}_roll_input`}
               value={damageCalculator.roll}
@@ -135,12 +129,11 @@ export function StaffBattleSessionBossDamageCalculator({
             />
           </div>
           <div className="flex flex-col">
-            <label className="">Multiply</label>
+            <label className="text-center">Multiply</label>
             <input
               id={`${name}_multiply_input`}
               className={cn(
                 "border-1 w-full rounded-3xl border-2 border-oldcream bg-lightcream text-center text-2xl",
-                textColorClassName,
               )}
               name={`${name}_multiply_input`}
               value={damageCalculator.multiply}
@@ -154,12 +147,11 @@ export function StaffBattleSessionBossDamageCalculator({
             />
           </div>
           <div className="flex flex-col">
-            <label className="">Stat</label>
+            <label className="text-center">Stat</label>
             <select
               id={`${name}_damage_type_input`}
               className={cn(
                 "border-1 w-full rounded-3xl border-2 border-oldcream bg-lightcream text-center text-2xl",
-                textColorClassName,
               )}
               name={`${name}_damage_type_input`}
               value={damageCalculator.stat ?? ""}
@@ -178,8 +170,8 @@ export function StaffBattleSessionBossDamageCalculator({
               ))}
             </select>
           </div>
-          <p className="flex items-center justify-center">=</p>
-          <p className="flex items-center justify-center">
+          <p className="flex items-center justify-center text-[32px]">=</p>
+          <p className="flex items-center justify-center text-[32px]">
             {damageCalculator.stat === null
               ? calculateDamage(
                   damageCalculator.roll,
@@ -193,23 +185,6 @@ export function StaffBattleSessionBossDamageCalculator({
           </p>
         </div>
       </div>
-
-      {/* <input
-          id={`${type}_input`}
-          className={cn(
-            "border-1 w-full rounded-3xl border-2 border-oldcream bg-lightcream text-center text-2xl",
-            textColorClassName,
-          )}
-          name={type}
-          value={bossStats[type]}
-          onChange={(e) => {
-            setBossStats({
-              ...bossStats,
-              [type]: e.target.value,
-            });
-          }}
-          required
-        /> */}
     </div>
   );
 }

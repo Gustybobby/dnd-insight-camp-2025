@@ -26,11 +26,14 @@ export default function StaffBattleTab({
               <StaffBattleSessionRow
                 key={`battle-session-${session.id}`}
                 activitySession={session}
-                currentPlayer={
-                  players?.find(
-                    (player) => player.id === session.currentTurnId,
-                  ) ?? null
-                }
+                currentPlayer={players?.find(
+                  (player) =>
+                    player.id ===
+                    session.turns.find(
+                      (turn) => turn.id === session.currentTurnId,
+                    )?.playerId,
+                )}
+                isBossTurn={session.currentTurnId === null}
               />
             )) ?? <div>No Battle Sessions...</div>}
         </div>

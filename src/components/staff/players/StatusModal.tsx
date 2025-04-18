@@ -24,12 +24,12 @@ export default function StatusModal({
 }) {
   console.log(modalOpen);
   return (
-    <div className="font-notosansthai">
-      <h2 className="mb-4 text-xl font-semibold">{status?.name}</h2>
-      <p className="mb-4">{`Give ${status?.name}`}</p>
-      <p className="mb-4 text-sm italic">{status?.description}</p>
-      <label className="mb-4">{`Last for (turns)`}</label>
-      <input id={`give-${status}-input`} />
+    <div className="font-notosansthai flex flex-col items-center gap-y-2">
+      <h2 className="text-xl font-semibold">{status?.name}</h2>
+      <p className="">{`Give ${status?.name}`}</p>
+      <p className="text-sm italic">{status?.description}</p>
+      <label className="">{`Last for (turns)`}</label>
+      <input className="w-fit text-center" id={`give-${status}-input`} />
       <div className="flex flex-row justify-center gap-x-2">
         <button
           onClick={async () => {
@@ -43,7 +43,8 @@ export default function StatusModal({
             if (
               status?.name !== null &&
               status !== undefined &&
-              !isNaN(countdown)
+              !isNaN(countdown) &&
+              countdown > 0
             ) {
               await onSubmit({
                 effectType: status?.name ?? "Advantage",

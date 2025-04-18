@@ -28,7 +28,7 @@ export default function StaffCreateBattlePlayerRow({
   return (
     <div
       className={cn(
-        "grid w-full grid-cols-4 place-items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.02]",
+        "grid w-full grid-cols-4 place-items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow",
         inBattle ? "opacity-50" : "",
       )}
     >
