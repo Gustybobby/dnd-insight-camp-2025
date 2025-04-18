@@ -23,15 +23,17 @@ export default function StaffDashboardPageWrapper() {
     queryKey: ["getAllActivities"],
     queryFn: async () => await getAllActivities(),
   });
+
   const { data: battleSessions } = useQuery({
     queryKey: ["getActivitySessions"],
-    queryFn: async () =>
-      await getActivitySessions({
+    queryFn: async () => {
+      return await getActivitySessions({
         activityId:
           activities?.find(
             (activity) => activity.name.toLowerCase() === "battle",
           )?.id ?? 1,
-      }),
+      });
+    },
     refetchInterval: 10000,
   });
 
@@ -60,7 +62,11 @@ export default function StaffDashboardPageWrapper() {
           node: (
             <StaffBattleTab
               players={players}
-              activitySessions={battleSessions ?? null}
+              activitySessions={
+                battleSessions?.filter(
+                  (battleSession) => battleSession.isActive,
+                ) ?? null
+              }
             />
           ),
         },
