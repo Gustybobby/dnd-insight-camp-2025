@@ -91,7 +91,7 @@ export function CharacterSelectMenu({
           <TitleBanner>
             <input
               id={"player_name"}
-              className="w-40 rounded-md border border-black bg-transparent text-center font-[family-name:var(--noto-sans-thai)]"
+              className="w-40 rounded-md border border-black bg-transparent text-center font-notosansthai"
               defaultValue={player.name}
             />
           </TitleBanner>

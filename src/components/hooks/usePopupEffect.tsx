@@ -40,7 +40,7 @@ export function Popups({ popups }: { popups: PopupData[] }) {
         <div
           key={popup.id}
           className={cn(
-            "motion-preset-slide-up-lg fixed z-50 font-[family-name:var(--noto-sans-thai)] font-bold text-black",
+            "motion-preset-slide-up-lg fixed z-50 font-notosansthai font-bold text-black",
             popup.className,
           )}
           style={{

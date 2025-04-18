@@ -34,7 +34,7 @@ export default function StaffCreateBattlePlayerRow({
     >
       <div className="flex w-full flex-row items-center gap-x-4">
         <p>Group {id}</p>
-        <p className="font-[family-name:var(--noto-sans-thai)]">{name}</p>
+        <p className="font-notosansthai">{name}</p>
         <Image
           src={character.image}
           width={100}

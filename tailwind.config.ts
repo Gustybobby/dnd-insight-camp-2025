@@ -47,7 +47,7 @@ export default {
       },
     },
     fontFamily: {
-      notosansthai: ["var(--font-noto-sans-thai)"],
+      notosansthai: ["var(--noto-sans-thai)"],
     },
   },
   plugins: [require("tailwindcss-motion")],

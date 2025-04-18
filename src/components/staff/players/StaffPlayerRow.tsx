@@ -40,7 +40,7 @@ export default function StaffPlayerRow({
     >
       <div className="flex flex-row items-center gap-x-4 text-sm font-light">
         <p className="w-[50px]">Group {id}</p>
-        <p className="w-[100px] truncate overflow-ellipsis font-[family-name:var(--noto-sans-thai)] text-sm">
+        <p className="w-[100px] truncate overflow-ellipsis font-notosansthai text-sm">
           {name}
         </p>
       </div>
