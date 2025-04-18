@@ -9,7 +9,7 @@ export default function StaffBattleSessionPlayerStatusTab({
 }: {
   player: PlayerWithAllInfo | null | undefined;
 }) {
-  console.log("Player:" ,player);
+  console.log("Effects:" ,player?.effects);
   return (
     <div>
       {player?.effects
