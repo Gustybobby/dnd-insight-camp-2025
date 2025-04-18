@@ -9,6 +9,9 @@ export type Effect = z.infer<typeof Effect>;
 export const EffectTypeEnum = Effect.shape.type;
 export type EffectTypeEnum = z.infer<typeof EffectTypeEnum>;
 
+export const EffectCreate = Effect.omit({ id: true, createdAt: true });
+export type EffectCreate = z.infer<typeof EffectCreate>;
+
 /**Stat Modification Effect */
 export const ModEffect = Effect.pick({
   id: true,

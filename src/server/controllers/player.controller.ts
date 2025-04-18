@@ -3,7 +3,6 @@
 import type {
   ICreatePlayerUseCase,
   IGetPlayerCharacterUseCase,
-  IGetPlayerItemsUseCase,
   IGetPlayerStatsUseCase,
   IGetPlayerUseCase,
   IResetPlayerDataUseCase,
@@ -19,7 +18,6 @@ import { SessionService } from "@/server/infrastructure/services/session.service
 import {
   CreatePlayerUseCase,
   GetPlayerCharacterUseCase,
-  GetPlayerItemsUseCase,
   GetPlayerStatsUseCase,
   GetPlayerUseCase,
   UpdatePlayerUseCase,
@@ -66,16 +64,6 @@ export async function getPlayerStats({
       console.error(error);
       return null;
     });
-}
-
-export async function getPlayerItems({
-  playerId,
-}: UseCaseParams<IGetPlayerItemsUseCase>): Promise<UseCaseReturn<IGetPlayerItemsUseCase> | null> {
-  const getPlayerItemsUseCase = new GetPlayerItemsUseCase(playerRepo);
-  return getPlayerItemsUseCase.invoke({ playerId }).catch((error) => {
-    console.error(error);
-    return null;
-  });
 }
 
 export async function updatePlayer(

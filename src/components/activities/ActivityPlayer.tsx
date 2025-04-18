@@ -26,6 +26,7 @@ import {
   PlayerStats,
   StatInfo,
 } from "@/components/players/details/stat";
+import { PlayerStatusesTab } from "@/components/players/details/status";
 import { StyledLink } from "@/components/ui/link";
 import { cn } from "@/components/utils";
 
@@ -218,7 +219,12 @@ export function ActivityPlayer({
               />
             ),
           },
-          { label: "Status", node: <div></div> },
+          {
+            label: "Status",
+            node: playerAllInfo?.effects && (
+              <PlayerStatusesTab effects={playerAllInfo.effects} />
+            ),
+          },
           {
             label: "Inventory",
             node: (

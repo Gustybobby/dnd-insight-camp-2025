@@ -3,7 +3,11 @@ import type {
   IPlayerRepository,
 } from "@/server/domain/interfaces/repositories";
 import type { IEffectService } from "@/server/domain/interfaces/services/applications";
-import type { ModEffectCreate, PlayerStatLog } from "@/server/domain/models";
+import type {
+  Effect,
+  ModEffectCreate,
+  PlayerStatLog,
+} from "@/server/domain/models";
 import type { ModEffect } from "@/server/domain/models";
 
 export class EffectService implements IEffectService {
@@ -34,6 +38,37 @@ export class EffectService implements IEffectService {
           },
         });
         console.log("modified stat:", stat);
+      }),
+    );
+    return effect;
+  }
+
+  async createAndApplyVisualEffect({
+    effectType,
+    countdown,
+    playerIds,
+    staffId,
+  }: {
+    effectType: Effect["type"];
+    countdown: Effect["countdown"];
+    playerIds: PlayerStatLog["playerId"][];
+    staffId: PlayerStatLog["staffId"];
+  }): Promise<Effect> {
+    const effect = await this.effectRepo.createEffect({
+      data: { type: effectType, stat: null, itemId: null, value: 0, countdown },
+    });
+    await Promise.all(
+      playerIds.map(async (playerId) => {
+        await this.playerRepo.updateStat({
+          data: {
+            effectId: effect.id,
+            type: "HP",
+            value: 0,
+            playerId,
+            staffId,
+          },
+        });
+        console.log(`apply visual effect to player ${playerId}`, effectType);
       }),
     );
     return effect;

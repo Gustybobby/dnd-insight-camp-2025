@@ -1,6 +1,7 @@
 import type { IEndTurnUseCase } from "@/server/applications/interfaces/usecases/activity";
 import type {
   IActivityRepository,
+  IEffectRepository,
   IPlayerSkillRepository,
 } from "@/server/domain/interfaces/repositories";
 
@@ -8,6 +9,7 @@ export class EndTurnUseCase implements IEndTurnUseCase {
   constructor(
     private readonly activityRepo: IActivityRepository,
     private readonly playerSkillRepo: IPlayerSkillRepository,
+    private readonly effectRepo: IEffectRepository,
   ) {}
 
   async invoke({
@@ -40,6 +42,7 @@ export class EndTurnUseCase implements IEndTurnUseCase {
 
     if (nextPlayerId) {
       await this.playerSkillRepo.decrementCooldown({ playerId: nextPlayerId });
+      await this.effectRepo.decrementCountdown({ playerId: nextPlayerId });
     }
   }
 }

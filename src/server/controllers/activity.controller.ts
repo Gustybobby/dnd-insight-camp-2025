@@ -15,6 +15,7 @@ import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 import { ActivitySessionUpdate, SessionTurn } from "@/server/domain/models";
 import { AuthService } from "@/server/domain/services/auth.service";
 import { ActivityRepository } from "@/server/infrastructure/repositories/activity.repository";
+import { EffectRepository } from "@/server/infrastructure/repositories/effect.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { PlayerSkillRepository } from "@/server/infrastructure/repositories/player-skill.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
@@ -34,6 +35,7 @@ const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
 const activityRepo = new ActivityRepository();
 const playerSkillRepo = new PlayerSkillRepository();
+const effectRepo = new EffectRepository();
 
 const sessionService = new SessionService();
 
@@ -99,6 +101,7 @@ export async function updateActivitySession(
   const updateActivitySessionUseCase = new UpdateActivitySessionUseCase(
     playerSkillRepo,
     activityRepo,
+    effectRepo,
   );
   return updateActivitySessionUseCase
     .invoke({
@@ -130,7 +133,11 @@ export async function endTurn(
 ): Promise<UseCaseReturn<IEndTurnUseCase> | null> {
   await authService.authSessionPlayer({ playerId: params.playerId });
 
-  const endTurnUseCase = new EndTurnUseCase(activityRepo, playerSkillRepo);
+  const endTurnUseCase = new EndTurnUseCase(
+    activityRepo,
+    playerSkillRepo,
+    effectRepo,
+  );
   return endTurnUseCase.invoke({ ...params, isBoss: false }).catch((error) => {
     console.error(error);
     return null;
@@ -142,7 +149,11 @@ export async function bossEndTurn(
 ): Promise<UseCaseReturn<IEndTurnUseCase> | null> {
   await authService.authStaff();
 
-  const endTurnUseCase = new EndTurnUseCase(activityRepo, playerSkillRepo);
+  const endTurnUseCase = new EndTurnUseCase(
+    activityRepo,
+    playerSkillRepo,
+    effectRepo,
+  );
   return endTurnUseCase.invoke({ ...params, isBoss: true }).catch((error) => {
     console.error(error);
     return null;

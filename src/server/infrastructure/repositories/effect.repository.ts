@@ -1,9 +1,16 @@
 import type { IEffectRepository } from "@/server/domain/interfaces/repositories";
-import type { ModEffect, ModEffectCreate } from "@/server/domain/models";
+import type {
+  Effect,
+  EffectCreate,
+  ModEffect,
+  ModEffectCreate,
+  Player,
+} from "@/server/domain/models";
 
 import { db } from "@/db";
-import { effectsTable } from "@/db/schema";
+import { effectsTable, playerStatLogsTable } from "@/db/schema";
 import { takeOneOrThrow } from "@/db/util";
+import { and, eq, exists, gt, ne, sql } from "drizzle-orm";
 
 export class EffectRepository implements IEffectRepository {
   async createModEffect({
@@ -17,5 +24,93 @@ export class EffectRepository implements IEffectRepository {
       .returning()
       .then(takeOneOrThrow);
     return effect as ModEffect;
+  }
+
+  async createEffect({ data }: { data: EffectCreate }): Promise<Effect> {
+    return db
+      .insert(effectsTable)
+      .values(data)
+      .returning()
+      .then(takeOneOrThrow);
+  }
+
+  async getPlayerVisualEffects({
+    playerId,
+  }: {
+    playerId: Player["id"];
+  }): Promise<Effect[]> {
+    return db
+      .select()
+      .from(effectsTable)
+      .where(
+        and(
+          ne(effectsTable.type, "Mod"),
+          gt(effectsTable.countdown, 0),
+          exists(
+            db
+              .select()
+              .from(playerStatLogsTable)
+              .where(
+                and(
+                  eq(playerStatLogsTable.effectId, effectsTable.id),
+                  eq(playerStatLogsTable.playerId, playerId),
+                ),
+              ),
+          ),
+        ),
+      );
+  }
+
+  async decrementCountdown({
+    playerId,
+  }: {
+    playerId: Player["id"];
+  }): Promise<void> {
+    await db
+      .update(effectsTable)
+      .set({ countdown: sql`${effectsTable.countdown} - 1` })
+      .where(
+        and(
+          ne(effectsTable.type, "Mod"),
+          gt(effectsTable.countdown, 0),
+          exists(
+            db
+              .select()
+              .from(playerStatLogsTable)
+              .where(
+                and(
+                  eq(playerStatLogsTable.effectId, effectsTable.id),
+                  eq(playerStatLogsTable.playerId, playerId),
+                ),
+              ),
+          ),
+        ),
+      );
+  }
+
+  async setZeroCountdown({
+    playerId,
+  }: {
+    playerId: Player["id"];
+  }): Promise<void> {
+    await db
+      .update(effectsTable)
+      .set({ countdown: 0 })
+      .where(
+        and(
+          ne(effectsTable.type, "Mod"),
+          exists(
+            db
+              .select()
+              .from(playerStatLogsTable)
+              .where(
+                and(
+                  eq(playerStatLogsTable.effectId, effectsTable.id),
+                  eq(playerStatLogsTable.playerId, playerId),
+                ),
+              ),
+          ),
+        ),
+      );
   }
 }

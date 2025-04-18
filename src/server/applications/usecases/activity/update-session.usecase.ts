@@ -1,6 +1,7 @@
 import type { IUpdateActivitySessionUseCase } from "@/server/applications/interfaces/usecases/activity";
 import type {
   IActivityRepository,
+  IEffectRepository,
   IPlayerSkillRepository,
 } from "@/server/domain/interfaces/repositories";
 import type {
@@ -14,6 +15,7 @@ export class UpdateActivitySessionUseCase
   constructor(
     private readonly playerSkillRepo: IPlayerSkillRepository,
     private readonly activityRepo: IActivityRepository,
+    private readonly effectRepo: IEffectRepository,
   ) {}
 
   async invoke({
@@ -28,6 +30,11 @@ export class UpdateActivitySessionUseCase
       await Promise.all(
         turns.map((turn) =>
           this.playerSkillRepo.setZeroCooldown({ playerId: turn.playerId }),
+        ),
+      );
+      await Promise.all(
+        turns.map((turn) =>
+          this.effectRepo.setZeroCountdown({ playerId: turn.playerId }),
         ),
       );
     }
