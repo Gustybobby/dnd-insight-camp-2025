@@ -1,4 +1,4 @@
-import type { StatusType} from "../constants";
+import type { StatusType } from "../constants";
 
 import { VISUAL_EFFECT_LISTS } from "../constants";
 import { StatusCard } from "./components";

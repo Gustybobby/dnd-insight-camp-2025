@@ -16,3 +16,8 @@ export function nonNullable<T>(value: T, onError?: () => void): NonNullable<T> {
   }
   return value;
 }
+
+export function mapNumToAlphabet(num: number): string {
+  const startCode = "A".charCodeAt(0);
+  return String.fromCharCode(startCode + num - 1);
+}
