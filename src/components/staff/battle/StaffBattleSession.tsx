@@ -94,7 +94,13 @@ export default function StaffBattleSession({
   const endBossMutation = useMutation({
     mutationFn: () => bossEndTurn({ playerId: 1, sessionId: sessionId }),
     onSuccess: async () => {
-      Promise.all([refetchActivitySession(), refetchAllPlayerInfos]);
+      Promise.all([refetchActivitySession(), refetchAllPlayerInfos])
+        .then(() => {
+          console.log("success!");
+        })
+        .catch((e) => {
+          alert(`An error has occurred refetching data: ${e}`);
+        });
     },
   });
 
@@ -102,7 +108,13 @@ export default function StaffBattleSession({
     mutationFn: ({ playerId }: { playerId: number }) =>
       endTurn({ playerId: playerId, sessionId: sessionId }),
     onSuccess: async () => {
-      Promise.all([refetchActivitySession(), refetchAllPlayerInfos]);
+      Promise.all([refetchActivitySession(), refetchAllPlayerInfos])
+        .then(() => {
+          console.log("success!");
+        })
+        .catch((e) => {
+          alert(`An error has occurred refetching data: ${e}`);
+        });
     },
   });
 

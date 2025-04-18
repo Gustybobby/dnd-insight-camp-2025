@@ -5,9 +5,9 @@ import { ALL_STAT_TYPES } from "@/shared/stat";
 import React from "react";
 
 import { STAT_STYLE_MAP } from "@/components/players/style";
+import { mapNumToAlphabet } from "@/components/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { mapNumToAlphabet } from "@/components/utils";
 
 export interface StaffPlayerRow {
   id: number;

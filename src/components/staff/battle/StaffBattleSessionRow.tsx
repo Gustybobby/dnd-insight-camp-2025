@@ -3,9 +3,9 @@ import type { ActivitySession } from "@/server/domain/models";
 
 import React from "react";
 
+import { mapNumToAlphabet } from "@/components/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { mapNumToAlphabet } from "@/components/utils";
 
 export default function StaffBattleSessionRow({
   activitySession,

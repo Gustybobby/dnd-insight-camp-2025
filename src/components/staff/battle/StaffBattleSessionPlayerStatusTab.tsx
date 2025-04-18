@@ -3,7 +3,6 @@ import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
 import React from "react";
 
 import { VISUAL_EFFECT_LISTS, VISUAL_EFFECT_NAME_LIST } from "../constants";
-
 import Image from "next/image";
 
 export default function StaffBattleSessionPlayerStatusTab({
