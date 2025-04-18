@@ -14,7 +14,6 @@ export function StaffPlayerStats({
 }) {
   return (
     <div className="p-2">
-      
       <div className="flex flex-col gap-4">
         {playerStats.map((stat) => (
           <StatChanger
@@ -52,7 +51,7 @@ export function StaffPlayerStats({
                       value,
                     };
                   })
-                  .filter((stat) => stat.value > 0),
+                  .filter((stat) => stat.value !== 0),
               );
             } catch (error) {
               if (error instanceof Error) {

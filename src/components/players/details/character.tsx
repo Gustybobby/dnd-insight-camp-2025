@@ -3,6 +3,7 @@ import type { Character } from "@/server/domain/models";
 
 import { TitleBanner } from "@/components/players/components";
 import { EquipmentsBar } from "@/components/players/details/equipment";
+import { mapNumToAlphabet } from "@/components/utils";
 import Image from "next/image";
 
 export function CharacterModel({ character }: { character: Character }) {
@@ -41,7 +42,7 @@ export function CharacterInfo({
 }) {
   return (
     <>
-      <TitleBanner>Player {playerId}</TitleBanner>
+      <TitleBanner>Player {mapNumToAlphabet(playerId)}</TitleBanner>
       <div className="mx-auto h-0.5 w-11/12 bg-black" />
       <div className="grid grid-cols-3 place-items-center p-2 px-8">
         <div className="col-span-2">

@@ -12,7 +12,7 @@ import {
 } from "@/components/players/CharacterCarousel";
 import { TitleBanner } from "@/components/players/components";
 import { StyledLink } from "@/components/ui/link";
-import { cn } from "@/components/utils";
+import { cn, mapNumToAlphabet } from "@/components/utils";
 
 export function PlayerSelectMenu({
   playerId,
@@ -64,7 +64,9 @@ export function PlayerSelectMenu({
     <>
       <div className="absolute left-0 right-0 top-[15%] mx-auto flex w-full flex-col items-center justify-center">
         <div className="w-80">
-          <TitleBanner>Group {players?.[currentIdx].id}</TitleBanner>
+          <TitleBanner>
+            Group {mapNumToAlphabet(players?.[currentIdx].id)}
+          </TitleBanner>
         </div>
         <h2 className="motion-preset-fade z-30 w-48 px-4 py-2 text-center text-2xl font-semibold text-gold drop-shadow-md">
           {players?.[currentIdx].name}

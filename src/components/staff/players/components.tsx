@@ -155,7 +155,6 @@ export function SkillCard({
   );
 }
 
-
 export function StatusCard({
   status,
   onClick,
@@ -183,7 +182,6 @@ export function StatusCard({
     </div>
   );
 }
-
 
 export function Modal({
   children,
