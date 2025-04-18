@@ -1,4 +1,5 @@
 import type {
+  Effect,
   ModEffect,
   ModEffectCreate,
   PlayerStatLog,
@@ -14,4 +15,16 @@ export interface IEffectService {
     playerIds: PlayerStatLog["playerId"][];
     staffId: PlayerStatLog["staffId"];
   }): Promise<ModEffect>;
+
+  createAndApplyVisualEffect({
+    effectType,
+    countdown,
+    playerIds,
+    staffId,
+  }: {
+    effectType: Effect["type"];
+    countdown: Effect["countdown"];
+    playerIds: PlayerStatLog["playerId"][];
+    staffId: PlayerStatLog["staffId"];
+  }): Promise<Effect>;
 }

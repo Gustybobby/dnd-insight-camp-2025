@@ -202,12 +202,11 @@ export default function StaffBattleSession({
   });
 
   const skillMutation = useMutation({
-    mutationFn: ({ skillId, remainingUses }: OnSubmitSkillInput) =>
+    mutationFn: ({ skillId }: OnSubmitSkillInput) =>
       addPlayerSkill({
         data: {
           playerId: selectedPlayerId ?? 0,
           skillId: skillId,
-          remainingUses: remainingUses,
         },
       }),
     onSuccess: () => {

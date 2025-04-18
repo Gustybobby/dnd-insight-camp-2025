@@ -3,6 +3,7 @@ export * from "./get-all.usecase.interface";
 export * from "./get-character.usecase.interface";
 export * from "./get-items.usecase.interface";
 export * from "./get-stats.usecase.interface";
+export * from "./get-visual-effects.usecase.interface";
 export * from "./get.usecase.interface";
 export * from "./get-all-info.usecase.interface";
 export * from "./reset.usecase.interface";

@@ -105,6 +105,7 @@ export function ItemSlot({
 export function ItemInfo({
   item,
   equipped,
+  partEquipped,
   showPlayerOptions,
   onClickBack,
   onEquip,
@@ -112,6 +113,7 @@ export function ItemInfo({
 }: {
   item: PlayerItemWithInfo["item"] | null;
   equipped: boolean;
+  partEquipped: boolean;
   showPlayerOptions: boolean;
   onClickBack: () => void;
   onEquip: (itemId: PlayerItemWithInfo["itemId"]) => void;
@@ -152,7 +154,14 @@ export function ItemInfo({
       </div>
       {showPlayerOptions && EQUIPPABLE_ITEM_TYPES.includes(item.type) ? (
         <>
-          {equipped ? (
+          {partEquipped ? (
+            <button
+              className="rounded-full border-2 border-black bg-lightorange/30 px-4 py-1 font-bold"
+              disabled
+            >
+              {item.type} is equipped
+            </button>
+          ) : equipped ? (
             <button
               className="rounded-full border-2 border-black bg-lightorange px-4 py-1 font-bold"
               onClick={() => onRemove(item.id)}

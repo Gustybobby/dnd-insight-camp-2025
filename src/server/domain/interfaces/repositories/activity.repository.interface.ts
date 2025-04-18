@@ -3,6 +3,7 @@ import type {
   Activity,
   ActivitySession,
   ActivitySessionUpdate,
+  Player,
   SessionTurn,
 } from "@/server/domain/models";
 
@@ -23,6 +24,12 @@ export interface IActivityRepository {
     sessionId,
   }: {
     sessionId: ActivitySession["id"];
+  }): Promise<ActivitySessionAllInfo>;
+
+  getPlayerActiveSession({
+    playerId,
+  }: {
+    playerId: Player["id"];
   }): Promise<ActivitySessionAllInfo>;
 
   createSession({

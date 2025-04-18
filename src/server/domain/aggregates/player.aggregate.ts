@@ -3,6 +3,7 @@ import type { PlayerItemWithInfo } from "@/server/domain/aggregates/player-item.
 import type { PlayerSkillWithInfo } from "@/server/domain/aggregates/player-skill.aggregate";
 import type {
   Character,
+  Effect,
   Player,
   PlayerEquipment,
   PlayerItem,
@@ -16,6 +17,7 @@ export interface PlayerWithCharacter extends Player {
 export interface PlayerWithAllInfo extends Player {
   character: Character;
   stats: PlayerStat[];
+  effects: Effect[];
   equipments: PlayerEquipmentWithInfo[];
   playerItems: PlayerItemWithInfo[];
   playerSkills: PlayerSkillWithInfo[];

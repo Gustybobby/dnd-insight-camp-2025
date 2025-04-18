@@ -3,7 +3,6 @@
 import type { IDeletePlayerEquipmentUseCase } from "../applications/interfaces/usecases/player/equipment/delete.usecase.interface";
 import type {
   IEquipEquipmentUseCase,
-  IGetAllPlayerEquipmentsUseCase,
   IRemoveEquipmentUseCase,
 } from "@/server/applications/interfaces/usecases/player/equipment";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
@@ -20,7 +19,6 @@ import { StaffRepository } from "@/server/infrastructure/repositories/staff.repo
 import { SessionService } from "@/server/infrastructure/services/session.service";
 import {
   EquipEquipmentUseCase,
-  GetAllPlayerEquipmentsUseCase,
   RemoveEquipmentUseCase,
 } from "@/server/applications/usecases/player/equipment";
 
@@ -43,18 +41,6 @@ const equipmentService = new EquipmentService(
   itemService,
   effectService,
 );
-
-export async function getPlayerEquipments(
-  params: UseCaseParams<IGetAllPlayerEquipmentsUseCase>,
-): Promise<UseCaseReturn<IGetAllPlayerEquipmentsUseCase> | null> {
-  const getAllPlayerEquipmentsUseCase = new GetAllPlayerEquipmentsUseCase(
-    equipmentRepo,
-  );
-  return getAllPlayerEquipmentsUseCase.invoke(params).catch((error) => {
-    console.error(error);
-    return null;
-  });
-}
 
 export async function deletePlayerEquipment(
   params: UseCaseParams<IDeletePlayerEquipmentUseCase>,

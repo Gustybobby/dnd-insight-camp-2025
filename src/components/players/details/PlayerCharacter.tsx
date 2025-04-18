@@ -20,6 +20,7 @@ import {
   PlayerStats,
   StatInfo,
 } from "@/components/players/details/stat";
+import { PlayerStatusesTab } from "@/components/players/details/status";
 import { cn } from "@/components/utils";
 
 export function PlayerCharacter({
@@ -98,6 +99,15 @@ export function PlayerCharacter({
                 ({ item }) => item.id === window.itemId,
               ) ?? false
             }
+            partEquipped={
+              !!playerAllInfo?.equipments.some(
+                ({ item }) =>
+                  item.type ===
+                  playerAllInfo?.playerItems?.find(
+                    ({ item }) => item.id === window.itemId,
+                  )?.item.type,
+              )
+            }
             showPlayerOptions={isPlayer}
             onClickBack={() => setWindow({ type: "character" })}
             onEquip={(itemId) => {
@@ -154,20 +164,21 @@ export function PlayerCharacter({
               />
             ),
           },
-          { label: "Status", node: <div></div> },
+          {
+            label: "Status",
+            node: playerAllInfo?.effects && (
+              <PlayerStatusesTab effects={playerAllInfo.effects} />
+            ),
+          },
           {
             label: "Inventory",
-            node: (
-              <>
-                {playerAllInfo?.playerItems && (
-                  <Inventory
-                    items={playerAllInfo.playerItems}
-                    onClick={(item) =>
-                      setWindow({ type: "itemInfo", itemId: item.id })
-                    }
-                  />
-                )}
-              </>
+            node: playerAllInfo?.playerItems && (
+              <Inventory
+                items={playerAllInfo.playerItems}
+                onClick={(item) =>
+                  setWindow({ type: "itemInfo", itemId: item.id })
+                }
+              />
             ),
           },
           {

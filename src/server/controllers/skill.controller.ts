@@ -11,6 +11,7 @@ import type { IGetAllSkillsUseCase } from "@/server/applications/interfaces/usec
 import type { UseCaseParams, UseCaseReturn } from "./utils";
 
 import { AuthService } from "@/server/domain/services/auth.service";
+import { ActivityRepository } from "@/server/infrastructure/repositories/activity.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { PlayerSkillRepository } from "@/server/infrastructure/repositories/player-skill.repository";
 import { SkillRepository } from "@/server/infrastructure/repositories/skill.repository";
@@ -25,12 +26,13 @@ import { PlayerUseSkillUseCase } from "../applications/usecases/player/skill";
 import { GetAllSkillsUseCase } from "../applications/usecases/skill";
 import { PlayerSkillCreate } from "../domain/models";
 
-const skillRepo = new SkillRepository();
-const playerSkillRepo = new PlayerSkillRepository();
-const sessionService = new SessionService();
-
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
+const skillRepo = new SkillRepository();
+const playerSkillRepo = new PlayerSkillRepository();
+const activityRepo = new ActivityRepository();
+
+const sessionService = new SessionService();
 
 const authService = new AuthService(playerRepo, staffRepo, sessionService);
 
@@ -99,7 +101,10 @@ export async function playerUseSkill({
 }: UseCaseParams<IPlayerUseSkillUseCase>): Promise<UseCaseReturn<IPlayerUseSkillUseCase> | null> {
   await authService.authSessionPlayer({ playerId });
 
-  const playerUseSkillUseCase = new PlayerUseSkillUseCase(playerSkillRepo);
+  const playerUseSkillUseCase = new PlayerUseSkillUseCase(
+    playerSkillRepo,
+    activityRepo,
+  );
   return playerUseSkillUseCase.invoke({ playerId, skillId }).catch((error) => {
     console.error(error);
     return null;

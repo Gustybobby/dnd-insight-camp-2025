@@ -26,6 +26,7 @@ import {
   PlayerStats,
   StatInfo,
 } from "@/components/players/details/stat";
+import { PlayerStatusesTab } from "@/components/players/details/status";
 import { StyledLink } from "@/components/ui/link";
 import { cn } from "@/components/utils";
 
@@ -153,6 +154,15 @@ export function ActivityPlayer({
                 ({ item }) => item.id === window.itemId,
               ) ?? false
             }
+            partEquipped={
+              !!playerAllInfo?.equipments.some(
+                ({ item }) =>
+                  item.type ===
+                  playerAllInfo?.playerItems?.find(
+                    ({ item }) => item.id === window.itemId,
+                  )?.item.type,
+              )
+            }
             showPlayerOptions={isPlayer}
             onClickBack={() => setWindow({ type: "character" })}
             onEquip={(itemId) => {
@@ -175,7 +185,7 @@ export function ActivityPlayer({
                 (playerSkill) => playerSkill.skillId === window.skillId,
               ) ?? null
             }
-            showPlayerOptions={isPlayer}
+            showPlayerOptions={isPlayer && isCurrentTurn}
             onClickBack={() => setWindow({ type: "character" })}
             onUse={(skillId) => {
               void useSkillMutation
@@ -209,7 +219,12 @@ export function ActivityPlayer({
               />
             ),
           },
-          { label: "Status", node: <div></div> },
+          {
+            label: "Status",
+            node: playerAllInfo?.effects && (
+              <PlayerStatusesTab effects={playerAllInfo.effects} />
+            ),
+          },
           {
             label: "Inventory",
             node: (

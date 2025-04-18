@@ -43,6 +43,7 @@ export class GetAllPlayersInfoUseCase implements IGetAllPlayersInfoUseCase {
       return {
         ...player,
         stats: stats,
+        effects: [],
         equipments: equipments,
         playerItems: items,
         playerSkills: skills,

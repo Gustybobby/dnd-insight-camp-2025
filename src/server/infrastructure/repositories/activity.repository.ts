@@ -4,6 +4,7 @@ import type {
   Activity,
   ActivitySession,
   ActivitySessionUpdate,
+  Player,
   SessionTurn,
 } from "@/server/domain/models";
 
@@ -80,6 +81,29 @@ export class ActivityRepository implements IActivityRepository {
         .where(eq(sessionTurnsTable.sessionId, sessionId)),
     ]);
     return { ...session, turns };
+  }
+
+  async getPlayerActiveSession({
+    playerId,
+  }: {
+    playerId: Player["id"];
+  }): Promise<ActivitySessionAllInfo> {
+    const playerActiveSessionTurn = await db
+      .select(getTableColumns(sessionTurnsTable))
+      .from(sessionTurnsTable)
+      .innerJoin(
+        activitySessionsTable,
+        eq(activitySessionsTable.id, sessionTurnsTable.sessionId),
+      )
+      .where(
+        and(
+          eq(activitySessionsTable.isActive, true),
+          eq(sessionTurnsTable.playerId, playerId),
+        ),
+      )
+      .limit(1)
+      .then(takeOneOrThrow);
+    return this.getSession({ sessionId: playerActiveSessionTurn.sessionId });
   }
 
   async createSession({

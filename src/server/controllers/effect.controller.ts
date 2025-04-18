@@ -1,16 +1,26 @@
 "use server";
 
-import type { ICreateModEffectUseCase } from "@/server/applications/interfaces/usecases/effect";
+import type {
+  ICreateModEffectUseCase,
+  ICreateVisualEffectUseCase,
+} from "@/server/applications/interfaces/usecases/effect";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
-import { ModEffectCreate, Player } from "@/server/domain/models";
+import {
+  EffectTypeEnum,
+  ModEffectCreate,
+  Player,
+} from "@/server/domain/models";
 import { AuthService } from "@/server/domain/services/auth.service";
 import { EffectService } from "@/server/domain/services/effect.service";
 import { EffectRepository } from "@/server/infrastructure/repositories/effect.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
 import { SessionService } from "@/server/infrastructure/services/session.service";
-import { CreateModEffectUseCase } from "@/server/applications/usecases/effect";
+import {
+  CreateModEffectUseCase,
+  CreateVisualEffectUseCase,
+} from "@/server/applications/usecases/effect";
 
 const effectRepo = new EffectRepository();
 const playerRepo = new PlayerRepository();
@@ -34,6 +44,32 @@ export async function createModEffect({
   return createModEffectUseCase
     .invoke({
       data: ModEffectCreate.parse(data),
+      playerIds: Player.shape.id.array().parse(playerIds),
+      staffId: session.user.staffId,
+    })
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
+}
+
+export async function createVisualEffect({
+  effectType,
+  countdown,
+  playerIds,
+}: Omit<
+  UseCaseParams<ICreateVisualEffectUseCase>,
+  "staffId"
+>): Promise<UseCaseReturn<ICreateVisualEffectUseCase> | null> {
+  const session = await authService.authStaff();
+
+  const createVisualEffectUseCase = new CreateVisualEffectUseCase(
+    effectService,
+  );
+  return createVisualEffectUseCase
+    .invoke({
+      effectType: EffectTypeEnum.parse(effectType),
+      countdown,
       playerIds: Player.shape.id.array().parse(playerIds),
       staffId: session.user.staffId,
     })

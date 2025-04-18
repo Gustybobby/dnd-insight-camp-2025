@@ -62,12 +62,11 @@ export function useStaffQuery({ playerId }: { playerId: number }) {
   });
 
   const skillMutation = useMutation({
-    mutationFn: ({ skillId, remainingUses }: OnSubmitSkillInput) =>
+    mutationFn: ({ skillId }: OnSubmitSkillInput) =>
       addPlayerSkill({
         data: {
           playerId: playerId,
           skillId: skillId,
-          remainingUses: remainingUses,
         },
       }),
     onSuccess: () => {
