@@ -129,7 +129,12 @@ export default function PlayerRow({ player, items, refetch }: PlayerRowProp) {
               ></ItemCell>
             ))}
             <AddItemSection
-              items={items}
+              items={items.filter(
+                (item) =>
+                  !player.equipments.some(
+                    (equipment) => equipment.itemId === item.id,
+                  ),
+              )}
               playerId={player.id}
               handleOnAddNewItem={handleOnAddNewItem}
             />

@@ -11,6 +11,7 @@ import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
 import { ItemCreate, PlayerItem } from "@/server/domain/models";
 import { AuthService } from "@/server/domain/services/auth.service";
+import { EquipmentRepository } from "@/server/infrastructure/repositories/equipment.repository";
 import { ItemRepository } from "@/server/infrastructure/repositories/item.repository";
 import { PlayerRepository } from "@/server/infrastructure/repositories/player.repository";
 import { StaffRepository } from "@/server/infrastructure/repositories/staff.repository";
@@ -22,7 +23,6 @@ import {
   DeletePlayerItemUseCase,
   GetAllItemsUseCase,
 } from "@/server/applications/usecases/item";
-import { EquipmentRepository } from "@/server/infrastructure/repositories/equipment.repository";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
