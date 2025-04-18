@@ -37,7 +37,7 @@ export function PlayerSkillDisplay({
     >
       <SkillIcon image={playerSkill.skill.image} />
       <div className="flex w-full flex-col items-start px-4 py-2">
-        <h1 className="font-[family-name:var(--noto-sans-thai)] font-bold">
+        <h1 className="font-notosansthai font-bold">
           {playerSkill.skill.name}
         </h1>
         <div className="flex w-full items-center justify-between">
@@ -83,10 +83,10 @@ export function PlayerSkillInfo({
       </button>
       <div className="grid w-full grid-cols-4 gap-4">
         <SkillIcon image={playerSkill.skill.image} />
-        <h1 className="col-span-3 flex items-center justify-center rounded-full bg-oldcream px-8 py-2 font-[family-name:var(--noto-sans-thai)] text-xl font-bold">
+        <h1 className="col-span-3 flex items-center justify-center rounded-full bg-oldcream px-8 py-2 font-notosansthai text-xl font-bold">
           {playerSkill.skill.name}
         </h1>
-        <p className="col-span-full text-left font-[family-name:var(--noto-sans-thai)]">
+        <p className="col-span-full text-left font-notosansthai">
           {playerSkill.skill.description}
         </p>
         <p className="col-span-full text-left text-lg font-bold">

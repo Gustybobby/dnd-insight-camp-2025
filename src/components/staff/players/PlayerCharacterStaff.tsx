@@ -11,7 +11,10 @@ import {
   addPlayerItem,
   getAllItems,
 } from "@/server/controllers/items.controller";
-import { getPlayerStats } from "@/server/controllers/player.controller";
+import {
+  getPlayer,
+  getPlayerStats,
+} from "@/server/controllers/player.controller";
 import {
   addPlayerSkill,
   getAllSkills,
@@ -41,11 +44,17 @@ export interface OnSubmitSkillInput {
 }
 
 export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
+  const { data: player } = useQuery({
+    queryKey: ["getPlayer", playerId],
+    queryFn: async () => await getPlayer({ playerId }),
+    refetchInterval: 5000,
+  });
+
   //Stats
   const { data: playerStats, refetch: refetchPlayerStats } = useQuery({
     queryKey: ["getPlayerStats", playerId],
     queryFn: async () => await getPlayerStats({ playerId }),
-    refetchInterval: 1000,
+    refetchInterval: 5000,
   });
 
   const statMutation = useMutation({
@@ -162,7 +171,6 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
       <div className="w-full px-5">
         <div className="grid grid-cols-3 rounded-md border-2 border-oldcream bg-cream px-4 py-2 text-xl">
           <Link href={"/staff"}>
-            {" "}
             <Image
               src={"/asset/props/back_arrow.png"}
               alt={"back"}
@@ -207,6 +215,7 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
               modal: (
                 <ItemModal
                   item={item ?? null}
+                  playerName={player?.name}
                   modalOpen={modalIsOpen}
                   closeModal={() => setModalIsOpen(false)}
                   onSubmit={() =>

@@ -85,7 +85,7 @@ export function PlayerSelectMenu({
         }}
       />
 
-      <h2 className="motion-preset-fade absolute bottom-[35%] left-0 right-0 mx-auto w-48 px-4 py-2 text-center font-[family-name:var(--noto-sans-thai)] text-xl font-semibold text-gold drop-shadow-md">
+      <h2 className="motion-preset-fade absolute bottom-[35%] left-0 right-0 mx-auto w-48 px-4 py-2 text-center font-notosansthai text-xl font-semibold text-gold drop-shadow-md">
         {character.name}
       </h2>
 

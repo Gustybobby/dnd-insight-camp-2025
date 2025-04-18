@@ -26,9 +26,9 @@ function ItemModal({
 }) {
   console.log(modalOpen);
   return (
-    <div className="flex flex-col gap-y-4 font-[family-name:var(--noto-sans-thai)]">
+    <div className="flex flex-col gap-y-4 font-notosansthai">
       <h2 className="text-xl font-semibold">{item?.name}</h2>
-      <p className="">{`Give ${item?.name}${playerName ?? ` to ${playerName}`}`}</p>
+      <p className="">{`Give ${item?.name} to "${playerName}"`}</p>
       <div className="flex w-full flex-row justify-center gap-x-2">
         {item?.stats
           .map((statText) => statText.split(":"))
@@ -44,6 +44,7 @@ function ItemModal({
             </InfoBadge>
           ))}
       </div>
+      <div className="italic">{item?.description}</div>
       <div className="flex flex-row justify-center gap-x-2">
         <button
           onClick={() => onSubmit({ itemId: item?.id ?? 0, amount: 1 })}

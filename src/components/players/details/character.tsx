@@ -8,7 +8,7 @@ import Image from "next/image";
 export function CharacterModel({ character }: { character: Character }) {
   return (
     <div className="motion-preset-bounce relative mb-4 max-w-32 motion-delay-200">
-      <h1 className="text-center font-[family-name:var(--noto-sans-thai)] font-bold">
+      <h1 className="text-center font-notosansthai font-bold">
         {character.name}
       </h1>
       <Image

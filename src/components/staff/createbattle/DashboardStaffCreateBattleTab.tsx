@@ -9,7 +9,6 @@ import {
   upsertSessionTurn,
 } from "@/server/controllers/activity.controller";
 
-import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import StyledButton from "../StyledButton";
@@ -30,27 +29,22 @@ export interface UpdateActivitySessionMutation {
 interface CreateActivitySessionMutationType {
   activityId: number;
   players: { id: number; turn: number }[];
-  bossTurnOrder: number | null | undefined;
+  bossTurnOrder: number;
 }
 
 interface StaffBattleTabProps {
   players?: PlayerWithAllInfo[] | null;
   activitySessions: ActivitySessionAllInfo[] | null;
+  activityId: number;
 }
 
 export default function StaffCreateBattleTab({
   players,
   activitySessions,
+  activityId,
 }: StaffBattleTabProps) {
   const updateActivitySessionMutation = useMutation({
-    mutationFn: ({ sessionId, bossTurnOrder }: UpdateActivitySessionMutation) =>
-      updateActivitySession({
-        sessionId: sessionId,
-        data: {
-          bossTurnOrder: bossTurnOrder,
-          isActive: true,
-        },
-      }),
+    mutationFn: updateActivitySession,
     onSuccess: async (data) => {
       console.log("Player turn updated successfully", data);
     },
@@ -75,36 +69,37 @@ export default function StaffCreateBattleTab({
       return await createActivitySession({ activityId });
     },
     onSuccess: async (session, variables) => {
+      if (!session) {
+        return;
+      }
       console.log("Battle session created successfully", session);
       console.log("Adding players to session");
 
-      variables?.players.forEach((player, index) => {
-        upsertPlayerMutation.mutate({
-          sessionId: session?.id ?? 1,
-          playerId: player.id,
-          order: index + 1,
-        });
-      });
-      if (
-        variables.bossTurnOrder !== null &&
-        variables.bossTurnOrder &&
-        !isNaN(variables.bossTurnOrder)
-      ) {
-        updateActivitySessionMutation.mutate({
-          sessionId: session?.id ?? 1,
+      const sessionTurns = await Promise.all(
+        variables.players.map((player) =>
+          upsertPlayerMutation.mutateAsync({
+            sessionId: session.id,
+            playerId: player.id,
+            order: player.turn,
+          }),
+        ),
+      );
+
+      updateActivitySessionMutation.mutate({
+        sessionId: session.id,
+        data: {
           bossTurnOrder: variables.bossTurnOrder,
-        });
-      } else {
-        updateActivitySessionMutation.mutate({
-          sessionId: session?.id ?? 1,
-          bossTurnOrder: variables.players.length + 1,
-        });
-      }
+          isActive: true,
+          currentTurnId: sessionTurns.find(
+            (sessionTurn) => sessionTurn?.order === 1,
+          )?.id,
+        },
+      });
       alert(`Session ${session?.id} has been created`);
     },
   });
 
-  const activityBattleId = activitySessions?.[0].activityId;
+  const activityBattleId = activityId;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -114,30 +109,52 @@ export default function StaffCreateBattleTab({
       (player) => formData.get(`player-${player.id}-check`) === "on",
     );
 
-    const formattedPlayers = selectedPlayers
-      ?.map((player, index) => {
-        const rawTurn = formData.get(`player-${player.id}-turn`);
-        const parsedTurn = parseInt(rawTurn as string);
-        const isValidTurn = !isNaN(parsedTurn);
+    if (!selectedPlayers || selectedPlayers.length === 0) {
+      alert("no player selected");
+      return;
+    }
 
-        return {
-          id: player.id,
-          turn: isValidTurn ? parsedTurn : Infinity, // fallback pushes invalid turns to bottom
-          originalIndex: index,
-        };
-      })
-      .sort((a, b) => {
-        if (a.turn === b.turn) {
-          return a.originalIndex - b.originalIndex;
-        }
-        return a.turn - b.turn;
-      });
-    const bossTurnOrder = parseInt(formData.get(`boss-turn`) as string);
+    const formattedPlayers: { id: string; turn: number }[] = [];
+
+    const bossTurnOrder = Number(formData.get(`boss-turn`));
     console.log("Boss Turn Order:", bossTurnOrder);
+    if (!bossTurnOrder || isNaN(bossTurnOrder)) {
+      alert("invalid boss turn");
+      return;
+    }
+
+    formattedPlayers.push({ id: "boss", turn: bossTurnOrder });
+
+    for (const player of selectedPlayers) {
+      const rawTurnData = formData.get(`player-${player.id}-turn`);
+      const turn = Number(rawTurnData);
+      if (!turn || isNaN(turn)) {
+        alert(`invalid turn for player ${player.id}: ${rawTurnData}`);
+        return;
+      }
+      formattedPlayers.push({ id: String(player.id), turn });
+    }
+    formattedPlayers.sort((a, b) => a.turn - b.turn);
+
+    for (let i = 0; i < formattedPlayers.length - 1; i++) {
+      if (i == 0 && formattedPlayers[i].turn !== 1) {
+        alert("turn must start with 1");
+        return;
+      }
+      if (formattedPlayers[i + 1].turn - formattedPlayers[i].turn !== 1) {
+        alert(
+          `${formattedPlayers[i].id} to ${formattedPlayers[i + 1].id} invalid turn sequence`,
+        );
+        return;
+      }
+    }
+
     console.log("Formatted Players:", formattedPlayers);
     battleSessionMutation.mutate({
       activityId: activityBattleId ?? 1,
-      players: formattedPlayers ?? [],
+      players: formattedPlayers
+        .filter(({ id }) => id !== "boss")
+        .map((player) => ({ ...player, id: Number(player.id) })),
       bossTurnOrder: bossTurnOrder,
     });
   };
@@ -153,6 +170,7 @@ export default function StaffCreateBattleTab({
       inBattle: playerIdsInBattle?.includes(player.id) ?? false,
     };
   });
+
   return (
     <div className="flex w-full flex-col gap-y-1 p-2">
       <div className="flex w-full flex-col gap-y-1 text-center">
@@ -162,9 +180,11 @@ export default function StaffCreateBattleTab({
           <h2 className="">Select</h2>
           <h2 className="">Order</h2>
         </div>
-        <form onSubmit={handleSubmit} className="flex w-full flex-col">
-          <div className="flex h-[90%] w-full flex-col items-center gap-y-1 overflow-y-scroll">
-            {playersWithInBattle?.map((player) => (
+        <div>
+          <h1 className="text-xl font-bold">In Battle</h1>
+          {playersWithInBattle
+            ?.filter(({ inBattle }) => inBattle)
+            .map((player) => (
               <StaffCreateBattleRow
                 key={`player-${player.id}-battle`}
                 id={player.id}
@@ -174,10 +194,27 @@ export default function StaffCreateBattleTab({
                 maxTurn={players ? players.length + 1 : 0}
               />
             ))}
+        </div>
+        <form onSubmit={handleSubmit} className="flex w-full flex-col">
+          <div className="flex h-[90%] w-full flex-col items-center gap-y-1">
+            <h1 className="text-xl font-bold">Selectable</h1>
+            {playersWithInBattle
+              ?.filter(({ inBattle }) => !inBattle)
+              .map((player) => (
+                <StaffCreateBattleRow
+                  key={`player-${player.id}-battle`}
+                  id={player.id}
+                  name={player.name}
+                  character={player.character}
+                  inBattle={player.inBattle}
+                  maxTurn={players ? players.length + 1 : 0}
+                />
+              ))}
+            <StaffCreateBattleBossRow
+              maxTurn={players ? players.length + 1 : 0}
+            />
           </div>
-          <StaffCreateBattleBossRow
-            maxTurn={players ? players.length + 1 : 0}
-          />
+
           <StyledButton type="submit" className="mt-8 w-fit self-center">
             Create a Battle Session
           </StyledButton>

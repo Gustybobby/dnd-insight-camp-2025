@@ -128,7 +128,7 @@ export function ItemInfo({
       </button>
       <div className="grid w-full grid-cols-4 gap-4">
         <ItemIcon item={item} />
-        <h1 className="col-span-3 rounded-full bg-oldcream px-8 py-2 text-center font-[family-name:var(--noto-sans-thai)] text-xl font-bold">
+        <h1 className="col-span-3 rounded-full bg-oldcream px-8 py-2 text-center font-notosansthai text-xl font-bold">
           {item.name}
         </h1>
         <div className="col-span-full flex items-center justify-between">
@@ -146,7 +146,7 @@ export function ItemInfo({
               ))}
           </div>
         </div>
-        <p className="col-span-full text-left font-[family-name:var(--noto-sans-thai)]">
+        <p className="col-span-full text-left font-notosansthai">
           {item.description}
         </p>
       </div>

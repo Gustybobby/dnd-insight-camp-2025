@@ -122,9 +122,7 @@ export default function StaffBattleSession({
     .sort((a, b) => a.order - b.order);
   console.log("Players : ", players);
 
-  const [selectedPlayerId, setSelectedPlayerId] = useState<number>(
-    players?.[0].id ?? 0,
-  );
+  const [selectedPlayerId, setSelectedPlayerId] = useState<number>(1);
   const [currentPlayerId, setCurrentPlayerId] = useState<number | null>(null);
 
   const statMutation = useMutation({
@@ -133,9 +131,7 @@ export default function StaffBattleSession({
         data: { ...modEffectCreate },
         playerIds: [+selectedPlayerId],
       }),
-    onSuccess: () => {
-      alert("Stat changed successfully!");
-    },
+    onSuccess: () => {},
   });
 
   const onStatSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -144,16 +140,19 @@ export default function StaffBattleSession({
     const statChange = Object.fromEntries(
       formData.entries().filter(([, value]) => +value !== 0),
     );
-    const mutationPromises = Object.entries(statChange).map(([key, value]) => {
-      return statMutation.mutateAsync({
-        stat: key as StatTypeEnum,
-        value: +value,
-        itemId: null,
-      });
-    });
+    const mutationPromises = Object.entries(statChange).map(
+      async ([key, value]) => {
+        return await statMutation.mutateAsync({
+          stat: key as StatTypeEnum,
+          value: +value,
+          itemId: null,
+        });
+      },
+    );
     Promise.all(mutationPromises)
       .then(() => {
         void refetchAllPlayerInfos();
+        alert("Stats has been changed successfully!");
       })
       .catch((e) => {
         alert(`Error changing stat: ${e}`);
@@ -253,7 +252,7 @@ export default function StaffBattleSession({
   const handleEndPlayerTurn = () => {
     setCurrentPlayerId(getCurrentTurnPlayerId(activitySession ?? null));
     endPlayerTurnMutation.mutate({
-      playerId: currentPlayerId ?? players?.[0].id ?? 0,
+      playerId: currentPlayerId ?? 0,
     });
   };
 
@@ -263,6 +262,8 @@ export default function StaffBattleSession({
   };
 
   console.log("Current player id", currentPlayerId);
+
+  console.log(activitySession);
 
   return (
     <div className="flex w-full flex-col">
@@ -286,7 +287,6 @@ export default function StaffBattleSession({
                 : `End Group Turn`}
             </StyledButton>
             <StyledButton
-              className={`${activitySession?.currentTurnId === 1}`}
               onClick={() => handleEndBossTurn()}
               disabled={activitySession?.currentTurnId !== null}
             >
