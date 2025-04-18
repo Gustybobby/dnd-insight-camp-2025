@@ -10,3 +10,5 @@ export const STAT_TEXT_STYLE_MAP: Record<
   Int: { label: "Intelligence", color: "text-orange-500" },
   HP: { label: "Health", color: "text-red-500" },
 };
+
+export const BUTTON_CLASSNAME_STYLE = `cursor-pointer rounded-lg border-2 border-black bg-brown-gradient px-4 py-2 text-black transition hover:opacity-90`;

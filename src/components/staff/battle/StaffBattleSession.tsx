@@ -1,30 +1,46 @@
 "use client";
 
-// import type { StatTypeEnum } from "@/server/domain/models";
-// import type { ModEffectCreate } from "@/server/domain/models/effect.model";
+import type { ActivitySessionAllInfo } from "@/server/domain/aggregates";
+import type {
+  Item,
+  ModEffectCreate,
+  Skill,
+  StatTypeEnum,
+} from "@/server/domain/models";
+import type { OnSubmitSkillInput } from "../players/PlayerCharacterStaff";
 
-// import { ALL_STAT_TYPES } from "@/shared/stat";
+import { ALL_STAT_TYPES } from "@/shared/stat";
 
-// import { createModEffect } from "@/server/controllers/effect.controller";
-// import {
-//   addPlayerItem,
-//   getAllItems,
-// } from "@/server/controllers/items.controller";
-import { getActivitySession } from "@/server/controllers/activity.controller";
+import {
+  bossEndTurn,
+  endTurn,
+  getActivitySession,
+} from "@/server/controllers/activity.controller";
+import { createModEffect } from "@/server/controllers/effect.controller";
+import {
+  addPlayerItem,
+  getAllItems,
+} from "@/server/controllers/items.controller";
 import { getAllPlayersInfo } from "@/server/controllers/player.controller";
+import {
+  addPlayerSkill,
+  getAllSkills,
+} from "@/server/controllers/skill.controller";
 
-// import ItemModal from "../players/ItemModal";
-// import SkillModal from "../players/SkillModal";
-// import StaffPlayerSkills from "../players/StaffPlayerSkills";
-// import { StaffPlayerStats } from "../players/StaffPlayerStats";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-// import { PlayerWithAllInfo } from "@/server/domain/aggregates";
-import StaffBattlePlayersInfo from "./StaffBattlePlayersInfo";
-// import { PlayerCharacter } from "@/components/players/details/PlayerCharacter";
-// import { StaffPlayerUtils } from "@/components/staff/players/StaffPlayerUtils";
-import Link from "next/link";
+import ItemModal from "../players/ItemModal";
+import SkillModal from "../players/SkillModal";
+import StaffPlayerItems from "../players/StaffPlayerItems";
+import StaffPlayerSkills from "../players/StaffPlayerSkills";
+import { StaffPlayerStats } from "../players/StaffPlayerStats";
+import { StaffPlayerUtils } from "../players/StaffPlayerUtils";
+import StyledButton from "../StyledButton";
+import TopNav from "../TopNav";
+import StaffBattlePlayersInfo from "./StaffBattleSessionPlayersInfo";
+import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -33,22 +49,31 @@ export interface OnSubmitItemInput {
 
 export default function StaffBattleSession({
   sessionId,
-  // players
 }: {
   sessionId: number;
-  // players: PlayerWithAllInfo[];
 }) {
   //Stats
+  const endBossMutation = useMutation({
+    mutationFn: () => bossEndTurn({ playerId: 1, sessionId: sessionId }),
+    onSuccess: () => {},
+  });
+
+  const endPlayerTurnMutation = useMutation({
+    mutationFn: ({ playerId }: { playerId: number }) =>
+      endTurn({ playerId: playerId, sessionId: sessionId }),
+    onSuccess: () => {},
+  });
+
   const { data: activitySession } = useQuery({
     queryKey: ["getActivitySession", sessionId],
     queryFn: async () => await getActivitySession({ sessionId: sessionId }),
-    refetchInterval: 5000,
+    refetchInterval: 10000,
   });
 
-  const { data: allPlayers } = useQuery({
+  const { data: allPlayers, refetch: refetchAllPlayerInfos } = useQuery({
     queryKey: ["getAllPlayers", sessionId],
     queryFn: async () => await getAllPlayersInfo(),
-    refetchInterval: 5000,
+    refetchInterval: 10000,
   });
 
   const players = allPlayers
@@ -63,80 +88,205 @@ export default function StaffBattleSession({
             ?.order ?? -1,
       };
     });
+  console.log("Players : ", players);
 
-  // const statMutation = useMutation({
-  //   mutationFn: (modEffectCreate: ModEffectCreate) =>
-  //     createModEffect({ data: { ...modEffectCreate }, playerIds: [+playerId] }),
-  //   onSuccess: () => {
-  //     alert("Stat changed successfully!");
-  //   },
-  // });
+  const [selectedPlayerId, setSelectedPlayerId] = useState<number>(
+    players?.[0].id ?? 0,
+  );
+  const [currentPlayerId, setCurrentPlayerId] = useState<number | null>(null);
 
-  // const onStatSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   const formData = new FormData(e.currentTarget);
-  //   const statChange = Object.fromEntries(
-  //     formData.entries().filter(([, value]) => +value !== 0),
-  //   );
-  //   const mutationPromises = Object.entries(statChange).map(([key, value]) => {
-  //     return statMutation.mutateAsync({
-  //       stat: key as StatTypeEnum,
-  //       value: +value,
-  //       itemId: null,
-  //     });
-  //   });
-  //   Promise.all(mutationPromises)
-  //     .then(() => {
-  //       void refetchPlayerStats();
-  //     })
-  //     .catch((e) => {
-  //       alert(`Error changing stat: ${e}`);
-  //     });
-  //   e.currentTarget.reset();
-  // };
+  const statMutation = useMutation({
+    mutationFn: (modEffectCreate: ModEffectCreate) =>
+      createModEffect({
+        data: { ...modEffectCreate },
+        playerIds: [+selectedPlayerId],
+      }),
+    onSuccess: () => {
+      alert("Stat changed successfully!");
+    },
+  });
 
-  const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
+  const onStatSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const statChange = Object.fromEntries(
+      formData.entries().filter(([, value]) => +value !== 0),
+    );
+    const mutationPromises = Object.entries(statChange).map(([key, value]) => {
+      return statMutation.mutateAsync({
+        stat: key as StatTypeEnum,
+        value: +value,
+        itemId: null,
+      });
+    });
+    Promise.all(mutationPromises)
+      .then(() => {
+        void refetchAllPlayerInfos();
+      })
+      .catch((e) => {
+        alert(`Error changing stat: ${e}`);
+      });
+    e.currentTarget.reset();
+  };
 
   //Items
-  // const itemMutation = useMutation({
-  //   mutationFn: ({ itemId, amount }: OnSubmitItemInput) =>
-  //     addPlayerItem({
-  //       data: { itemId: itemId, playerId: playerId, amount: amount },
-  //     }),
-  //   onSuccess: () => {
-  //     // Refetch the items or update the state to reflect the new item
-  //     alert("Item given successfully!");
-  //   },
-  // });
+  const itemMutation = useMutation({
+    mutationFn: ({ itemId, amount }: OnSubmitItemInput) =>
+      addPlayerItem({
+        data: {
+          itemId: itemId,
+          playerId: selectedPlayerId ?? 0,
+          amount: amount,
+        },
+      }),
+    onSuccess: () => {
+      // Refetch the items or update the state to reflect the new item
+      alert("Item given successfully!");
+    },
+  });
 
-  // const { data: items } = useQuery({
-  //   queryKey: ["getAllItems"],
-  //   queryFn: async () => await getAllItems(),
-  //   refetchInterval: 10000,
-  // });
-  // const onItemSubmit = async ({ itemId, amount }: OnSubmitItemInput) => {
-  //   console.log(itemId, amount);
-  //   itemMutation.mutate({ itemId, amount });
-  // };
-  // useEffect(() => {}), [selectedPlayerId];
+  const { data: items } = useQuery({
+    queryKey: ["getAllItems"],
+    queryFn: async () => await getAllItems(),
+  });
+  const onItemSubmit = async ({ itemId, amount }: OnSubmitItemInput) => {
+    console.log(itemId, amount);
+    itemMutation.mutate({ itemId, amount });
+  };
+
+  //Skills
+  const { data: skills } = useQuery({
+    queryKey: ["getAllSkills"],
+    queryFn: async () => await getAllSkills(),
+    refetchInterval: 10000,
+  });
+
+  const skillMutation = useMutation({
+    mutationFn: ({ skillId, remainingUses }: OnSubmitSkillInput) =>
+      addPlayerSkill({
+        data: {
+          playerId: selectedPlayerId ?? 0,
+          skillId: skillId,
+          remainingUses: remainingUses,
+        },
+      }),
+    onSuccess: () => {
+      // Refetch the items or update the state to reflect the new item
+      alert("Item given successfully!");
+    },
+  });
+
+  const onSkillSubmit = async ({
+    skillId,
+    remainingUses,
+  }: OnSubmitSkillInput) => {
+    console.log({
+      playerId: selectedPlayerId,
+      skillId: skillId,
+      remainingUses: remainingUses,
+    });
+
+    skillMutation.mutate({ skillId, remainingUses });
+  };
+
+  const [modalIsOpen, setModalIsOpen] = React.useState(false);
+
+  const openModal = ({
+    label,
+    data,
+  }: {
+    label: string;
+    data: Item | Skill;
+  }) => {
+    if (label === "Item") {
+      setItem(data as Item);
+    }
+    if (label === "Skill") {
+      setSkill(data as Skill);
+    }
+    setModalIsOpen(true);
+  };
+
+  const [item, setItem] = React.useState<Item | null>(null);
+  const [skill, setSkill] = React.useState<Skill | null>(null);
+
+  const handleEndBossTurn = () => {
+    endBossMutation.mutate();
+  };
+  const handleEndBattle = () => {};
+
+  const handleEndPlayerTurn = () => {
+    setCurrentPlayerId(getCurrentTurnPlayerId(activitySession ?? null));
+    console.log(currentPlayerId);
+    if (currentPlayerId !== null) {
+      endPlayerTurnMutation.mutate({ playerId: currentPlayerId });
+    }
+  };
+
+  const handleSessionPlayerRowClick = (playerId: number) => {
+    console.log(playerId);
+    setSelectedPlayerId(playerId);
+  };
+
+  console.log("Current player id", currentPlayerId);
+
   return (
     <div className="flex w-full flex-col">
-      <div className="px-4">
-        <div className="flex w-full flex-row justify-between rounded-md border-2 border-oldcream bg-cream px-4 py-2 text-xl">
-          <Link href={"/staff"} className="">
-            Back
-          </Link>
-          <h1 className="text-center">{`Battle Session ${sessionId}`}</h1>
+      <TopNav backLink="/staff" title={`Battle Session ${sessionId}`} />
+      <div className="grid max-h-[100%] w-full grid-cols-2">
+        <div className="grid grid-rows-2">
+          <div className="flex flex-col">
+            <StaffBattlePlayersInfo
+              players={players}
+              selectedPlayerId={selectedPlayerId}
+              activitySession={activitySession}
+              onSessionPlayerRowClick={handleSessionPlayerRowClick}
+              currentPlayerId={currentPlayerId ?? -1}
+            />
+            <StyledButton
+              disabled={activitySession?.currentTurnId === null}
+              onClick={() => handleEndPlayerTurn()}
+            >
+              End Player Turn
+            </StyledButton>
+            <StyledButton
+              className={`${activitySession?.currentTurnId === 1}`}
+              onClick={() => handleEndBossTurn()}
+              disabled={activitySession?.currentTurnId !== null}
+            >
+              End Boss Turn
+            </StyledButton>
+            <StyledButton
+              className="bg-red-900 text-white"
+              onClick={() => handleEndBattle()}
+            >
+              End Battle
+            </StyledButton>
+          </div>
+          {/* Not necessary but is good to have */}
+          <StaffBattleSessionPlayerTabs
+            tabs={[
+              {
+                label: "Status",
+                node: <></>,
+                modal: <></>,
+              },
+              {
+                label: "Equipment",
+                node: <></>,
+                modal: <></>,
+              },
+              {
+                label: "Inventory",
+                node: <></>,
+                modal: <></>,
+              },
+            ]}
+            defaultTab={""}
+            className={"h-full"}
+          ></StaffBattleSessionPlayerTabs>
         </div>
-      </div>
-      <div className="grid max-h-[100%] w-full grid-cols-2 gap-x-4 overflow-y-auto">
-        {/* <PlayerCharacter playerId={playerId} isPlayer={true} className="mt-0" /> */}
-        <StaffBattlePlayersInfo
-          players={players}
-          selectedPlayerId={selectedPlayerId}
-          setSelectedPlayerId={setSelectedPlayerId}
-        ></StaffBattlePlayersInfo>
-        {/* <StaffPlayerUtils
+        <StaffPlayerUtils
           tabs={[
             {
               label: "Stats",
@@ -144,7 +294,9 @@ export default function StaffBattleSession({
                 <StaffPlayerStats
                   playerStats={ALL_STAT_TYPES.map(
                     (type) =>
-                      playerStats?.find((stat) => stat.type === type) ?? {
+                      players
+                        ?.find((player) => player.id === selectedPlayerId)
+                        ?.stats.find((stat) => stat.type === type) ?? {
                         type,
                         value: 0,
                         playerId: 0,
@@ -158,7 +310,7 @@ export default function StaffBattleSession({
             {
               label: "Item",
               node: (
-                <StaffPlayerItem
+                <StaffPlayerItems
                   items={items ?? null}
                   onClickItem={openModal}
                 />
@@ -168,6 +320,10 @@ export default function StaffBattleSession({
                   item={item ?? null}
                   modalOpen={modalIsOpen}
                   closeModal={() => setModalIsOpen(false)}
+                  playerName={
+                    players?.find((player) => player.id === selectedPlayerId)
+                      ?.name
+                  }
                   onSubmit={() =>
                     onItemSubmit({ itemId: item?.id ?? 0, amount: 0 })
                   }
@@ -197,9 +353,18 @@ export default function StaffBattleSession({
           defaultTab="Stats"
           isModalOpen={modalIsOpen}
           setIsModalOpen={setModalIsOpen}
-        /> */}
+        />
       </div>
-      <div className="grid w-full grid-cols-2 gap-x-4 overflow-y-auto bg-radial-gradient from-darkred to-dark"></div>
     </div>
+  );
+}
+
+function getCurrentTurnPlayerId(
+  activitySession: ActivitySessionAllInfo | null,
+) {
+  return (
+    activitySession?.turns.find(
+      (turn) => turn.id === activitySession.currentTurnId,
+    )?.playerId ?? null
   );
 }

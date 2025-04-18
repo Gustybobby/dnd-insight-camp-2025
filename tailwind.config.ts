@@ -42,6 +42,8 @@ export default {
       backgroundImage: {
         "radial-gradient": "radial-gradient(circle, var(--tw-gradient-stops))",
         "brown-gradient": "linear-gradient(to bottom, #D0C1A0, #AE9A84)",
+        "brown-gradient-dark": "linear-gradient(to right, #a37d50, #704623)",
+        "gray-gradient": "linear-gradient(to bottom, #a4a4a4, #464646)",
       },
     },
     fontFamily: {

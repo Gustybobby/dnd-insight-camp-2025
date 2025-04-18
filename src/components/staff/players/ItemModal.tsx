@@ -1,13 +1,18 @@
-import type { Item } from "@/server/domain/models";
+import type { Item, StatTypeEnum } from "@/server/domain/models";
 
 import React from "react";
+
+import { InfoBadge } from "@/components/players/details/inventory";
+import { STAT_STYLE_MAP } from "@/components/players/style";
 
 function ItemModal({
   item,
   modalOpen,
+  playerName,
   closeModal,
   onSubmit,
 }: {
+  playerName?: string;
   item: Item | null;
   modalOpen: boolean;
   closeModal: () => void;
@@ -21,9 +26,24 @@ function ItemModal({
 }) {
   console.log(modalOpen);
   return (
-    <div>
-      <h2 className="mb-4 text-xl font-semibold">{item?.name}</h2>
-      <p className="mb-4">{`Give ${item?.name}`}</p>
+    <div className="flex flex-col gap-y-4 font-[family-name:var(--noto-sans-thai)]">
+      <h2 className="text-xl font-semibold">{item?.name}</h2>
+      <p className="">{`Give ${item?.name}${playerName ?? ` to ${playerName}`}`}</p>
+      <div className="flex w-full flex-row justify-center gap-x-2">
+        {item?.stats
+          .map((statText) => statText.split(":"))
+          .map(([statType, value], idx) => (
+            <InfoBadge
+              key={idx}
+              className={
+                STAT_STYLE_MAP[statType as StatTypeEnum].bgColor +
+                " px-2 text-xs font-semibold"
+              }
+            >
+              {statType} {value}
+            </InfoBadge>
+          ))}
+      </div>
       <div className="flex flex-row justify-center gap-x-2">
         <button
           onClick={() => onSubmit({ itemId: item?.id ?? 0, amount: 1 })}

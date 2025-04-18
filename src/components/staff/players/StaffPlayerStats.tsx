@@ -1,7 +1,8 @@
 import type { PlayerStat } from "@/server/domain/models";
 
+import { STAT_TEXT_STYLE_MAP } from "../style";
+import StyledButton from "../StyledButton";
 import { StatChanger } from "./components";
-import { STAT_TEXT_STYLE_MAP } from "./style";
 import { STAT_STYLE_MAP } from "@/components/players/style";
 
 export function StaffPlayerStats({
@@ -29,12 +30,7 @@ export function StaffPlayerStats({
             type={stat.type}
           />
         ))}
-        <button
-          className={`mt-4 self-center rounded-md border-2 border-gray-100 bg-white p-2 text-black ${false ? "cursor-not-allowed bg-slate-300" : "cursor-pointer"}`}
-          type="submit"
-        >
-          {false ? "Loading..." : "Submit"}
-        </button>
+        <StyledButton type="submit">{"Submit"}</StyledButton>
       </form>
     </div>
   );

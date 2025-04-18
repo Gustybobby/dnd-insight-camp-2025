@@ -1,5 +1,7 @@
-import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
-import type { ActivitySession } from "@/server/domain/models";
+import type {
+  ActivitySessionAllInfo,
+  PlayerWithAllInfo,
+} from "@/server/domain/aggregates";
 
 import {
   createActivitySession,
@@ -9,8 +11,9 @@ import {
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import StaffBattleRow from "./StaffBattlePlayerRow";
-import StaffBattleSessionRow from "./StaffBattleSessionRow";
+import StyledButton from "../StyledButton";
+import StaffCreateBattleBossRow from "./StaffCreateBattleBossRow";
+import StaffCreateBattleRow from "./StaffCreateBattlePlayerRow";
 
 interface UpsertPlayerMutationType {
   sessionId: number;
@@ -25,9 +28,13 @@ interface CreateActivitySessionMutationType {
 
 interface StaffBattleTabProps {
   players?: PlayerWithAllInfo[] | null;
-  activitySessions: ActivitySession[] | null;
+  activitySessions: ActivitySessionAllInfo[] | null;
 }
-function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
+
+export default function StaffCreateBattleTab({
+  players,
+  activitySessions,
+}: StaffBattleTabProps) {
   const upsertPlayerMutation = useMutation({
     mutationFn: ({ sessionId, playerId, order }: UpsertPlayerMutationType) =>
       upsertSessionTurn({
@@ -54,7 +61,7 @@ function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
         upsertPlayerMutation.mutate({
           sessionId: session?.id ?? 1,
           playerId: player.id,
-          order: index,
+          order: index + 1,
         });
       });
     },
@@ -89,54 +96,54 @@ function StaffBattleTab({ players, activitySessions }: StaffBattleTabProps) {
         return a.turn - b.turn;
       });
 
-    console.log(formattedPlayers);
+    console.log("Formatted Players:", formattedPlayers);
     battleSessionMutation.mutate({
       activityId: activityBattleId ?? 1,
       players: formattedPlayers ?? [],
     });
   };
+
+  const playersWithInBattle = players?.map((player) => {
+    const playerIdsInBattle = activitySessions
+      ?.filter((activitySession) => activitySession.isActive)
+      .flatMap((activitySession) =>
+        activitySession.turns.flatMap((turn) => turn.playerId),
+      );
+    return {
+      ...player,
+      inBattle: playerIdsInBattle?.includes(player.id) ?? false,
+    };
+  });
   return (
     <div className="flex w-full flex-col gap-y-1 p-2">
       <div className="flex w-full flex-col gap-y-1 text-center">
-        <div className="text-center text-2xl font-bold">Battle Sessions</div>
-        <div className="flex w-full flex-col justify-between">
-          {activitySessions?.map((session) => (
-            <StaffBattleSessionRow
-              key={`battle-session-${session.id}`}
-              activitySession={session}
-              currentPlayer={
-                players?.find(
-                  (player) => player.id === session.currentTurnId,
-                ) ?? null
-              }
-            />
-          )) ?? <div>No Battle Sessions...</div>}
+        <div className="grid w-full grid-cols-4 flex-row place-items-center justify-between px-4 text-center text-2xl font-bold">
+          <h2 className="w-[250px]">Name</h2>
+          <h2 className="">Status</h2>
+          <h2 className="">Select</h2>
+          <h2 className="">Order</h2>
         </div>
-      </div>
-      <div className="flex w-full flex-col gap-y-1 text-center">
-        <div className="flex w-full flex-row justify-between">
-          <p className="w-[250px] text-center text-2xl font-bold">Name</p>
-          <p className="text-center text-2xl font-bold">Status</p>
-          <p className="text-center text-2xl font-bold">Select</p>
-          <p className="text-center text-2xl font-bold">Turn</p>
-        </div>
-        <form onSubmit={handleSubmit}>
-          {players?.map((player) => (
-            <StaffBattleRow
-              key={`player-${player.id}-battle`}
-              id={player.id}
-              name={player.name}
-              character={player.character}
-              inBattle={false}
-              maxTurn={20}
-            />
-          ))}
-          {/* {activitySessions?.find((session) => session. === null) ? (} */}
-          <button type="submit">Create Battle Session</button>
+        <form onSubmit={handleSubmit} className="flex w-full flex-col">
+          <div className="flex h-[90%] w-full flex-col items-center gap-y-1 overflow-y-scroll">
+            {playersWithInBattle?.map((player) => (
+              <StaffCreateBattleRow
+                key={`player-${player.id}-battle`}
+                id={player.id}
+                name={player.name}
+                character={player.character}
+                inBattle={player.inBattle}
+                maxTurn={players ? players.length + 1 : 0}
+              />
+            ))}
+          </div>
+          <StaffCreateBattleBossRow
+            maxTurn={players ? players.length + 1 : 0}
+          />
+          <StyledButton type="submit" className="mt-8 w-fit self-center">
+            Create a Battle Session
+          </StyledButton>
         </form>
       </div>
     </div>
   );
 }
-
-export default StaffBattleTab;

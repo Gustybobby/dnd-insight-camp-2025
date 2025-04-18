@@ -1,28 +1,34 @@
 import React, { useState } from "react";
 
-import { BUTTON_CLASSNAME_STYLE } from "./style";
 import { cn } from "@/components/utils";
-import Link from "next/link";
 
-export default function StaffDashboard({
+export default function StaffBattleSessionPlayerTabs({
   tabs,
   defaultTab,
+  // isModalOpen,
+  // setIsModalOpen,
+  className,
 }: {
-  tabs: { label: string; node?: React.ReactNode }[];
+  tabs: {
+    label: string;
+    node: React.ReactNode;
+    modal: React.ReactNode;
+  }[];
   defaultTab: string;
+  isModalOpen?: boolean;
+  setIsModalOpen?: (isOpen: boolean) => void;
+  className: string;
 }) {
   const [active, setActive] = useState<string>(defaultTab);
+
   return (
-    <div className="w-md flex h-full w-full flex-col items-center gap-y-4 rounded-md bg-cream p-4">
-      <h1 className="text-center text-4xl font-bold text-darkred">
-        Staff Dashboard
-      </h1>
+    <div className={cn("relative py-2", className)}>
       <div className="flex w-full items-center gap-2 px-1.5">
         {tabs.map((tab) => (
           <div key={tab.label} className="relative w-full">
             <button
               className={cn(
-                "w-full rounded-xl border-2 border-black text-lg font-semibold",
+                "w-full rounded-t-3xl text-lg font-semibold",
                 tab.label === active ? "bg-cream" : "bg-oldcream",
               )}
               onClick={() => setActive(tab.label)}
@@ -38,12 +44,17 @@ export default function StaffDashboard({
           </div>
         ))}
       </div>
-      <div className="relative flex h-full w-full overflow-scroll bg-center">
+
+      <section
+        className={
+          "h-full max-h-[290px] min-h-[32vh] w-full overflow-scroll rounded-lg border-4 border-oldcream bg-cream"
+        }
+      >
         {tabs.find((tab) => tab.label === active)?.node}
-      </div>
-      <Link className={BUTTON_CLASSNAME_STYLE} href={"/"}>
-        Go Back to Home
-      </Link>
+      </section>
+      {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {tabs.find((tab) => tab.label === active)?.modal}
+      </Modal> */}
     </div>
   );
 }
