@@ -22,10 +22,12 @@ import {
   DeletePlayerItemUseCase,
   GetAllItemsUseCase,
 } from "@/server/applications/usecases/item";
+import { EquipmentRepository } from "@/server/infrastructure/repositories/equipment.repository";
 
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
 const itemRepo = new ItemRepository();
+const equipmentRepo = new EquipmentRepository();
 
 const sessionService = new SessionService();
 
@@ -46,7 +48,10 @@ export async function addPlayerItem(
 ): Promise<UseCaseReturn<IAddPlayerItemUseCase> | null> {
   await authService.authStaff();
 
-  const addPlayerItemUseCase = new AddPlayerItemUseCase(itemRepo);
+  const addPlayerItemUseCase = new AddPlayerItemUseCase(
+    itemRepo,
+    equipmentRepo,
+  );
   return addPlayerItemUseCase
     .invoke({ data: PlayerItem.parse(params.data) })
     .catch((error) => {
