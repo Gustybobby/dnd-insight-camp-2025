@@ -160,7 +160,7 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
   return (
     <div className="flex min-w-full flex-col items-center">
       <div className="w-full px-5">
-        <div className="grid grid-cols-3 px-4 py-2 text-xl bg-cream rounded-md border-2 border-oldcream">
+        <div className="grid grid-cols-3 rounded-md border-2 border-oldcream bg-cream px-4 py-2 text-xl">
           <Link href={"/staff"}>
             {" "}
             <Image
@@ -170,7 +170,9 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
               height={40}
             />
           </Link>
-          <h1 className="font-bold text-black text-3xl self-center text-center">Player</h1>
+          <h1 className="self-center text-center text-3xl font-bold text-black">
+            Player
+          </h1>
         </div>
       </div>
       <div className="grid max-h-[100%] w-full grid-cols-2 gap-x-4 overflow-y-auto">

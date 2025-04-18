@@ -60,7 +60,16 @@ export function ActivityPlayer({
 
   const endTurnMutation = useMutation({ mutationFn: endTurn });
 
-  if (playerAllInfo === null || session === null) {
+  const sessionInActive = session?.isActive === false;
+  const playerNotInSession = session?.turns.every(
+    (turn) => turn.playerId !== playerId,
+  );
+  if (
+    playerAllInfo === null ||
+    session === null ||
+    sessionInActive ||
+    playerNotInSession
+  ) {
     router.replace("/players");
     return;
   }
