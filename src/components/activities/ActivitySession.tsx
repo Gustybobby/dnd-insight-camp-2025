@@ -4,6 +4,7 @@ import { getActivitySession } from "@/server/controllers/activity.controller";
 import { getPlayerCharacter } from "@/server/controllers/player.controller";
 
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 import { TitleBanner } from "@/components/players/components";
 import { StyledLink } from "@/components/ui/link";
@@ -11,18 +12,20 @@ import { cn } from "@/components/utils";
 import Image from "next/image";
 
 export function ActivitySession({ sessionId }: { sessionId: number }) {
+  const router = useRouter();
   const { data: session } = useQuery({
     queryKey: ["getActivitySession", sessionId],
     queryFn: async () => await getActivitySession({ sessionId }),
     refetchInterval: 5000,
   });
 
+  const currentPlayerId = session?.turns.find(
+    (turn) => turn.id === session.currentTurnId,
+  )?.playerId;
+
   const { data: currentCharacter } = useQuery({
     queryKey: ["getPlayer", session],
     queryFn: async () => {
-      const currentPlayerId = session?.turns.find(
-        (turn) => turn.id === session.currentTurnId,
-      )?.playerId;
       if (!currentPlayerId) {
         return null;
       }
@@ -33,11 +36,17 @@ export function ActivitySession({ sessionId }: { sessionId: number }) {
     },
   });
 
+  if (session?.isActive === false) {
+    router.replace("/players");
+  }
+
   return (
     <>
       <div className="absolute left-0 right-0 top-[15%] mx-auto flex w-full flex-col items-center justify-center">
         <div className="w-80">
-          <TitleBanner>Player 1 Turn</TitleBanner>
+          <TitleBanner>
+            {currentPlayerId ? `Player ${currentPlayerId} Turn` : "Boss Turn"}
+          </TitleBanner>
         </div>
       </div>
       {currentCharacter && (

@@ -17,4 +17,5 @@ export interface PlayerStatLogFullInfoPlusPlayerCharacter
   extends PlayerStatLogFullInfo {
   player: Player;
   character: Character;
+  message?: string;
 }

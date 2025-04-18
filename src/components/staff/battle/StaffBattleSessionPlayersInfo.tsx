@@ -12,7 +12,7 @@ export interface StaffBattlePlayersInfoProps {
   activitySession: ActivitySessionAllInfo | undefined | null;
   onSessionPlayerRowClick: (playerId: number) => void;
   selectedPlayerId: number | null;
-    currentPlayerId: number;
+  currentPlayerId: number;
 }
 
 export default function StaffBattlePlayersInfo({
@@ -20,12 +20,12 @@ export default function StaffBattlePlayersInfo({
   selectedPlayerId,
   activitySession,
   onSessionPlayerRowClick,
-  currentPlayerId
+  currentPlayerId,
 }: StaffBattlePlayersInfoProps) {
 
   return (
     <div className="w-ful flex flex-col">
-      <div className="flex w-full justify-center text-black bg-cream py-2 mt-2 border-2 border-oldcream rounded-xl">
+      <div className="mt-2 flex w-full justify-center rounded-xl border-2 border-oldcream bg-cream py-2 text-black">
         {activitySession?.currentTurnId === null
           ? "Boss Turn"
           : `Group ${currentPlayerId} Turn`}

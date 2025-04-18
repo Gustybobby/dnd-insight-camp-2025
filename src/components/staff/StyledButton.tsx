@@ -22,7 +22,7 @@ export default function StyledButton({
       onClick={onClick}
       className={cn(
         `cursor-pointer rounded-lg border-2 border-black bg-brown-gradient px-4 py-2 text-black transition hover:opacity-90`,
-        `${disabled ? "bg-gray-gradient cursor-not-allowed text-gray-400" : ""}`,
+        `${disabled ? "cursor-not-allowed bg-gray-gradient text-gray-400" : ""}`,
         className,
       )}
       type={type ?? "button"}
