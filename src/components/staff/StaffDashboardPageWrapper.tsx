@@ -76,6 +76,11 @@ export default function StaffDashboardPageWrapper() {
             <StaffCreateBattleTab
               activitySessions={battleSessions ?? null}
               players={players}
+              activityId={
+                activities?.find(
+                  (activity) => activity.name.toLowerCase() === "battle",
+                )?.id ?? 1
+              }
             />
           ),
         },

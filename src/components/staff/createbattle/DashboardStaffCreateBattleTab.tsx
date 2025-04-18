@@ -36,11 +36,13 @@ interface CreateActivitySessionMutationType {
 interface StaffBattleTabProps {
   players?: PlayerWithAllInfo[] | null;
   activitySessions: ActivitySessionAllInfo[] | null;
+  activityId: number;
 }
 
 export default function StaffCreateBattleTab({
   players,
   activitySessions,
+  activityId,
 }: StaffBattleTabProps) {
   const updateActivitySessionMutation = useMutation({
     mutationFn: ({ sessionId, bossTurnOrder }: UpdateActivitySessionMutation) =>
@@ -104,7 +106,7 @@ export default function StaffCreateBattleTab({
     },
   });
 
-  const activityBattleId = activitySessions?.[0].activityId;
+  const activityBattleId = activityId;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
