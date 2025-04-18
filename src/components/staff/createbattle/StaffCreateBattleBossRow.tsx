@@ -16,6 +16,7 @@ export default function StaffCreateBattleBossRow({
         type="number"
         max={maxTurn}
         name={`boss-turn`}
+        disabled
       />
     </div>
   );

@@ -23,6 +23,7 @@ export default function StaffDashboardPageWrapper() {
     queryKey: ["getAllActivities"],
     queryFn: async () => await getAllActivities(),
   });
+
   const { data: battleSessions } = useQuery({
     queryKey: ["getActivitySessions"],
     queryFn: async () =>
@@ -60,7 +61,11 @@ export default function StaffDashboardPageWrapper() {
           node: (
             <StaffBattleTab
               players={players}
-              activitySessions={battleSessions ?? null}
+              activitySessions={
+                battleSessions?.filter(
+                  (battleSession) => battleSession.isActive,
+                ) ?? null
+              }
             />
           ),
         },

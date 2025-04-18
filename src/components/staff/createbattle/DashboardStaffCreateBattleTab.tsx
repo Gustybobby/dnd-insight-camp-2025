@@ -22,14 +22,14 @@ interface UpsertPlayerMutationType {
   order: number;
 }
 
-interface UpdateActivitySessionMutation {
+export interface UpdateActivitySessionMutation {
   sessionId: number;
   bossTurnOrder: number;
 }
 
 interface CreateActivitySessionMutationType {
   activityId: number;
-  players: (PlayerWithAllInfo & { turn: number })[];
+  players: { id: number; turn: number }[];
   bossTurnOrder: number | null | undefined;
 }
 
@@ -119,7 +119,7 @@ export default function StaffCreateBattleTab({
         const isValidTurn = !isNaN(parsedTurn);
 
         return {
-          ...player,
+          id: player.id,
           turn: isValidTurn ? parsedTurn : Infinity, // fallback pushes invalid turns to bottom
           originalIndex: index,
         };
@@ -131,7 +131,7 @@ export default function StaffCreateBattleTab({
         return a.turn - b.turn;
       });
     const bossTurnOrder = parseInt(formData.get(`boss-turn`) as string);
-
+    console.log("Boss Turn Order:", bossTurnOrder);
     console.log("Formatted Players:", formattedPlayers);
     battleSessionMutation.mutate({
       activityId: activityBattleId ?? 1,

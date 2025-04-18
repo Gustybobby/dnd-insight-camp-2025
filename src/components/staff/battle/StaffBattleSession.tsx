@@ -15,6 +15,7 @@ import {
   bossEndTurn,
   endTurn,
   getActivitySession,
+  updateActivitySession,
 } from "@/server/controllers/activity.controller";
 import { createModEffect } from "@/server/controllers/effect.controller";
 import {
@@ -27,7 +28,7 @@ import {
   getAllSkills,
 } from "@/server/controllers/skill.controller";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -41,10 +42,15 @@ import StyledButton from "../StyledButton";
 import TopNav from "../TopNav";
 import StaffBattlePlayersInfo from "./StaffBattleSessionPlayersInfo";
 import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
+import { redirect } from "next/navigation";
 
 export interface OnSubmitItemInput {
   itemId: number;
   amount: number;
+}
+
+export interface EndBattleMutationType {
+  sessionId: number;
 }
 
 export default function StaffBattleSession({
@@ -65,6 +71,17 @@ export default function StaffBattleSession({
       endTurn({ playerId: playerId, sessionId: sessionId }),
     onSuccess: () => {
       refetchActivitySession();
+    },
+  });
+
+  const endBattleMutation = useMutation({
+    mutationFn: ({ sessionId }: EndBattleMutationType) =>
+      updateActivitySession({
+        sessionId: sessionId,
+        data: { isActive: false },
+      }),
+    onSuccess: async (data) => {
+      console.log("Player turn updated successfully", data);
     },
   });
 
@@ -101,7 +118,8 @@ export default function StaffBattleSession({
           activitySession?.turns.find((turn) => turn.playerId === player.id)
             ?.order ?? -1,
       };
-    });
+    })
+    .sort((a, b) => a.order - b.order);
   console.log("Players : ", players);
 
   const [selectedPlayerId, setSelectedPlayerId] = useState<number>(
@@ -227,7 +245,10 @@ export default function StaffBattleSession({
   const handleEndBossTurn = () => {
     endBossMutation.mutate();
   };
-  const handleEndBattle = () => {};
+  const handleEndBattle = () => {
+    endBattleMutation.mutate({ sessionId: sessionId });
+    redirect("/staff");
+  };
 
   const handleEndPlayerTurn = () => {
     setCurrentPlayerId(getCurrentTurnPlayerId(activitySession ?? null));
@@ -240,12 +261,6 @@ export default function StaffBattleSession({
     console.log(playerId);
     setSelectedPlayerId(playerId);
   };
-
-  // useEffect(() => {
-  //   if (currentPlayerId !== null) {
-  //     endPlayerTurnMutation.mutate({ playerId: currentPlayerId });
-  //   }
-  // }, [currentPlayerId]);
 
   console.log("Current player id", currentPlayerId);
 
