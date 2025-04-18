@@ -94,7 +94,7 @@ export default function StaffBattleSession({
   const endBossMutation = useMutation({
     mutationFn: () => bossEndTurn({ playerId: 1, sessionId: sessionId }),
     onSuccess: async () => {
-      await refetchActivitySession();
+      Promise.all([refetchActivitySession(), refetchAllPlayerInfos]);
     },
   });
 
@@ -102,7 +102,7 @@ export default function StaffBattleSession({
     mutationFn: ({ playerId }: { playerId: number }) =>
       endTurn({ playerId: playerId, sessionId: sessionId }),
     onSuccess: async () => {
-      await refetchActivitySession();
+      Promise.all([refetchActivitySession(), refetchAllPlayerInfos]);
     },
   });
 
