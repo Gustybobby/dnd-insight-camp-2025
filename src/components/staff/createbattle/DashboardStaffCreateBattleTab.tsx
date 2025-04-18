@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import StaffCreateBattleRow from "./StaffCreateBattlePlayerRow";
 import StyledButton from "../StyledButton";
+import StaffCreateBattleBossRow from "./StaffCreateBattleBossRow";
 
 interface UpsertPlayerMutationType {
   sessionId: number;
@@ -135,7 +136,9 @@ export default function StaffCreateBattleTab({
               />
             ))}
           </div>
-          {/* {activitySessions?.find((session) => session. === null) ? (} */}
+          <StaffCreateBattleBossRow
+            maxTurn={players ? players.length + 1 : 0}
+          />
           <StyledButton type="submit" className="mt-8 w-fit self-center">
             Create a Battle Session
           </StyledButton>

@@ -20,12 +20,10 @@ export default function StaffCreateBattlePlayerRow({
   id,
   name,
   character,
-  playerStats,
   inBattle,
   maxTurn,
 }: StaffPlayerRow) {
   //placeholder
-  console.log(playerStats);
   return (
     <div className="grid w-full grid-cols-4 place-items-center justify-between rounded-md border-2 border-black bg-brown-gradient p-4 shadow transition-transform hover:scale-[1.02]">
       <div className="flex w-full flex-row items-center gap-x-4">
