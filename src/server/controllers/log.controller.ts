@@ -23,17 +23,14 @@ const sessionService = new SessionService();
 
 const authService = new AuthService(playerRepo, staffRepo, sessionService);
 
-const getPlayerStatLogsUseCase = new GetPlayerStatLogsUseCase(
-  playerStatLogRepo,
-);
-const getAllPlayerStatLogsFullInfoUseCase =
-  new GetAllPlayerStatLogsFullInfoUseCase(playerStatLogRepo);
-
 export async function getPlayerStatLogs(
   params: UseCaseParams<IGetPlayerStatLogsUseCase>,
 ): Promise<UseCaseReturn<IGetPlayerStatLogsUseCase> | null> {
   await authService.authStaff();
 
+  const getPlayerStatLogsUseCase = new GetPlayerStatLogsUseCase(
+    playerStatLogRepo,
+  );
   return getPlayerStatLogsUseCase.invoke(params).catch((error) => {
     console.error(error);
     return null;
@@ -43,6 +40,8 @@ export async function getPlayerStatLogs(
 export async function getAllPlayerStatLogsFullInfo(): Promise<UseCaseReturn<IGetAllPlayerStatLogsFullInfoUseCase> | null> {
   await authService.authStaff();
 
+  const getAllPlayerStatLogsFullInfoUseCase =
+    new GetAllPlayerStatLogsFullInfoUseCase(playerStatLogRepo);
   return getAllPlayerStatLogsFullInfoUseCase.invoke().catch((error) => {
     console.error(error);
     return null;

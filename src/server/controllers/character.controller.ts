@@ -8,9 +8,8 @@ import { GetAllCharactersUseCase } from "@/server/applications/usecases/characte
 
 const characterRepo = new CharacterRepository();
 
-const getAllChractersUseCase = new GetAllCharactersUseCase(characterRepo);
-
 export async function getAllCharacters(): Promise<UseCaseReturn<IGetAllCharactersUseCase> | null> {
+  const getAllChractersUseCase = new GetAllCharactersUseCase(characterRepo);
   return getAllChractersUseCase.invoke().catch((error) => {
     console.error(error);
     return null;

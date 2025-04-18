@@ -21,8 +21,6 @@ const sessionService = new SessionService();
 const authService = new AuthService(playerRepo, staffRepo, sessionService);
 const effectService = new EffectService(effectRepo, playerRepo);
 
-const createModEffectUseCase = new CreateModEffectUseCase(effectService);
-
 export async function createModEffect({
   data,
   playerIds,
@@ -32,6 +30,7 @@ export async function createModEffect({
 >): Promise<UseCaseReturn<ICreateModEffectUseCase> | null> {
   const session = await authService.authStaff();
 
+  const createModEffectUseCase = new CreateModEffectUseCase(effectService);
   return createModEffectUseCase
     .invoke({
       data: ModEffectCreate.parse(data),

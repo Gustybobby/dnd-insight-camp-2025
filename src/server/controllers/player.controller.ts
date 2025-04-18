@@ -44,22 +44,8 @@ const sessionService = new SessionService();
 
 const authService = new AuthService(playerRepo, staffRepo, sessionService);
 
-const getAllPlayersUseCase = new GetAllPlayersUseCase(playerRepo);
-const getPlayerUseCase = new GetPlayerUseCase(playerRepo);
-const getPlayerCharacterUseCase = new GetPlayerCharacterUseCase(playerRepo);
-const getPlayerStatsUseCase = new GetPlayerStatsUseCase(playerRepo);
-const getPlayerItemsUseCase = new GetPlayerItemsUseCase(playerRepo);
-const updatePlayerUseCase = new UpdatePlayerUseCase(playerRepo);
-const createPlayerUseCase = new CreatePlayerUseCase(playerRepo);
-const getAllPlayersInfoUseCase = new GetAllPlayersInfoUseCase(
-  playerRepo,
-  playerStatRepo,
-  equipmentRepo,
-  playerItemRepo,
-);
-const resetPlayerDataUseCase = new ResetPlayerDataUseCase(playerRepo);
-
 export async function getAllPlayers(): Promise<UseCaseReturn<IGetAllPlayersUseCase> | null> {
+  const getAllPlayersUseCase = new GetAllPlayersUseCase(playerRepo);
   return getAllPlayersUseCase.invoke().catch((error) => {
     console.error(error);
     return null;
@@ -69,6 +55,7 @@ export async function getAllPlayers(): Promise<UseCaseReturn<IGetAllPlayersUseCa
 export async function getPlayer({
   playerId,
 }: UseCaseParams<IGetPlayerUseCase>): Promise<UseCaseReturn<IGetPlayerUseCase> | null> {
+  const getPlayerUseCase = new GetPlayerUseCase(playerRepo);
   return getPlayerUseCase
     .invoke({ playerId: Player.shape.id.parse(playerId) })
     .catch((error) => {
@@ -80,6 +67,7 @@ export async function getPlayer({
 export async function getPlayerCharacter({
   playerId,
 }: UseCaseParams<IGetPlayerCharacterUseCase>): Promise<UseCaseReturn<IGetPlayerCharacterUseCase> | null> {
+  const getPlayerCharacterUseCase = new GetPlayerCharacterUseCase(playerRepo);
   return getPlayerCharacterUseCase.invoke({ playerId }).catch((error) => {
     console.error(error);
     return null;
@@ -89,6 +77,7 @@ export async function getPlayerCharacter({
 export async function getPlayerStats({
   playerId,
 }: UseCaseParams<IGetPlayerStatsUseCase>): Promise<UseCaseReturn<IGetPlayerStatsUseCase> | null> {
+  const getPlayerStatsUseCase = new GetPlayerStatsUseCase(playerRepo);
   return getPlayerStatsUseCase
     .invoke({ playerId: Player.shape.id.parse(playerId) })
     .catch((error) => {
@@ -100,6 +89,7 @@ export async function getPlayerStats({
 export async function getPlayerItems({
   playerId,
 }: UseCaseParams<IGetPlayerItemsUseCase>): Promise<UseCaseReturn<IGetPlayerItemsUseCase> | null> {
+  const getPlayerItemsUseCase = new GetPlayerItemsUseCase(playerRepo);
   return getPlayerItemsUseCase.invoke({ playerId }).catch((error) => {
     console.error(error);
     return null;
@@ -111,6 +101,7 @@ export async function updatePlayer(
 ): Promise<UseCaseReturn<IUpdatePlayerUseCase>> {
   await authService.authSessionPlayer({ playerId: params.playerId });
 
+  const updatePlayerUseCase = new UpdatePlayerUseCase(playerRepo);
   return updatePlayerUseCase.invoke(params);
 }
 
@@ -119,6 +110,7 @@ export async function createPlayer({
 }: UseCaseParams<ICreatePlayerUseCase>): Promise<UseCaseReturn<ICreatePlayerUseCase> | null> {
   await authService.authStaff();
 
+  const createPlayerUseCase = new CreatePlayerUseCase(playerRepo);
   return createPlayerUseCase
     .invoke({ data: PlayerCreate.parse(data) })
     .catch((error) => {
@@ -130,6 +122,12 @@ export async function createPlayer({
 export async function getAllPlayersInfo(): Promise<UseCaseReturn<IGetAllPlayersInfoUseCase> | null> {
   await authService.authStaff();
 
+  const getAllPlayersInfoUseCase = new GetAllPlayersInfoUseCase(
+    playerRepo,
+    playerStatRepo,
+    equipmentRepo,
+    playerItemRepo,
+  );
   return getAllPlayersInfoUseCase.invoke().catch((error) => {
     console.error(error);
     return null;
@@ -140,5 +138,7 @@ export async function resetPlayerData({
   playerId,
 }: UseCaseParams<IResetPlayerDataUseCase>): Promise<UseCaseReturn<IResetPlayerDataUseCase> | null> {
   await authService.authStaff();
+
+  const resetPlayerDataUseCase = new ResetPlayerDataUseCase(playerRepo);
   return resetPlayerDataUseCase.invoke({ playerId });
 }
