@@ -9,7 +9,7 @@ import {
   playerItemsTable,
 } from "@/db/schema";
 import { takeOne, takeOneOrThrow } from "@/db/util";
-import { and, eq, getTableColumns, sql } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 
 export class EquipmentRepository implements IEquipmentRepository {
   async getAll(): Promise<PlayerEquipmentWithInfo[]> {
@@ -72,35 +72,16 @@ export class EquipmentRepository implements IEquipmentRepository {
 
   playerEquip({ data }: { data: PlayerEquipment }): Promise<PlayerEquipment> {
     return db.transaction(async (tx) => {
-      const item = await tx
-        .select()
-        .from(playerItemsTable)
+      const { rowCount } = await tx
+        .delete(playerItemsTable)
         .where(
           and(
             eq(playerItemsTable.playerId, data.playerId),
             eq(playerItemsTable.itemId, data.itemId),
           ),
-        )
-        .then(takeOneOrThrow);
-      if (item.amount === 1) {
-        await tx
-          .delete(playerItemsTable)
-          .where(
-            and(
-              eq(playerItemsTable.playerId, data.playerId),
-              eq(playerItemsTable.itemId, data.itemId),
-            ),
-          );
-      } else {
-        await tx
-          .update(playerItemsTable)
-          .set({ amount: sql`${playerItemsTable.amount} - 1` })
-          .where(
-            and(
-              eq(playerItemsTable.playerId, data.playerId),
-              eq(playerItemsTable.itemId, data.itemId),
-            ),
-          );
+        );
+      if (!rowCount) {
+        throw new Error("item not found");
       }
       return tx
         .insert(playerEquipmentsTable)
@@ -109,6 +90,7 @@ export class EquipmentRepository implements IEquipmentRepository {
         .then(takeOneOrThrow);
     });
   }
+
   playerRemove({
     playerId,
     itemId,
@@ -122,23 +104,16 @@ export class EquipmentRepository implements IEquipmentRepository {
             eq(playerEquipmentsTable.itemId, itemId),
           ),
         );
-      if (rowCount === 0) {
+      if (!rowCount) {
         throw new Error("equipment not found");
       }
       await tx
         .insert(playerItemsTable)
         .values({ playerId, itemId, amount: 1 })
-        .catch(() =>
-          tx
-            .update(playerItemsTable)
-            .set({ amount: sql`${playerItemsTable.amount} + 1` })
-            .where(
-              and(
-                eq(playerEquipmentsTable.playerId, playerId),
-                eq(playerEquipmentsTable.itemId, itemId),
-              ),
-            ),
-        );
+        .onConflictDoUpdate({
+          target: [playerItemsTable.itemId, playerItemsTable.playerId],
+          set: { amount: 1 },
+        });
     });
   }
 }

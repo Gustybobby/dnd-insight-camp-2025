@@ -98,6 +98,15 @@ export function PlayerCharacter({
                 ({ item }) => item.id === window.itemId,
               ) ?? false
             }
+            partEquipped={
+              !!playerAllInfo?.equipments.some(
+                ({ item }) =>
+                  item.type ===
+                  playerAllInfo?.playerItems?.find(
+                    ({ item }) => item.id === window.itemId,
+                  )?.item.type,
+              )
+            }
             showPlayerOptions={isPlayer}
             onClickBack={() => setWindow({ type: "character" })}
             onEquip={(itemId) => {
