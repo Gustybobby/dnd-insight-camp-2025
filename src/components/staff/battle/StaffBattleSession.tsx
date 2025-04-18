@@ -31,6 +31,7 @@ import {
 import { useState } from "react";
 import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { redirect } from "next/navigation";
 
 import ItemModal from "../players/ItemModal";
 import SkillModal from "../players/SkillModal";
@@ -42,7 +43,6 @@ import StyledButton from "../StyledButton";
 import TopNav from "../TopNav";
 import StaffBattlePlayersInfo from "./StaffBattleSessionPlayersInfo";
 import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
-import { redirect } from "next/navigation";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -61,16 +61,16 @@ export default function StaffBattleSession({
   //Stats
   const endBossMutation = useMutation({
     mutationFn: () => bossEndTurn({ playerId: 1, sessionId: sessionId }),
-    onSuccess: () => {
-      refetchActivitySession();
+    onSuccess: async () => {
+      await refetchActivitySession();
     },
   });
 
   const endPlayerTurnMutation = useMutation({
     mutationFn: ({ playerId }: { playerId: number }) =>
       endTurn({ playerId: playerId, sessionId: sessionId }),
-    onSuccess: () => {
-      refetchActivitySession();
+    onSuccess: async () => {
+      await refetchActivitySession();
     },
   });
 

@@ -48,6 +48,7 @@ export default function StaffCreateBattleTab({
         sessionId: sessionId,
         data: {
           bossTurnOrder: bossTurnOrder,
+          isActive: true,
         },
       }),
     onSuccess: async (data) => {
@@ -99,6 +100,7 @@ export default function StaffCreateBattleTab({
           bossTurnOrder: variables.players.length + 1,
         });
       }
+      alert(`Session ${session?.id} has been created`);
     },
   });
 

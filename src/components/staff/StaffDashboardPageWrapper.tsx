@@ -26,13 +26,14 @@ export default function StaffDashboardPageWrapper() {
 
   const { data: battleSessions } = useQuery({
     queryKey: ["getActivitySessions"],
-    queryFn: async () =>
-      await getActivitySessions({
+    queryFn: async () => {
+      return await getActivitySessions({
         activityId:
           activities?.find(
             (activity) => activity.name.toLowerCase() === "battle",
           )?.id ?? 1,
-      }),
+      });
+    },
     refetchInterval: 10000,
   });
 
