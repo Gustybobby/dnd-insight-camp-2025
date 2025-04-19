@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 
+import { Modal } from "../players/components";
 import { cn } from "@/components/utils";
 
 export default function StaffBattleSessionPlayerTabs({
   tabs,
   defaultTab,
-  // isModalOpen,
-  // setIsModalOpen,
+  isModalOpen,
+  setIsModalOpen,
   className,
 }: {
   tabs: {
@@ -15,12 +16,14 @@ export default function StaffBattleSessionPlayerTabs({
     modal: React.ReactNode;
   }[];
   defaultTab: string;
-  isModalOpen?: boolean;
-  setIsModalOpen?: (isOpen: boolean) => void;
+  isModalOpen: boolean;
+  setIsModalOpen: (isOpen: boolean) => void;
   className: string;
 }) {
   const [active, setActive] = useState<string>(defaultTab);
-
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div className={cn("relative py-2", className)}>
       <div className="flex w-full items-center gap-2 px-1.5">
@@ -52,9 +55,9 @@ export default function StaffBattleSessionPlayerTabs({
       >
         {tabs.find((tab) => tab.label === active)?.node}
       </section>
-      {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
         {tabs.find((tab) => tab.label === active)?.modal}
-      </Modal> */}
+      </Modal>
     </div>
   );
 }

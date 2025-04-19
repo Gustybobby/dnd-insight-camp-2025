@@ -165,7 +165,7 @@ export function StatusCard({
 }) {
   return (
     <div
-      className="flex flex-row items-center gap-4 rounded-md border-2 border-black bg-white p-2 shadow"
+      className="flex flex-row items-center gap-4 rounded-md border-2 border-black bg-white p-2 shadow font-notosansthai"
       onClick={() => onClick(status)}
     >
       <div className="flex h-8 w-8 items-center justify-center">
@@ -177,8 +177,9 @@ export function StatusCard({
           alt={status.name}
         />
       </div>
-      <div className="flex flex-col">
-        <h1 className="font-notosansthai">{status.name}</h1>
+      <div className="flex flex-col w-full">
+        <h1 className="text-md">{status.name}</h1>
+        <p className="w-full italic text-sm truncate overflow-ellipsis">{status.description}</p>
       </div>
     </div>
   );

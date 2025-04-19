@@ -76,11 +76,13 @@ export function StaffBattleSessionBossDamageCalculator({
   damageCalculator,
   setDamageCalculator,
   bossStats,
+  // playerStats
 }: {
   name?: string;
   damageCalculator: DamageCalculator;
   setDamageCalculator: React.Dispatch<React.SetStateAction<DamageCalculator>>;
   bossStats: BossStatsStateType;
+  // playerStats: BossStatsStateType;
 }) {
   return (
     <div className="flex flex-col gap-2">
