@@ -56,6 +56,7 @@ import StaffBattleSessionPlayerStatusTab from "./StaffBattleSessionPlayerStatusT
 import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
 import { fetchAllPlayersInfo } from "@/bff/api/players.api";
 import { mapNumToAlphabet } from "@/components/utils";
+import SkillLogModal from "../players/SkillLogModal";
 
 export interface OnSubmitItemInput {
   itemId: number;
@@ -269,6 +270,7 @@ export default function StaffBattleSession({
   };
 
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
+  const [modalPlayerTabIsOpen, setModalPlayerTabIsOpen] = React.useState(false);
 
   const openModal = ({
     label,
@@ -289,8 +291,28 @@ export default function StaffBattleSession({
     setModalIsOpen(true);
   };
 
+  const openPlayerTabModal = ({
+    label,
+    data,
+  }: {
+    label: string;
+    data: string;
+  }) => {
+    if (label === "Logs") {
+      const clickedSkill = skills?.find(
+        (skill) => skill.name === (data as string),
+      );
+      if (clickedSkill) {
+        console.log(clickedSkill);
+        setSkillLog(clickedSkill);
+      }
+    }
+    setModalPlayerTabIsOpen(true);
+  };
+
   const [item, setItem] = React.useState<Item | null>(null);
   const [skill, setSkill] = React.useState<Skill | null>(null);
+  const [skillLog, setSkillLog] = React.useState<Skill | null>(null);
   const [statusType, setStatusType] = React.useState<StatusType | null>(null);
 
   const handleEndBossTurn = () => {
@@ -407,9 +429,15 @@ export default function StaffBattleSession({
                 node: (
                   <StaffBattleSessionPlayerLogsTab
                     battleSession={activitySession}
+                    onClickLog={openPlayerTabModal}
                   />
                 ),
-                modal: <></>,
+                modal: (
+                  <SkillLogModal
+                    skill={skillLog ?? null}
+                    closeModal={() => setModalPlayerTabIsOpen(false)}
+                  />
+                ),
               },
               // {
               //   label: "Equipment",
@@ -424,6 +452,8 @@ export default function StaffBattleSession({
             ]}
             defaultTab={"Status"}
             className={"h-full"}
+            isModalOpen={modalPlayerTabIsOpen}
+            setIsModalOpen={setModalPlayerTabIsOpen}
           />
         </div>
         <StaffPlayerUtils

@@ -2,7 +2,7 @@ import type { Skill } from "@/server/domain/models";
 
 import React from "react";
 
-function ItemModal({
+export default function SkillModal({
   skill,
   modalOpen,
   closeModal,
@@ -19,6 +19,7 @@ function ItemModal({
     remainingUses: number;
   }) => Promise<void>;
 }) {
+  console.log("------Inside Skill Modal :", skill);
   console.log(modalOpen);
   return (
     <div className="font-notosansthai">
@@ -44,5 +45,3 @@ function ItemModal({
     </div>
   );
 }
-
-export default ItemModal;
