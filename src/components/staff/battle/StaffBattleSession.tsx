@@ -308,8 +308,17 @@ export default function StaffBattleSession({
   };
 
   const handleSessionPlayerRowClick = (playerId: number) => {
-    console.log(playerId);
-    setSelectedPlayerId(playerId);
+    const player = players?.find((player) => player.id === playerId);
+    if (!player) return;
+
+    const newStats: BossStatsStateType = { ...selectedPlayerBossStats };
+
+    player.stats.forEach((stat) => {
+      newStats[stat.type.toLowerCase() as statLowerCaseType] = stat.value;
+    });
+    console.log("New Player Stats :", newStats);
+
+    setSelectedPlayerBossStats(newStats);
   };
 
   console.log("Current player id", currentPlayerId);
@@ -323,6 +332,14 @@ export default function StaffBattleSession({
     chr: 10,
     str: 10,
   });
+  const [selectedPlayerBossStats, setSelectedPlayerBossStats] =
+    useState<BossStatsStateType>({
+      hp: 200,
+      dex: 10,
+      int: 10,
+      chr: 10,
+      str: 10,
+    });
   const [bossDamageToPlayerCalculator, setBossDamageToPlayerCalculator] =
     useState<DamageCalculator>({
       stat: "str",
@@ -330,7 +347,13 @@ export default function StaffBattleSession({
       multiply: "1.5",
     });
 
-  // const [playerDamageToBoss, setPlayerDamageToBoss] = useState<number>(0);
+  const [playerDamageToBossCalculator, setPlayerDamageToBossCalculator] =
+    useState<DamageCalculator>({
+      stat: "str",
+      roll: "1",
+      multiply: "1.5",
+    });
+
   return (
     <div className="flex w-full flex-col">
       <TopNav backLink="/staff" title={`Battle Session ${sessionId}`} />
@@ -405,6 +428,11 @@ export default function StaffBattleSession({
                   bossDamageToPlayerCalculator={bossDamageToPlayerCalculator}
                   setBossDamageToPlayerCalculator={
                     setBossDamageToPlayerCalculator
+                  }
+                  selectedPlayerBossStats={selectedPlayerBossStats}
+                  playerDamageToBossCalculator={playerDamageToBossCalculator}
+                  setPlayerDamageToBossCalculator={
+                    setPlayerDamageToBossCalculator
                   }
                 />
               ),
