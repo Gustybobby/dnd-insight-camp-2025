@@ -168,7 +168,7 @@ export default function StaffBattleSession({
     .sort((a, b) => a.order - b.order);
   console.log("Players : ", players);
 
-  const [selectedPlayerId, setSelectedPlayerId] = useState<number>(1);
+  const [selectedPlayerId, setSelectedPlayerId] = useState<number>(-1);
   const [currentPlayerId, setCurrentPlayerId] = useState<number | null>(null);
 
   const statMutation = useMutation({
@@ -182,7 +182,10 @@ export default function StaffBattleSession({
 
   const createVFXMutation = useMutation({
     mutationFn: createVisualEffect,
-    onSuccess: () => {},
+    onSuccess: () => {
+      alert("Status Effect has been given!");
+      refetchAllPlayerInfos();``
+    },
   });
 
   const onStatSubmit = async (
@@ -207,7 +210,7 @@ export default function StaffBattleSession({
       addPlayerItem({
         data: {
           itemId: itemId,
-          playerId: selectedPlayerId ?? 0,
+          playerId: selectedPlayerId ?? -1,
           amount: amount,
         },
       }),
@@ -237,7 +240,7 @@ export default function StaffBattleSession({
     mutationFn: ({ skillId }: OnSubmitSkillInput) =>
       addPlayerSkill({
         data: {
-          playerId: selectedPlayerId ?? 0,
+          playerId: selectedPlayerId ?? -1,
           skillId: skillId,
         },
       }),
@@ -265,7 +268,6 @@ export default function StaffBattleSession({
     playerIds,
     countdown,
   }: onSubmitStatusInput) => {
-    console.log(effectType, playerIds, countdown);
     createVFXMutation.mutate({ effectType, playerIds, countdown });
   };
 

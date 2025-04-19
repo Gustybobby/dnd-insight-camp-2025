@@ -12,7 +12,7 @@ export default function StaffBattleSessionPlayerStatusTab({
 }) {
   console.log("Effects:", player?.effects);
   return (
-    <div className="flex w-full flex-col p-2">
+    <div className="flex w-full flex-col gap-y-2 p-2">
       {player?.effects && player?.effects.length > 0 ? (
         player?.effects
           .filter((effect) => VISUAL_EFFECT_NAME_LIST.includes(effect.type))
@@ -24,7 +24,7 @@ export default function StaffBattleSessionPlayerStatusTab({
                 onClick={() => {}}
               >
                 <div className="flex flex-row items-center gap-x-4">
-                  <div className="flex h-[70px] w-[70px] items-center justify-center rounded-full border-2 border-black">
+                  <div className="flex aspect-square size-14 items-center justify-center rounded-full border-2 border-black bg-radial-gradient from-seafoam to-dexcolor-in">
                     <Image
                       src={
                         VISUAL_EFFECT_LISTS.find(
@@ -34,12 +34,12 @@ export default function StaffBattleSessionPlayerStatusTab({
                       alt={status.type}
                       width={50}
                       height={50}
-                      className="h-[50px] w-[50px]"
+                      className="h-[30px] w-[30px]"
                     />
                   </div>
-                  <div className="flex-col">
-                    <div className="">{status.type}</div>
-                    <div className="">{`Turns Left ${status.countdown}`}</div>
+                  <div className="text-md flex-col">
+                    <div className="text-lg font-bold">{status.type}</div>
+                    <div className="text-lg italic">{`Last for (Turn): ${status.countdown}`}</div>
                   </div>
                 </div>
               </div>
