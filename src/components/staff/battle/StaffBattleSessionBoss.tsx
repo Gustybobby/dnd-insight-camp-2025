@@ -15,21 +15,24 @@ import { STAT_STYLE_MAP } from "@/components/players/style";
 export default function StaffBattleSessionBoss({
   bossStats,
   setBossStats,
+  selectedPlayerBossStats,
   bossDamageToPlayerCalculator,
   setBossDamageToPlayerCalculator,
-  // playerDamageToBossCalculator,
-  // setPlayerDamageToBossCalculator,
+  playerDamageToBossCalculator,
+  setPlayerDamageToBossCalculator,
 }: {
   bossStats: BossStatsStateType;
   setBossStats: React.Dispatch<React.SetStateAction<BossStatsStateType>>;
+  selectedPlayerBossStats: BossStatsStateType;
+
   bossDamageToPlayerCalculator: DamageCalculator;
   setBossDamageToPlayerCalculator: React.Dispatch<
     React.SetStateAction<DamageCalculator>
   >;
-  // playerDamageToBossCalculator?: DamageCalculator;
-  // setPlayerDamageToBossCalculator?: React.Dispatch<
-  //   React.SetStateAction<DamageCalculator>
-  // >;
+  playerDamageToBossCalculator: DamageCalculator;
+  setPlayerDamageToBossCalculator: React.Dispatch<
+    React.SetStateAction<DamageCalculator>
+  >;
 }) {
   return (
     <div className="w-full p-2">
@@ -61,6 +64,12 @@ export default function StaffBattleSessionBoss({
             bossStats={bossStats}
             damageCalculator={bossDamageToPlayerCalculator}
             setDamageCalculator={setBossDamageToPlayerCalculator}
+          />
+          <StaffBattleSessionBossDamageCalculator
+          name="player-boss"
+            bossStats={selectedPlayerBossStats}
+            damageCalculator={playerDamageToBossCalculator}
+            setDamageCalculator={setPlayerDamageToBossCalculator}
           />
         </div>
       </div>
