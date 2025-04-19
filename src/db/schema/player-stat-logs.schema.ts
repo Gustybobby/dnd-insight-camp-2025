@@ -6,7 +6,13 @@ import {
 import { playersTable } from "@/db/schema/players.schema";
 import { staffsTable } from "@/db/schema/staffs.schema";
 import { timestamptz } from "@/db/util";
-import { foreignKey, integer, pgTable, serial } from "drizzle-orm/pg-core";
+import {
+  foreignKey,
+  index,
+  integer,
+  pgTable,
+  serial,
+} from "drizzle-orm/pg-core";
 
 export const playerStatLogsTable = pgTable(
   "player_stat_logs",
@@ -30,5 +36,7 @@ export const playerStatLogsTable = pgTable(
       columns: [table.playerId, table.type],
       foreignColumns: [playerStatsTable.playerId, playerStatsTable.type],
     }),
+    index().using("btree", table.playerId),
+    index().using("btree", table.effectId),
   ],
 );
