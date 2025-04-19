@@ -1,11 +1,27 @@
 import type { IPlayerSkillRepository } from "@/server/domain/interfaces/repositories";
 import type { PlayerSkillWithInfo } from "@/server/domain/aggregates";
-import type { PlayerSkill, PlayerSkillCreate } from "@/server/domain/models";
+import type {
+  ActivitySession,
+  PlayerSkill,
+  PlayerSkillCreate,
+} from "@/server/domain/models";
 
 import { db } from "@/db";
-import { playerSkillsTable, skillsTable } from "@/db/schema";
+import { playerSkillsTable, sessionTurnsTable, skillsTable } from "@/db/schema";
 import { takeOne, takeOneOrThrow } from "@/db/util";
-import { and, eq, getTableColumns, gt, lt, sql } from "drizzle-orm";
+import {
+  and,
+  asc,
+  eq,
+  exists,
+  getTableColumns,
+  gt,
+  inArray,
+  isNotNull,
+  isNull,
+  lt,
+  sql,
+} from "drizzle-orm";
 
 export class PlayerSkillRepository implements IPlayerSkillRepository {
   async getAllPlayers(): Promise<PlayerSkillWithInfo[]> {
@@ -30,7 +46,8 @@ export class PlayerSkillRepository implements IPlayerSkillRepository {
       })
       .from(playerSkillsTable)
       .innerJoin(skillsTable, eq(playerSkillsTable.skillId, skillsTable.id))
-      .where(eq(playerSkillsTable.playerId, playerId));
+      .where(eq(playerSkillsTable.playerId, playerId))
+      .orderBy(asc(skillsTable.name));
   }
 
   async create({ data }: { data: PlayerSkillCreate }): Promise<PlayerSkill> {
@@ -79,6 +96,7 @@ export class PlayerSkillRepository implements IPlayerSkillRepository {
       .select()
       .from(skillsTable)
       .where(eq(skillsTable.id, skillId))
+      .limit(1)
       .then(takeOneOrThrow);
     const playerSkill = await db
       .update(playerSkillsTable)
@@ -109,9 +127,50 @@ export class PlayerSkillRepository implements IPlayerSkillRepository {
         and(
           eq(playerSkillsTable.playerId, playerId),
           gt(playerSkillsTable.cooldown, 0),
+          isNotNull(
+            db
+              .select({ cooldownCycleRef: skillsTable.cooldownCycleRef })
+              .from(skillsTable)
+              .where(eq(skillsTable.id, playerSkillsTable.skillId)),
+          ),
         ),
       )
       .returning();
+  }
+
+  async decrementBossRefCooldown({
+    sessionId,
+  }: {
+    sessionId: ActivitySession["id"];
+  }): Promise<void> {
+    await db
+      .update(playerSkillsTable)
+      .set({
+        cooldown: sql`${playerSkillsTable.cooldown}-1`,
+      })
+      .where(
+        and(
+          gt(playerSkillsTable.cooldown, 0),
+          inArray(
+            playerSkillsTable.skillId,
+            db
+              .select({ id: skillsTable.id })
+              .from(skillsTable)
+              .where(isNull(skillsTable.cooldownCycleRef)),
+          ),
+          exists(
+            db
+              .select({ id: sessionTurnsTable.id })
+              .from(sessionTurnsTable)
+              .where(
+                and(
+                  eq(sessionTurnsTable.sessionId, sessionId),
+                  eq(sessionTurnsTable.playerId, playerSkillsTable.playerId),
+                ),
+              ),
+          ),
+        ),
+      );
   }
 
   async setZeroCooldown({

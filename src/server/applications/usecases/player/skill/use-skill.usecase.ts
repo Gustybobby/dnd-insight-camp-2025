@@ -2,12 +2,14 @@ import type { IPlayerUseSkillUseCase } from "@/server/applications/interfaces/us
 import type {
   IActivityRepository,
   IPlayerSkillRepository,
+  ISkillRepository,
 } from "@/server/domain/interfaces/repositories";
 import type { PlayerSkill } from "@/server/domain/models";
 
 export class PlayerUseSkillUseCase implements IPlayerUseSkillUseCase {
   constructor(
     private readonly playerSkillRepo: IPlayerSkillRepository,
+    private readonly skillRepo: ISkillRepository,
     private readonly activityRepo: IActivityRepository,
   ) {}
 
@@ -18,9 +20,13 @@ export class PlayerUseSkillUseCase implements IPlayerUseSkillUseCase {
     const session = await this.activityRepo.getPlayerActiveSession({
       playerId,
     });
-    if (
+    const skill = await this.skillRepo.getById({ skillId });
+    const isPlayerTurn =
       session.turns.find((turn) => turn.id === session.currentTurnId)
-        ?.playerId !== playerId
+        ?.playerId === playerId;
+    if (
+      !(skill.usableBossTurn && session.currentTurnId === null) &&
+      !isPlayerTurn
     ) {
       throw new Error("player cannot use skill outside of their turn");
     }

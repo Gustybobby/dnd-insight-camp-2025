@@ -103,6 +103,7 @@ export async function playerUseSkill({
 
   const playerUseSkillUseCase = new PlayerUseSkillUseCase(
     playerSkillRepo,
+    skillRepo,
     activityRepo,
   );
   return playerUseSkillUseCase.invoke({ playerId, skillId }).catch((error) => {

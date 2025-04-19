@@ -10,7 +10,7 @@ export default function StaffBattleSessionPlayerLogsTab({
   onClickLog: ({ label, data }: { label: string; data: string }) => void;
 }) {
   return (
-    <div className="flex w-full flex-col p-2 font-notosansthai gap-y-2">
+    <div className="flex w-full flex-col gap-y-2 p-2 font-notosansthai">
       {battleSession?.battleLogs ? (
         battleSession?.battleLogs
           .slice()
@@ -24,7 +24,7 @@ export default function StaffBattleSessionPlayerLogsTab({
             return (
               <div
                 key={`log-${idx}`}
-                className="text-sm flex w-full cursor-pointer flex-row justify-between border-2 border-black bg-white rounded-md p-2  "
+                className="flex w-full cursor-pointer flex-row justify-between rounded-md border-2 border-black bg-white p-2 text-sm"
                 onClick={() =>
                   onClickLog({ label: "Logs", data: skillName?.[1] ?? "" })
                 }

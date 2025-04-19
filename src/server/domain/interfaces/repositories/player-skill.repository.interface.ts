@@ -1,5 +1,9 @@
 import type { PlayerSkillWithInfo } from "@/server/domain/aggregates/player-skill.aggregate";
-import type { PlayerSkill, PlayerSkillCreate } from "@/server/domain/models";
+import type {
+  ActivitySession,
+  PlayerSkill,
+  PlayerSkillCreate,
+} from "@/server/domain/models";
 
 export interface IPlayerSkillRepository {
   getAllPlayers(): Promise<PlayerSkillWithInfo[]>;
@@ -36,6 +40,12 @@ export interface IPlayerSkillRepository {
   }: {
     playerId: PlayerSkill["playerId"];
   }): Promise<PlayerSkill[]>;
+
+  decrementBossRefCooldown({
+    sessionId,
+  }: {
+    sessionId: ActivitySession["id"];
+  }): Promise<void>;
 
   setZeroCooldown({
     playerId,

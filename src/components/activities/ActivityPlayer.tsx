@@ -81,7 +81,8 @@ export function ActivityPlayer({
     playerAllInfo?.stats?.find((stat) => stat.type === "HP")?.value ?? 0;
 
   const isCurrentTurn =
-    session?.currentTurnId === session?.turns.find((turn) => turn.playerId === playerId)?.id;
+    session?.currentTurnId ===
+    session?.turns.find((turn) => turn.playerId === playerId)?.id;
 
   return (
     <div
@@ -187,7 +188,14 @@ export function ActivityPlayer({
                 (playerSkill) => playerSkill.skillId === window.skillId,
               ) ?? null
             }
-            showPlayerOptions={isPlayer && isCurrentTurn}
+            showPlayerOptions={
+              isPlayer &&
+              (playerAllInfo?.playerSkills?.find(
+                (playerSkill) => playerSkill.skillId === window.skillId,
+              )?.skill.usableBossTurn
+                ? session?.currentTurnId === null
+                : isCurrentTurn)
+            }
             onClickBack={() => setWindow({ type: "character" })}
             onUse={(skillId) => {
               void useSkillMutation

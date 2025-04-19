@@ -43,6 +43,8 @@ export class EndTurnUseCase implements IEndTurnUseCase {
     if (nextPlayerId) {
       await this.playerSkillRepo.decrementCooldown({ playerId: nextPlayerId });
       await this.effectRepo.decrementCountdown({ playerId: nextPlayerId });
+    } else {
+      await this.playerSkillRepo.decrementBossRefCooldown({ sessionId });
     }
   }
 }

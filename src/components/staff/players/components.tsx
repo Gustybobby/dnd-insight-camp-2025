@@ -136,7 +136,7 @@ export function SkillCard({
 }) {
   return (
     <div
-      className="grid grid-cols-8 gap-4 rounded-md border-2 border-black bg-white p-2 shadow place-items-center"
+      className="grid grid-cols-8 place-items-center gap-4 rounded-md border-2 border-black bg-white p-2 shadow"
       onClick={() => onClick(skill)}
     >
       <div className="flex h-8 w-8 items-center justify-center overflow-hidden">
@@ -165,7 +165,7 @@ export function StatusCard({
 }) {
   return (
     <div
-      className="flex flex-row items-center gap-4 rounded-md border-2 border-black bg-white p-2 shadow font-notosansthai"
+      className="flex flex-row items-center gap-4 rounded-md border-2 border-black bg-white p-2 font-notosansthai shadow"
       onClick={() => onClick(status)}
     >
       <div className="flex h-8 w-8 items-center justify-center">
@@ -177,9 +177,11 @@ export function StatusCard({
           alt={status.name}
         />
       </div>
-      <div className="flex flex-col w-full">
+      <div className="flex w-full flex-col">
         <h1 className="text-md">{status.name}</h1>
-        <p className="w-full italic text-sm truncate overflow-ellipsis">{status.description}</p>
+        <p className="w-full truncate overflow-ellipsis text-sm italic">
+          {status.description}
+        </p>
       </div>
     </div>
   );
