@@ -76,6 +76,33 @@ export class EffectRepository implements IEffectRepository {
       );
   }
 
+  async clearPlayerVisualEffect({
+    playerId,
+    effectId,
+  }: {
+    playerId: Player["id"];
+    effectId: Effect["id"];
+  }): Promise<void> {
+    return db.transaction(async (tx) => {
+      await tx
+        .delete(playerStatLogsTable)
+        .where(
+          and(
+            eq(playerStatLogsTable.effectId, effectId),
+            eq(playerStatLogsTable.playerId, playerId),
+          ),
+        );
+      const effect = await tx
+        .delete(effectsTable)
+        .where(eq(effectsTable.id, effectId))
+        .returning()
+        .then(takeOneOrThrow);
+      if (effect.type === "Mod") {
+        throw new Error("cannot clear mod effect");
+      }
+    });
+  }
+
   async decrementCountdown({
     playerId,
   }: {

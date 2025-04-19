@@ -4,6 +4,7 @@ import type {
   ICreateModEffectUseCase,
   ICreateVisualEffectUseCase,
 } from "@/server/applications/interfaces/usecases/effect";
+import type { IClearVisualEffectUseCase } from "@/server/applications/interfaces/usecases/effect/clear-visual.usecase.interface";
 import type { UseCaseParams, UseCaseReturn } from "@/server/controllers/utils";
 
 import {
@@ -21,6 +22,7 @@ import {
   CreateModEffectUseCase,
   CreateVisualEffectUseCase,
 } from "@/server/applications/usecases/effect";
+import { ClearVisualEffectUseCase } from "@/server/applications/usecases/effect/clear-visual.usecase";
 
 const effectRepo = new EffectRepository();
 const playerRepo = new PlayerRepository();
@@ -77,4 +79,16 @@ export async function createVisualEffect({
       console.error(error);
       return null;
     });
+}
+
+export async function clearVisualEffect(
+  params: UseCaseParams<IClearVisualEffectUseCase>,
+): Promise<UseCaseReturn<IClearVisualEffectUseCase> | null> {
+  await authService.authStaff();
+
+  const clearVisualEffectUseCase = new ClearVisualEffectUseCase(effectRepo);
+  return clearVisualEffectUseCase.invoke(params).catch((error) => {
+    console.error(error);
+    return null;
+  });
 }

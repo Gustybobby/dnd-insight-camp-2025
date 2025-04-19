@@ -2,6 +2,7 @@
 
 import { DEFAULT_STAT_VALUES, ORDERED_STAT_TYPES } from "@/shared/stat";
 
+import { clearVisualEffect } from "@/server/controllers/effect.controller";
 import { deletePlayerItem } from "@/server/controllers/items.controller";
 import { removePlayerSkill } from "@/server/controllers/skill.controller";
 
@@ -63,6 +64,10 @@ export function PlayerCharacter({
 
   const removePlayerSkillMutation = useMutation({
     mutationFn: removePlayerSkill,
+  });
+
+  const clearVisualEffectMutation = useMutation({
+    mutationFn: clearVisualEffect,
   });
 
   if (playerAllInfo === null) {
@@ -190,7 +195,17 @@ export function PlayerCharacter({
           {
             label: "Status",
             node: playerAllInfo?.effects && (
-              <PlayerStatusesTab effects={playerAllInfo.effects} />
+              <PlayerStatusesTab
+                effects={playerAllInfo.effects}
+                showStaffOptions={isStaff}
+                onClear={async (effectId) => {
+                  await clearVisualEffectMutation.mutateAsync({
+                    playerId,
+                    effectId,
+                  });
+                  void refetch();
+                }}
+              />
             ),
           },
           {

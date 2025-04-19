@@ -20,6 +20,14 @@ export interface IEffectRepository {
     playerId: Player["id"];
   }): Promise<Effect[]>;
 
+  clearPlayerVisualEffect({
+    playerId,
+    effectId,
+  }: {
+    playerId: Player["id"];
+    effectId: Effect["id"];
+  }): Promise<void>;
+
   decrementCountdown({ playerId }: { playerId: Player["id"] }): Promise<void>;
 
   setZeroCountdown({ playerId }: { playerId: Player["id"] }): Promise<void>;
