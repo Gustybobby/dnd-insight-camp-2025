@@ -32,9 +32,9 @@ export class EndTurnUseCase implements IEndTurnUseCase {
       }
     }
 
-    await this.activityRepo.updateNextTurn({ sessionId });
-
-    const updatedSession = await this.activityRepo.getSession({ sessionId });
+    const updatedSession = await this.activityRepo.updateNextTurn({
+      sessionId,
+    });
 
     const nextPlayerId = updatedSession.turns.find(
       (turn) => turn.id === updatedSession.currentTurnId,

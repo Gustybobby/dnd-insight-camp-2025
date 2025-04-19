@@ -43,16 +43,32 @@ export class ItemRepository implements IItemRepository {
     playerId,
     itemId,
   }: Omit<PlayerItem, "amount">): Promise<PlayerItem> {
-    return db
-      .delete(playerItemsTable)
-      .where(
-        and(
-          eq(playerItemsTable.playerId, playerId),
-          eq(playerItemsTable.itemId, itemId),
-        ),
-      )
-      .returning()
-      .then(takeOneOrThrow);
+    return db.transaction(async (tx) => {
+      const playerItem = await tx
+        .update(playerItemsTable)
+        .set({ amount: sql`${playerItemsTable.amount} - 1` })
+        .where(
+          and(
+            eq(playerItemsTable.playerId, playerId),
+            eq(playerItemsTable.itemId, itemId),
+          ),
+        )
+        .returning()
+        .then(takeOneOrThrow);
+      if (playerItem.amount <= 0) {
+        return tx
+          .delete(playerItemsTable)
+          .where(
+            and(
+              eq(playerItemsTable.playerId, playerId),
+              eq(playerItemsTable.itemId, itemId),
+            ),
+          )
+          .returning()
+          .then(takeOneOrThrow);
+      }
+      return playerItem;
+    });
   }
 
   async createItem({ data }: { data: ItemCreate }): Promise<Item> {

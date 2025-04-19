@@ -1,3 +1,4 @@
+import type { SQL } from "drizzle-orm";
 import type { IPlayerRepository } from "@/server/domain/interfaces/repositories";
 import type {
   PlayerItemWithInfo,
@@ -26,7 +27,6 @@ import {
   usersTable,
 } from "@/db/schema";
 import { takeOne, takeOneOrThrow } from "@/db/util";
-import type { SQL } from "drizzle-orm";
 import { and, asc, eq, getTableColumns, sql } from "drizzle-orm";
 
 export class PlayerRepository implements IPlayerRepository {

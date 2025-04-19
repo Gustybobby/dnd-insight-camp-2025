@@ -56,5 +56,5 @@ export interface IActivityRepository {
     sessionId,
   }: {
     sessionId: ActivitySession["id"];
-  }): Promise<void>;
+  }): Promise<ActivitySessionAllInfo>;
 }

@@ -23,6 +23,8 @@ const eslintConfig = [
           groups: [
             //type imports
             [
+              "^@\\/db.*\\u0000$",
+              "^drizzle.*\\u0000$",
               ".*interfaces.*\\u0000$",
               "^@\\/server\\/domain.*\\u0000$",
               "^@\\/server\\/infrastructure.*\\u0000$",

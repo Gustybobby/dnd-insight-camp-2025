@@ -1,3 +1,4 @@
+import type { DBTransactionClient } from "@/db";
 import type { IActivityRepository } from "@/server/domain/interfaces/repositories";
 import type { ActivitySessionAllInfo } from "@/server/domain/aggregates";
 import type {
@@ -64,18 +65,17 @@ export class ActivityRepository implements IActivityRepository {
       .where(eq(activitySessionsTable.isActive, true));
   }
 
-  async getSession({
-    sessionId,
-  }: {
-    sessionId: ActivitySession["id"];
-  }): Promise<ActivitySessionAllInfo> {
+  async getSession(
+    { sessionId }: { sessionId: ActivitySession["id"] },
+    tx?: DBTransactionClient,
+  ): Promise<ActivitySessionAllInfo> {
     const [session, turns] = await Promise.all([
-      db
+      (tx ?? db)
         .select()
         .from(activitySessionsTable)
         .where(eq(activitySessionsTable.id, sessionId))
         .then(takeOneOrThrow),
-      db
+      (tx ?? db)
         .select()
         .from(sessionTurnsTable)
         .where(eq(sessionTurnsTable.sessionId, sessionId)),
@@ -153,29 +153,39 @@ export class ActivityRepository implements IActivityRepository {
     sessionId,
   }: {
     sessionId: ActivitySession["id"];
-  }): Promise<void> {
-    const session = await this.getSession({ sessionId });
+  }): Promise<ActivitySessionAllInfo> {
+    return db.transaction(
+      async (tx) => {
+        const session = await this.getSession({ sessionId }, tx);
 
-    let nextTurnOrder =
-      session.turns.find((turn) => turn.id === session.currentTurnId)?.order ??
-      null;
-    if (nextTurnOrder === null) {
-      nextTurnOrder = session.bossTurnOrder + 1;
-    } else {
-      nextTurnOrder += 1;
-    }
-    const totalTurns = session.turns.length + 1;
-    nextTurnOrder =
-      nextTurnOrder === totalTurns ? totalTurns : nextTurnOrder % totalTurns;
+        let nextTurnOrder =
+          session.turns.find((turn) => turn.id === session.currentTurnId)
+            ?.order ?? null;
+        if (nextTurnOrder === null) {
+          nextTurnOrder = session.bossTurnOrder + 1;
+        } else {
+          nextTurnOrder += 1;
+        }
+        const totalTurns = session.turns.length + 1;
+        nextTurnOrder =
+          nextTurnOrder === totalTurns
+            ? totalTurns
+            : nextTurnOrder % totalTurns;
 
-    await db
-      .update(activitySessionsTable)
-      .set({
-        currentTurnId:
-          nextTurnOrder === session.bossTurnOrder
-            ? null
-            : session.turns.find((turn) => turn.order === nextTurnOrder)?.id,
-      })
-      .where(eq(activitySessionsTable.id, sessionId));
+        await tx
+          .update(activitySessionsTable)
+          .set({
+            currentTurnId:
+              nextTurnOrder === session.bossTurnOrder
+                ? null
+                : session.turns.find((turn) => turn.order === nextTurnOrder)
+                    ?.id,
+          })
+          .where(eq(activitySessionsTable.id, sessionId));
+
+        return this.getSession({ sessionId }, tx);
+      },
+      { isolationLevel: "serializable" },
+    );
   }
 }
