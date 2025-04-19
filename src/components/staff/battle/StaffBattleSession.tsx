@@ -311,6 +311,8 @@ export default function StaffBattleSession({
     const player = players?.find((player) => player.id === playerId);
     if (!player) return;
 
+    setSelectedPlayerId(playerId);
+
     const newStats: BossStatsStateType = { ...selectedPlayerBossStats };
 
     player.stats.forEach((stat) => {
@@ -320,10 +322,6 @@ export default function StaffBattleSession({
 
     setSelectedPlayerBossStats(newStats);
   };
-
-  console.log("Current player id", currentPlayerId);
-  console.log("Selected player id", selectedPlayerId);
-  console.log(activitySession);
 
   const [bossStats, setBossStats] = useState<BossStatsStateType>({
     hp: 200,
@@ -340,6 +338,7 @@ export default function StaffBattleSession({
       chr: 10,
       str: 10,
     });
+
   const [bossDamageToPlayerCalculator, setBossDamageToPlayerCalculator] =
     useState<DamageCalculator>({
       stat: "str",
