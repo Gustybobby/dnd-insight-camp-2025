@@ -12,7 +12,6 @@ export default function SkillLogModal({
   return (
     <div className="black font-notosansthai">
       <h2 className="mb-4 text-xl font-semibold">{skill?.name}</h2>
-      <p className="mb-4">{`Give ${skill?.name}`}</p>
       <p className="mb-4 text-sm italic">{skill?.description}</p>
       <button
         onClick={closeModal}

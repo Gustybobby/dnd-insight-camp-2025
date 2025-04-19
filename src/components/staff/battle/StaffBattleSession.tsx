@@ -182,9 +182,11 @@ export default function StaffBattleSession({
 
   const createVFXMutation = useMutation({
     mutationFn: createVisualEffect,
-    onSuccess: () => {
+    onSuccess: async () => {
       alert("Status Effect has been given!");
-      refetchAllPlayerInfos();``
+      await refetchAllPlayerInfos().then(() =>
+        console.log("refetchedAllPlayersInfo"),
+      );
     },
   });
 
@@ -537,6 +539,10 @@ export default function StaffBattleSession({
                   skill={skill ?? null}
                   modalOpen={modalIsOpen}
                   closeModal={() => setModalIsOpen(false)}
+                  playerName={
+                    players?.find((player) => player.id === selectedPlayerId)
+                      ?.name
+                  }
                   onSubmit={() =>
                     onSkillSubmit({
                       skillId: skill?.id ?? 0,
@@ -557,6 +563,10 @@ export default function StaffBattleSession({
                   closeModal={() => setModalIsOpen(false)}
                   onSubmit={onStatusSubmit}
                   submitButtonText={"Give Status"}
+                  playerName={
+                    players?.find((player) => player.id === selectedPlayerId)
+                      ?.name
+                  }
                 />
               ),
             },

@@ -10,6 +10,7 @@ export default function StatusModal({
   onSubmit,
   submitButtonText,
   selectedPlayerId,
+  playerName,
 }: {
   status: StatusType | null;
   modalOpen: boolean;
@@ -21,12 +22,13 @@ export default function StatusModal({
     countdown,
   }: onSubmitStatusInput) => Promise<void>;
   submitButtonText: string;
+  playerName: string | undefined;
 }) {
   console.log(modalOpen);
   return (
     <div className="flex flex-col items-center gap-y-2 font-notosansthai">
       <h2 className="text-xl font-semibold">{status?.name}</h2>
-      <p className="">{`Give ${status?.name}`}</p>
+      <p className="">{`Give "${status?.name}" to "${playerName}"`}</p>
       <p className="text-sm italic">{status?.description}</p>
       <label className="">{`Last for (turns)`}</label>
       <input className="w-fit text-center" id={`give-${status}-input`} />

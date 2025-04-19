@@ -28,7 +28,7 @@ function ItemModal({
   return (
     <div className="flex flex-col gap-y-4 font-notosansthai">
       <h2 className="text-xl font-semibold">{item?.name}</h2>
-      <p className="">{`Give ${item?.name} to "${playerName}"`}</p>
+      <p className="">{`Give "${item?.name}" to "${playerName}"`}</p>
       <div className="flex w-full flex-row justify-center gap-x-2">
         {item?.stats
           .map((statText) => statText.split(":"))
