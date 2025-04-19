@@ -1,6 +1,6 @@
 "use client";
 
-import { ORDERED_STAT_TYPES } from "@/shared/stat";
+import { DEFAULT_STAT_VALUES, ORDERED_STAT_TYPES } from "@/shared/stat";
 
 import { deletePlayerItem } from "@/server/controllers/items.controller";
 import { removePlayerSkill } from "@/server/controllers/skill.controller";
@@ -94,7 +94,7 @@ export function PlayerCharacter({
             <div className="mx-auto h-0.5 w-11/12 bg-black" />
             <HealthBar
               health={currentHealth}
-              max={Math.max(200, currentHealth)}
+              max={Math.max(DEFAULT_STAT_VALUES[4], currentHealth)}
             />
           </>
         ) : window.type === "statInfo" ? (

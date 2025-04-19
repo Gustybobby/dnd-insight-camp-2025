@@ -1,6 +1,6 @@
 "use client";
 
-import { ORDERED_STAT_TYPES } from "@/shared/stat";
+import { DEFAULT_STAT_VALUES, ORDERED_STAT_TYPES } from "@/shared/stat";
 
 import {
   endTurn,
@@ -112,7 +112,7 @@ export function ActivityPlayer({
             <div className="flex w-full items-center justify-between">
               <HealthBar
                 health={currentHealth}
-                max={Math.max(100, currentHealth)}
+                max={Math.max(DEFAULT_STAT_VALUES[4], currentHealth)}
               />
               <StyledLink
                 href="#"
