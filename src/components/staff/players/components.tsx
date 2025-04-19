@@ -136,20 +136,21 @@ export function SkillCard({
 }) {
   return (
     <div
-      className="flex flex-row items-center gap-4 rounded-md border-2 border-black bg-white p-2 shadow"
+      className="grid grid-cols-8 gap-4 rounded-md border-2 border-black bg-white p-2 shadow place-items-center"
       onClick={() => onClick(skill)}
     >
-      <div className="flex h-8 w-8 items-center justify-center">
+      <div className="flex h-8 w-8 items-center justify-center overflow-hidden">
         <Image
           src={skill.image}
-          width={50}
-          height={50}
-          className="h-auto w-auto"
+          width={32}
+          height={32}
+          className="object-contain"
           alt={skill.name}
         />
       </div>
-      <div className="flex flex-col">
-        <h1 className="font-notosansthai">{skill.name}</h1>
+      <div className="col-span-7 flex w-full flex-col font-notosansthai">
+        <h1>{skill.name}</h1>
+        <p className="truncate text-sm italic">{skill.description}</p>
       </div>
     </div>
   );
