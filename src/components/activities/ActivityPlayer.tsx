@@ -81,7 +81,7 @@ export function ActivityPlayer({
     playerAllInfo?.stats?.find((stat) => stat.type === "HP")?.value ?? 0;
 
   const isCurrentTurn =
-    session?.currentTurnId === session?.turns.find((turn) => turn.playerId)?.id;
+    session?.currentTurnId === session?.turns.find((turn) => turn.playerId === playerId)?.id;
 
   return (
     <div
