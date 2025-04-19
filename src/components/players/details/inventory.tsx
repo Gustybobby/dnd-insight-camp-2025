@@ -107,17 +107,24 @@ export function ItemInfo({
   equipped,
   partEquipped,
   showPlayerOptions,
+  showStaffOptions,
   onClickBack,
   onEquip,
   onRemove,
+  onUngive,
 }: {
   item: PlayerItemWithInfo["item"] | null;
   equipped: boolean;
   partEquipped: boolean;
   showPlayerOptions: boolean;
+  showStaffOptions?: boolean;
   onClickBack: () => void;
   onEquip: (itemId: PlayerItemWithInfo["itemId"]) => void;
   onRemove: (itemId: PlayerItemWithInfo["itemId"]) => void;
+  onUngive?: (
+    itemId: PlayerItemWithInfo["itemId"],
+    isEquipped: boolean,
+  ) => void;
 }) {
   if (!item) {
     onClickBack();
@@ -178,6 +185,14 @@ export function ItemInfo({
           )}
         </>
       ) : null}
+      {showStaffOptions && (
+        <button
+          className="rounded-full border-2 border-black bg-red-500 px-4 py-1 font-bold"
+          onClick={() => onUngive?.(item.id, equipped)}
+        >
+          Delete Item
+        </button>
+      )}
     </div>
   );
 }

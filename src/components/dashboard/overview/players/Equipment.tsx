@@ -1,6 +1,6 @@
 "use client";
 
-import type { IDeletePlayerEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
+import type { IRemoveEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
 import type { PlayerEquipmentWithInfo } from "@/server/domain/aggregates";
 import type { UseCaseParams } from "@/server/controllers/utils";
 
@@ -12,7 +12,7 @@ interface EquipmentCellProp {
   equipment: PlayerEquipmentWithInfo;
   handleOnDeleteEquipment: (
     event: React.MouseEvent<HTMLButtonElement>,
-    { playerId, itemId }: UseCaseParams<IDeletePlayerEquipmentUseCase>,
+    { playerId, itemId }: UseCaseParams<IRemoveEquipmentUseCase>,
   ) => Promise<void>;
 }
 

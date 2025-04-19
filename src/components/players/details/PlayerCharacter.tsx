@@ -2,10 +2,17 @@
 
 import { ORDERED_STAT_TYPES } from "@/shared/stat";
 
+import { deletePlayerItem } from "@/server/controllers/items.controller";
+import { removePlayerSkill } from "@/server/controllers/skill.controller";
+
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { useCharacter } from "@/components/hooks/useCharacter";
-import { usePlayerWindow } from "@/components/hooks/usePlayerWindow";
+import {
+  usePlayerItems,
+  usePlayerWindow,
+} from "@/components/hooks/usePlayerWindow";
 import { Popups, usePopupEffect } from "@/components/hooks/usePopupEffect";
 import { CharacterBox } from "@/components/players/components";
 import { CharacterInfo } from "@/components/players/details/character";
@@ -26,10 +33,12 @@ import { cn } from "@/components/utils";
 export function PlayerCharacter({
   playerId,
   isPlayer,
+  isStaff,
   className,
 }: {
   playerId: number;
   isPlayer: boolean;
+  isStaff?: boolean;
   className?: string;
 }) {
   const router = useRouter();
@@ -43,6 +52,16 @@ export function PlayerCharacter({
     removeMutation,
     useSkillMutation,
   } = useCharacter({ playerId, refetchInterval: 5000, popper });
+
+  const playerItemsWindow = usePlayerItems(playerAllInfo ?? {});
+
+  const deletePlayerItemMutation = useMutation({
+    mutationFn: deletePlayerItem,
+  });
+
+  const removePlayerSkillMutation = useMutation({
+    mutationFn: removePlayerSkill,
+  });
 
   if (playerAllInfo === null) {
     router.replace("/players");
@@ -85,30 +104,15 @@ export function PlayerCharacter({
         ) : window.type === "itemInfo" ? (
           <ItemInfo
             key={window.itemId}
+            showPlayerOptions={isPlayer}
+            showStaffOptions={isStaff}
             item={
-              playerAllInfo?.playerItems?.find(
-                ({ item }) => item.id === window.itemId,
-              )?.item ??
-              playerAllInfo?.equipments?.find(
-                ({ item }) => item.id === window.itemId,
-              )?.item ??
+              playerItemsWindow.getItemById(window.itemId)?.item ??
+              playerItemsWindow.getEquipmentById(window.itemId)?.item ??
               null
             }
-            equipped={
-              playerAllInfo?.equipments?.some(
-                ({ item }) => item.id === window.itemId,
-              ) ?? false
-            }
-            partEquipped={
-              !!playerAllInfo?.equipments.some(
-                ({ item }) =>
-                  item.type ===
-                  playerAllInfo?.playerItems?.find(
-                    ({ item }) => item.id === window.itemId,
-                  )?.item.type,
-              )
-            }
-            showPlayerOptions={isPlayer}
+            equipped={!!playerItemsWindow.getEquipmentById(window.itemId)}
+            partEquipped={playerItemsWindow.isPartEquipped(window.itemId)}
             onClickBack={() => setWindow({ type: "character" })}
             onEquip={(itemId) => {
               void equipMutation.mutateAsync({ playerId, itemId }).then(() => {
@@ -122,6 +126,14 @@ export function PlayerCharacter({
               });
               setWindow({ type: "character" });
             }}
+            onUngive={async (itemId, isEquipped) => {
+              if (isEquipped) {
+                await removeMutation.mutateAsync({ playerId, itemId });
+                setWindow({ type: "character" });
+              }
+              await deletePlayerItemMutation.mutateAsync({ playerId, itemId });
+              await refetch();
+            }}
           />
         ) : window.type === "skillInfo" ? (
           <PlayerSkillInfo
@@ -131,6 +143,7 @@ export function PlayerCharacter({
               ) ?? null
             }
             showPlayerOptions={false}
+            showStaffOptions={isStaff}
             onClickBack={() => setWindow({ type: "character" })}
             onUse={(skillId) => {
               void useSkillMutation
@@ -138,6 +151,14 @@ export function PlayerCharacter({
                 .then(() => {
                   void refetch();
                 });
+            }}
+            onUngive={async (skillId) => {
+              void removePlayerSkillMutation
+                .mutateAsync({ playerId, skillId })
+                .then(() => {
+                  void refetch();
+                });
+              setWindow({ type: "character" });
             }}
           />
         ) : null}

@@ -20,13 +20,21 @@ export class AuthService implements IAuthService {
     if (!session) {
       throw new AuthError("user is unauthenticated", session);
     }
+    const staff = await this.staffRepo.getByUserId({ userId: session.user.id });
     const player = await this.playerRepo.getByUserId({
       userId: session.user.id,
     });
     if (!player) {
       throw new AuthError("user is not a player", session);
     }
-    return { ...session, user: { ...session.user, playerId: player.id } };
+    return {
+      ...session,
+      user: {
+        ...session.user,
+        playerId: player.id,
+        staffId: staff?.id ?? null,
+      },
+    };
   }
 
   async authSessionPlayer({

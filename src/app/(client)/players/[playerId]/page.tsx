@@ -25,6 +25,7 @@ export default async function PlayerCharacterPage({
     <PlayerCharacter
       playerId={+playerId}
       isPlayer={session?.user.playerId === +playerId}
+      isStaff={!!session?.user.staffId}
     />
   );
 }

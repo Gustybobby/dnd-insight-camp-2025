@@ -4,14 +4,14 @@ import type {
   IAddPlayerItemUseCase,
   IDeletePlayerItemUseCase,
 } from "@/server/applications/interfaces/usecases/item";
-import type { IDeletePlayerEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
+import type { IRemoveEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
 import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
 import type { Item, Player } from "@/server/domain/models";
 import type { UseCaseParams } from "@/server/controllers/utils";
 
 import { ALL_STAT_TYPES } from "@/shared/stat";
 
-import { deletePlayerEquipment } from "@/server/controllers/equipment.controller";
+import { playerRemoveEquipment } from "@/server/controllers/equipment.controller";
 import {
   addPlayerItem,
   deletePlayerItem,
@@ -37,8 +37,8 @@ export default function PlayerRow({ player, items, refetch }: PlayerRowProp) {
   const deletePlayerItemMutation = useMutation({
     mutationFn: deletePlayerItem,
   });
-  const deleteEquipmentMutation = useMutation({
-    mutationFn: deletePlayerEquipment,
+  const removeEquipmentMutation = useMutation({
+    mutationFn: playerRemoveEquipment,
   });
   const addPlayerItemMutation = useMutation({ mutationFn: addPlayerItem });
 
@@ -65,11 +65,12 @@ export default function PlayerRow({ player, items, refetch }: PlayerRowProp) {
 
   const handleOnDeleteEquipment = async (
     event: React.MouseEvent<HTMLButtonElement>,
-    { playerId, itemId }: UseCaseParams<IDeletePlayerEquipmentUseCase>,
+    { playerId, itemId }: UseCaseParams<IRemoveEquipmentUseCase>,
   ) => {
     event.stopPropagation();
-    await deleteEquipmentMutation
+    await removeEquipmentMutation
       .mutateAsync({ playerId, itemId })
+      .then(() => handleOnDeletePlayerItem({ playerId, itemId }))
       .catch((error) => console.error(error));
     refetch();
   };

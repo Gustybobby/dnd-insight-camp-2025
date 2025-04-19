@@ -1,6 +1,5 @@
 "use server";
 
-import type { IDeletePlayerEquipmentUseCase } from "../applications/interfaces/usecases/player/equipment/delete.usecase.interface";
 import type {
   IEquipEquipmentUseCase,
   IRemoveEquipmentUseCase,
@@ -22,8 +21,6 @@ import {
   RemoveEquipmentUseCase,
 } from "@/server/applications/usecases/player/equipment";
 
-import { DeletePlayerEquipmentUseCase } from "../applications/usecases/player/equipment/delete.usecase";
-
 const effectRepo = new EffectRepository();
 const playerRepo = new PlayerRepository();
 const staffRepo = new StaffRepository();
@@ -41,20 +38,6 @@ const equipmentService = new EquipmentService(
   itemService,
   effectService,
 );
-
-export async function deletePlayerEquipment(
-  params: UseCaseParams<IDeletePlayerEquipmentUseCase>,
-): Promise<UseCaseReturn<IDeletePlayerEquipmentUseCase> | null> {
-  await authService.authStaff();
-
-  const deletePlayerEquipmentUseCase = new DeletePlayerEquipmentUseCase(
-    equipmentRepo,
-  );
-  return deletePlayerEquipmentUseCase.invoke({
-    playerId: params.playerId,
-    itemId: params.itemId,
-  });
-}
 
 export async function playerEquipEquipment(
   params: UseCaseParams<IEquipEquipmentUseCase>,

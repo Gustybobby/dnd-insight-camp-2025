@@ -60,13 +60,17 @@ export function SkillIcon({ image }: { image: string }) {
 export function PlayerSkillInfo({
   playerSkill,
   showPlayerOptions,
+  showStaffOptions,
   onClickBack,
   onUse,
+  onUngive,
 }: {
   playerSkill: PlayerSkillWithInfo | null;
   showPlayerOptions: boolean;
+  showStaffOptions?: boolean;
   onClickBack: () => void;
   onUse: (skillId: PlayerSkillWithInfo["skillId"]) => void;
+  onUngive?: (skillId: PlayerSkillWithInfo["skillId"]) => void;
 }) {
   if (!playerSkill) {
     onClickBack();
@@ -103,6 +107,14 @@ export function PlayerSkillInfo({
           </button>
         ) : null}
       </div>
+      {showStaffOptions && (
+        <button
+          className="rounded-full border-2 border-black bg-red-500 px-4 py-1 font-bold"
+          onClick={() => onUngive?.(playerSkill.skillId)}
+        >
+          Delete Skill
+        </button>
+      )}
     </div>
   );
 }

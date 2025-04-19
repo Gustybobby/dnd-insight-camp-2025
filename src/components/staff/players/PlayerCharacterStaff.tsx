@@ -176,7 +176,12 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
         </div>
       </div>
       <div className="grid max-h-[100%] w-full grid-cols-2 gap-x-4 overflow-y-auto">
-        <PlayerCharacter playerId={playerId} isPlayer={true} className="mt-0" />
+        <PlayerCharacter
+          playerId={playerId}
+          isPlayer={true}
+          isStaff={true}
+          className="mt-0"
+        />
         <StaffPlayerUtils
           tabs={[
             {
