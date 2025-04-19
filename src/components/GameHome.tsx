@@ -95,35 +95,29 @@ export function GameHome({ isPlayer }: { isPlayer: boolean }) {
         unoptimized
         width={500}
         height={500}
-        className="absolute bottom-[2%] left-1/2 w-1/6 max-w-[4rem] -translate-x-[45%] motion-opacity-in-0 motion-duration-1500"
+        className="absolute bottom-[1.5%] left-[12%] w-1/6 max-w-[4rem] -translate-x-[45%] z-[20] motion-opacity-in-0 motion-duration-1500 scale-x-[-1]"
       />
-      <div className="absolute bottom-0 left-0 grid grid-cols-2 place-items-center gap-2 p-4">
-        {SPONSOR_IMAGES.slice(0, 4).map((image) => (
+      <Image
+        src="/asset/characters/mekla.png"
+        alt="mekla"
+        priority
+        unoptimized
+        width={500}
+        height={500}
+        className="absolute bottom-[1.5%] right-[2%] w-1/6 max-w-[4rem] -translate-x-[45%] z-[20] motion-opacity-in-0 motion-duration-1500"
+      />
+      <div className="absolute bottom-0 left-0">
+        {
           <Image
-            key={image}
-            src={image}
-            alt={image}
+            src={"asset/cover/sponsor-logos.png"}
+            alt={"sponsor-logos"}
             priority
             unoptimized
             width={64}
             height={64}
-            className="w-[10vw] max-w-16"
+            className="w-lvw"
           />
-        ))}
-      </div>
-      <div className="absolute bottom-0 right-0 grid grid-cols-2 place-items-center gap-2 p-4">
-        {SPONSOR_IMAGES.slice(4).map((image) => (
-          <Image
-            key={image}
-            src={image}
-            alt={image}
-            priority
-            unoptimized
-            width={64}
-            height={64}
-            className="w-[10vw] max-w-16"
-          />
-        ))}
+        }
       </div>
     </div>
   );
