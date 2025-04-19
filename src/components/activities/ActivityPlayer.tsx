@@ -30,6 +30,8 @@ import { PlayerStatusesTab } from "@/components/players/details/status";
 import { StyledLink } from "@/components/ui/link";
 import { cn } from "@/components/utils";
 
+const REFETCH_INTERVAL = 1 * 1000;
+
 export function ActivityPlayer({
   sessionId,
   playerId,
@@ -51,12 +53,12 @@ export function ActivityPlayer({
     equipMutation,
     removeMutation,
     useSkillMutation,
-  } = useCharacter({ playerId, refetchInterval: 5000, popper });
+  } = useCharacter({ playerId, refetchInterval: REFETCH_INTERVAL, popper });
 
   const { data: session, refetch: refetchSession } = useQuery({
     queryKey: ["getActivitySession", sessionId],
     queryFn: async () => await getActivitySession({ sessionId }),
-    refetchInterval: 5000,
+    refetchInterval: REFETCH_INTERVAL,
   });
 
   const endTurnMutation = useMutation({ mutationFn: endTurn });

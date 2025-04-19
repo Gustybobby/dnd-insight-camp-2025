@@ -7,7 +7,7 @@ import {
 
 import { NextResponse } from "next/server";
 
-export const revalidate = 5;
+export const revalidate = 2;
 
 export async function GET(req: NextRequest) {
   const action = req.nextUrl.searchParams.get("action");

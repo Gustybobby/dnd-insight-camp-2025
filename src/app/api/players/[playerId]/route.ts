@@ -4,7 +4,7 @@ import { getPlayerAllInfo } from "@/server/controllers/queries/player.query";
 
 import { NextResponse } from "next/server";
 
-export const revalidate = 5;
+export const revalidate = 2;
 
 export async function GET(
   req: NextRequest,

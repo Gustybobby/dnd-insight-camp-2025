@@ -30,6 +30,8 @@ import {
 import { PlayerStatusesTab } from "@/components/players/details/status";
 import { cn } from "@/components/utils";
 
+const REFETCH_INTERVAL = 3 * 1000;
+
 export function PlayerCharacter({
   playerId,
   isPlayer,
@@ -51,7 +53,7 @@ export function PlayerCharacter({
     equipMutation,
     removeMutation,
     useSkillMutation,
-  } = useCharacter({ playerId, refetchInterval: 5000, popper });
+  } = useCharacter({ playerId, refetchInterval: REFETCH_INTERVAL, popper });
 
   const playerItemsWindow = usePlayerItems(playerAllInfo ?? {});
 
