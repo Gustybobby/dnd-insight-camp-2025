@@ -13,7 +13,7 @@ export default function StaffBattleSessionPlayerStatusTab({
   console.log("Effects:", player?.effects);
   return (
     <div className="flex w-full flex-col p-2">
-      {player?.effects
+      {player?.effects && player?.effects.length > 0 ? player?.effects
         .filter((effect) => VISUAL_EFFECT_NAME_LIST.includes(effect.type))
         .map((status) => {
           return (
@@ -43,7 +43,7 @@ export default function StaffBattleSessionPlayerStatusTab({
               </div>
             </div>
           );
-        })}
+        }) : <div className="flex text-center w-full justify-center">No Status Effects</div>}
     </div>
   );
 }

@@ -65,8 +65,11 @@ export default function StaffBattleSessionBoss({
             damageCalculator={bossDamageToPlayerCalculator}
             setDamageCalculator={setBossDamageToPlayerCalculator}
           />
+          <h1 className="w-full text-center text-xl font-bold">
+            Selected Player Damage to Boss
+          </h1>
           <StaffBattleSessionBossDamageCalculator
-          name="player-boss"
+            name="player-boss"
             bossStats={selectedPlayerBossStats}
             damageCalculator={playerDamageToBossCalculator}
             setDamageCalculator={setPlayerDamageToBossCalculator}

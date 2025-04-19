@@ -50,6 +50,7 @@ import StatusModal from "../players/StatusModal";
 import StyledButton from "../StyledButton";
 import TopNav from "../TopNav";
 import StaffBattleSessionBoss from "./StaffBattleSessionBoss";
+import StaffBattleSessionPlayerLogsTab from "./StaffBattleSessionPlayerLogsTabs";
 import StaffBattlePlayersInfo from "./StaffBattleSessionPlayersInfo";
 import StaffBattleSessionPlayerStatusTab from "./StaffBattleSessionPlayerStatusTab";
 import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
@@ -142,7 +143,7 @@ export default function StaffBattleSession({
       return null;
     },
 
-    refetchInterval: 10000,
+    refetchInterval: 2000,
   });
 
   const { data: allPlayers, refetch: refetchAllPlayerInfos } = useQuery({
@@ -402,15 +403,24 @@ export default function StaffBattleSession({
                 modal: <></>,
               },
               {
-                label: "Equipment",
-                node: <></>,
+                label: "Logs",
+                node: (
+                  <StaffBattleSessionPlayerLogsTab
+                    battleSession={activitySession}
+                  />
+                ),
                 modal: <></>,
               },
-              {
-                label: "Inventory",
-                node: <></>,
-                modal: <></>,
-              },
+              // {
+              //   label: "Equipment",
+              //   node: <></>,
+              //   modal: <></>,
+              // },
+              // {
+              //   label: "Inventory",
+              //   node: <></>,
+              //   modal: <></>,
+              // },
             ]}
             defaultTab={"Status"}
             className={"h-full"}
