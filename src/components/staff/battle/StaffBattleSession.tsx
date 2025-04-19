@@ -40,6 +40,7 @@ import { redirect } from "next/navigation";
 
 import { DEFAULT_ITEM_AMOUNT, DEFAULT_SKILL_USES } from "../constants";
 import ItemModal from "../players/ItemModal";
+import SkillLogModal from "../players/SkillLogModal";
 import SkillModal from "../players/SkillModal";
 import StaffPlayerItems from "../players/StaffPlayerItems";
 import StaffPlayerSkills from "../players/StaffPlayerSkills";
@@ -56,7 +57,6 @@ import StaffBattleSessionPlayerStatusTab from "./StaffBattleSessionPlayerStatusT
 import StaffBattleSessionPlayerTabs from "./StaffBattleSessionPlayerTabs";
 import { fetchAllPlayersInfo } from "@/bff/api/players.api";
 import { mapNumToAlphabet } from "@/components/utils";
-import SkillLogModal from "../players/SkillLogModal";
 
 export interface OnSubmitItemInput {
   itemId: number;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import { cn } from "@/components/utils";
 import { Modal } from "../players/components";
+import { cn } from "@/components/utils";
 
 export default function StaffBattleSessionPlayerTabs({
   tabs,
