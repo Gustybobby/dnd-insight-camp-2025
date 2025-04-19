@@ -1,7 +1,5 @@
 "use client";
 
-import { SPONSOR_IMAGES } from "@/shared/sponsors";
-
 import { getGlobal } from "@/server/controllers/global.controller";
 
 import { useQuery } from "@tanstack/react-query";
@@ -95,7 +93,7 @@ export function GameHome({ isPlayer }: { isPlayer: boolean }) {
         unoptimized
         width={500}
         height={500}
-        className="absolute bottom-[1.5%] left-[12%] w-1/6 max-w-[4rem] -translate-x-[45%] z-[20] motion-opacity-in-0 motion-duration-1500 scale-x-[-1]"
+        className="absolute bottom-[1.5%] left-[12%] z-[20] w-1/6 max-w-[4rem] -translate-x-[45%] scale-x-[-1] motion-opacity-in-0 motion-duration-1500"
       />
       <Image
         src="/asset/characters/mekla.png"
@@ -104,7 +102,7 @@ export function GameHome({ isPlayer }: { isPlayer: boolean }) {
         unoptimized
         width={500}
         height={500}
-        className="absolute bottom-[1.5%] right-[2%] w-1/6 max-w-[4rem] -translate-x-[45%] z-[20] motion-opacity-in-0 motion-duration-1500"
+        className="absolute bottom-[1.5%] right-[2%] z-[20] w-1/6 max-w-[4rem] -translate-x-[45%] motion-opacity-in-0 motion-duration-1500"
       />
       <div className="absolute bottom-0 left-0">
         {
