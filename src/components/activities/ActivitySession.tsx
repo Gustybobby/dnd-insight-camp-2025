@@ -68,7 +68,16 @@ export function ActivitySession({ sessionId }: { sessionId: number }) {
       )}
       <div className="absolute bottom-[20%] left-0 right-0 mx-auto w-11/12">
         <ul className="h-[20vh] overflow-auto border-4 border-gray-500 bg-gray-800 bg-opacity-90 p-2 leading-tight text-white">
-          {session?.battleLogs.map((log, idx) => <li key={idx}>{log}</li>)}
+          {session?.battleLogs.map((log, idx) => (
+            <li key={idx}>
+              {log
+                .split(" ")
+                .map((word, idx) =>
+                  idx === 1 ? mapNumToAlphabet(Number(word)) : word,
+                )
+                .join(" ")}
+            </li>
+          ))}
         </ul>
       </div>
       <div className="absolute bottom-[8%] w-full">

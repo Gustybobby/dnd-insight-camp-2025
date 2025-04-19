@@ -66,7 +66,7 @@ export default function StaffBattleSessionBoss({
             setDamageCalculator={setBossDamageToPlayerCalculator}
           />
           <StaffBattleSessionBossDamageCalculator
-          name="player-boss"
+            name="player-boss"
             bossStats={selectedPlayerBossStats}
             damageCalculator={playerDamageToBossCalculator}
             setDamageCalculator={setPlayerDamageToBossCalculator}
