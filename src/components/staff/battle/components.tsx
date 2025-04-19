@@ -82,22 +82,6 @@ export function StaffBattleSessionBossDamageCalculator({
   setDamageCalculator: React.Dispatch<React.SetStateAction<DamageCalculator>>;
   bossStats: BossStatsStateType;
 }) {
-  const calculateDamage = (
-    roll: string,
-    multiply: string,
-    statValue?: number,
-  ) => {
-    console.log("Calculate Damage : ", roll, multiply, statValue);
-    console.log("Boss Stat", bossStats);
-    const numRoll = parseInt(roll);
-    const numMultiply = parseFloat(multiply);
-    if (isNaN(numRoll) || isNaN(numMultiply)) {
-      return 0;
-    }
-    if (!statValue) return numRoll * numMultiply;
-
-    return numRoll * numMultiply + statValue;
-  };
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-center">
@@ -188,3 +172,18 @@ export function StaffBattleSessionBossDamageCalculator({
     </div>
   );
 }
+
+export const calculateDamage = (
+  roll: string,
+  multiply: string,
+  statValue?: number,
+) => {
+  const numRoll = parseInt(roll);
+  const numMultiply = parseFloat(multiply);
+  if (isNaN(numRoll) || isNaN(numMultiply)) {
+    return 0;
+  }
+  if (!statValue) return numRoll * numMultiply;
+
+  return numRoll * numMultiply + statValue;
+};
