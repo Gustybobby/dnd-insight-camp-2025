@@ -168,7 +168,7 @@ export default function StaffBattleSession({
     .sort((a, b) => a.order - b.order);
   console.log("Players : ", players);
 
-  const [selectedPlayerId, setSelectedPlayerId] = useState<number>(1);
+  const [selectedPlayerId, setSelectedPlayerId] = useState<number>(-1);
   const [currentPlayerId, setCurrentPlayerId] = useState<number | null>(null);
 
   const statMutation = useMutation({
@@ -182,7 +182,12 @@ export default function StaffBattleSession({
 
   const createVFXMutation = useMutation({
     mutationFn: createVisualEffect,
-    onSuccess: () => {},
+    onSuccess: async () => {
+      alert("Status Effect has been given!");
+      await refetchAllPlayerInfos().then(() =>
+        console.log("refetchedAllPlayersInfo"),
+      );
+    },
   });
 
   const onStatSubmit = async (
@@ -207,7 +212,7 @@ export default function StaffBattleSession({
       addPlayerItem({
         data: {
           itemId: itemId,
-          playerId: selectedPlayerId ?? 0,
+          playerId: selectedPlayerId ?? -1,
           amount: amount,
         },
       }),
@@ -237,7 +242,7 @@ export default function StaffBattleSession({
     mutationFn: ({ skillId }: OnSubmitSkillInput) =>
       addPlayerSkill({
         data: {
-          playerId: selectedPlayerId ?? 0,
+          playerId: selectedPlayerId ?? -1,
           skillId: skillId,
         },
       }),
@@ -265,7 +270,6 @@ export default function StaffBattleSession({
     playerIds,
     countdown,
   }: onSubmitStatusInput) => {
-    console.log(effectType, playerIds, countdown);
     createVFXMutation.mutate({ effectType, playerIds, countdown });
   };
 
@@ -535,6 +539,10 @@ export default function StaffBattleSession({
                   skill={skill ?? null}
                   modalOpen={modalIsOpen}
                   closeModal={() => setModalIsOpen(false)}
+                  playerName={
+                    players?.find((player) => player.id === selectedPlayerId)
+                      ?.name
+                  }
                   onSubmit={() =>
                     onSkillSubmit({
                       skillId: skill?.id ?? 0,
@@ -555,6 +563,10 @@ export default function StaffBattleSession({
                   closeModal={() => setModalIsOpen(false)}
                   onSubmit={onStatusSubmit}
                   submitButtonText={"Give Status"}
+                  playerName={
+                    players?.find((player) => player.id === selectedPlayerId)
+                      ?.name
+                  }
                 />
               ),
             },

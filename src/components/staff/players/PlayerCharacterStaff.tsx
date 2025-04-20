@@ -243,6 +243,7 @@ export function PlayerCharacterStaff({ playerId }: { playerId: number }) {
                       remainingUses: DEFAULT_SKILL_USES,
                     })
                   }
+                  playerName={player?.name}
                 />
               ),
             },

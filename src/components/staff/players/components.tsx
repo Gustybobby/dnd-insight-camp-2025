@@ -222,7 +222,7 @@ export function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div
         ref={modalRef}
-        className="w-72 rounded-xl border-4 border-oldcream bg-cream p-6 text-center motion-scale-in-0 motion-opacity-in-0"
+        className="w-80 rounded-xl border-4 border-oldcream bg-cream p-6 text-center motion-scale-in-0 motion-opacity-in-0"
       >
         {children}
       </div>

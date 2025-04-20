@@ -7,6 +7,7 @@ export default function SkillModal({
   modalOpen,
   closeModal,
   onSubmit,
+  playerName,
 }: {
   skill: Skill | null;
   modalOpen: boolean;
@@ -18,13 +19,13 @@ export default function SkillModal({
     skillId: number;
     remainingUses: number;
   }) => Promise<void>;
+  playerName: string | undefined;
 }) {
-  console.log("------Inside Skill Modal :", skill);
   console.log(modalOpen);
   return (
     <div className="font-notosansthai">
       <h2 className="mb-4 text-xl font-semibold">{skill?.name}</h2>
-      <p className="mb-4">{`Give ${skill?.name}`}</p>
+      <p className="mb-4">{`Give "${skill?.name}" to "${playerName}"`}</p>
       <p className="mb-4 text-sm italic">{skill?.description}</p>
       <div className="flex flex-row justify-center gap-x-2">
         <button
