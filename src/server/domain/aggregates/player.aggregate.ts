@@ -7,6 +7,7 @@ import type {
   Player,
   PlayerEquipment,
   PlayerItem,
+  PlayerSkill,
   PlayerStat,
 } from "@/server/domain/models";
 
@@ -26,4 +27,8 @@ export interface PlayerWithAllInfo extends Player {
 export interface PlayerWithItemsAndEquipments extends Player {
   playerItems: PlayerItem[];
   equipments: PlayerEquipment[];
+}
+
+export interface PlayerWithSkills extends Player {
+  playerSkills: PlayerSkill[];
 }

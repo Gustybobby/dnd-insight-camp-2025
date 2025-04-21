@@ -6,7 +6,7 @@ import type {
 } from "@/server/applications/interfaces/usecases/item";
 import type { IRemoveEquipmentUseCase } from "@/server/applications/interfaces/usecases/player/equipment";
 import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
-import type { Item, Player } from "@/server/domain/models";
+import type { Item, Player, Skill } from "@/server/domain/models";
 import type { UseCaseParams } from "@/server/controllers/utils";
 
 import { ALL_STAT_TYPES } from "@/shared/stat";
@@ -25,6 +25,7 @@ import AddItemSection from "./AddItemSection";
 import EquipmentCell from "./Equipment";
 import ItemCell from "./ItemCell";
 import ResetDataButton from "./ResetDataButton";
+import SkillCell from "./SkillCell";
 
 interface PlayerRowProp {
   player: PlayerWithAllInfo;
@@ -150,6 +151,15 @@ export default function PlayerRow({ player, items, refetch }: PlayerRowProp) {
                 handleOnDeleteEquipment={handleOnDeleteEquipment}
                 key={equipment.itemId}
               ></EquipmentCell>
+            ))}
+          </div>
+          <div className="flex flex-col items-center space-y-2">
+            <h2 className="font-bold">Skills</h2>
+            {player.playerSkills.map((skill) => (
+              <SkillCell
+                key={`skillcell-player-${[player.id]}-skill-${skill.skillId}`}
+                playerSkill={skill}
+              />
             ))}
           </div>
         </div>

@@ -18,5 +18,6 @@ export class ResetPlayerDataUseCase implements IResetPlayerDataUseCase {
 
     await this.playerRepo.setStats({ data: stats });
     await this.playerRepo.removeAllItemsAndEquipments({ playerId });
+    await this.playerRepo.removeAllSkills({ playerId });
   }
 }

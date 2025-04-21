@@ -1,5 +1,5 @@
 import type { PlayerWithAllInfo } from "@/server/domain/aggregates";
-import type { Item } from "@/server/domain/models";
+import type { Item, Skill } from "@/server/domain/models";
 
 import { ALL_STAT_TYPES } from "@/shared/stat";
 
@@ -41,7 +41,7 @@ export default function PlayerTable({
             items={items}
             key={player.id}
             refetch={refetch}
-          ></PlayerRow>
+          />
         ))}
       </div>
     </div>
