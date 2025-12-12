@@ -30,7 +30,7 @@ export default function StaffBattlePlayersInfo({
           ? "Boss Turn"
           : `Group ${mapNumToAlphabet(currentPlayerId)} Turn`}
       </div>
-      <div className="flex w-full flex-col gap-y-2 pt-2 mb-2">
+      <div className="mb-2 flex w-full flex-col gap-y-2 pt-2">
         {players?.map((player) => {
           const isCurrentTurn =
             activitySession?.currentTurnId ===
