@@ -1,6 +1,6 @@
 {
   "name": "dnd-insight-camp-2025",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -13,20 +13,20 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.69.0",
+    "@tanstack/react-query": "^5.90.12",
     "clsx": "^2.1.1",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.6.1",
     "drizzle-orm": "^0.40.1",
-    "drizzle-zod": "^0.7.0",
-    "next": "^15.3.0",
+    "drizzle-zod": "^0.7.1",
+    "next": "^15.5.9",
     "next-auth": "^5.0.0-beta.25",
-    "pg": "^8.14.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-hook-form": "^7.54.2",
-    "react-hot-toast": "^2.5.2",
-    "tailwind-merge": "^3.0.2",
-    "zod": "^3.24.2"
+    "pg": "^8.16.3",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-hook-form": "^7.68.0",
+    "react-hot-toast": "^2.6.0",
+    "tailwind-merge": "^3.4.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
